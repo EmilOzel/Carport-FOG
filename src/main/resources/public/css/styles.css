@@ -25,10 +25,20 @@ a {
 }
 
 .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
     font-size: 22px;
     font-weight: 800;
     text-decoration: none;
     letter-spacing: 0;
+}
+
+.brand img {
+    width: 46px;
+    height: 46px;
+    border-radius: 6px;
+    object-fit: contain;
 }
 
 .nav {

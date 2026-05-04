@@ -1,0 +1,36 @@
+@startuml
+
+class Customer
+class Salesperson
+class Order
+
+class Carport
+class PrefabricatedCarport
+class CustomCarport
+
+class Roof
+class FlatRoof
+class RaisedRoof
+
+class Shed
+
+class MaterialList
+class MaterialLine
+class Material
+
+Customer "1" -- "0..*" Order : has
+Salesperson "1" -- "0..*" Order : has
+
+Order "1" -- "1" Carport : has
+Carport "1" -- "1" Roof : has
+Carport "1" -- "0..1" Shed : has
+Carport "1" -- "1" MaterialList : has
+MaterialList "1" -- "1..*" MaterialLine : has
+MaterialLine "1" -- "1" Material : has
+
+Carport <|-- PrefabricatedCarport : is
+Carport <|-- CustomCarport : is
+Roof <|-- FlatRoof : is
+Roof <|-- RaisedRoof : is
+
+@enduml
