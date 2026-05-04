@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick-byg carport | Carport FOG</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header class="site-header">
+    <a class="brand" href="/">Carport FOG</a>
+    <nav class="nav" aria-label="Hovedmenu">
+        <a href="/carporte/enkelt">Enkelt carport</a>
+        <a class="active" href="/carporte/quick-byg">Quick-byg</a>
+    </nav>
+</header>
+<main class="page builder-layout">
+    <section class="builder-panel">
+        <p class="eyebrow">Quick-byg</p>
+        <h1>Sammensæt carporten trin for trin</h1>
+        <form class="builder-form">
+            <label>
+                Carporttype
+                <select name="type">
+                    <option>Enkelt carport</option>
+                    <option>Dobbelt carport</option>
+                    <option>Carport med skur</option>
+                </select>
+            </label>
+            <label>
+                Tagtype
+                <select name="roof">
+                    <option>Fladt tag</option>
+                    <option>Tag med rejsning</option>
+                </select>
+            </label>
+            <div class="form-row">
+                <label>
+                    Bredde
+                    <input name="width" type="number" value="360" min="300" max="780" step="30">
+                </label>
+                <label>
+                    Længde
+                    <input name="length" type="number" value="600" min="480" max="900" step="30">
+                </label>
+            </div>
+            <label class="checkbox">
+                <input name="shed" type="checkbox">
+                Tilføj redskabsrum
+            </label>
+            <button class="button primary" type="button">Beregn forslag</button>
+        </form>
+    </section>
+
+    <aside class="summary-panel" aria-label="Foreløbigt forslag">
+        <h2>Foreløbigt forslag</h2>
+        <ul class="steps">
+            <li><span>1</span> Vælg type og mål</li>
+            <li><span>2</span> Tilføj tag og skur</li>
+            <li><span>3</span> Se materialeliste</li>
+            <li><span>4</span> Send forespørgsel</li>
+        </ul>
+        <p class="note">Næste naturlige backend-del er at gemme valgene som en ordre eller forespørgsel i databasen.</p>
+    </aside>
+</main>
+</body>
+</html>
