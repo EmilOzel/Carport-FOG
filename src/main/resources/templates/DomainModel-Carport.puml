@@ -1,73 +1,69 @@
 @startuml
 
-class User{
+class User {
 - userId
 - name
 - email
 - passwordHash
 - role
 }
+
 class Order {
-- orderID
+- orderId
 - date
-- totalPrice
 - status
+- totalPrice
 }
 
 class Carport {
-
-}
-class PrefabricatedCarport{
-- carportID
-- name
-- basePrice
 - width
 - length
-- height
-}
-class CustomCarport{
-
 }
 
-class Roof{
+class PrefabricatedCarport {
+- name
+- basePrice
+}
+
+class CustomCarport
+
+class Roof {
 - price
-
-}
-class FlatRoof{
-
-}
-class RaisedRoof{
-
 }
 
-class Shed{
+class FlatRoof {
+}
+class RaisedRoof {
 }
 
-class MaterialList{
-
+class Shed {
+- width
+- length
 }
-class MaterialLine{
+
+class MaterialLine {
 - quantity
 - unitPrice
 }
-class Material{
-- materialID
+
+class Material {
+- materialId
 - name
 - price
 }
 
-User "1" -- "0..*" Order : has
+User "has 1 " -- "has 0..*" Order
+Order "1" -- "has 1" Carport
 
-Order "1" -- "1" Carport : has
-Carport "1" -- "1" Roof : has
-Carport "1" -- "0..1" Shed : has
-Carport "1" -- "1" MaterialList : has
-MaterialList "1" -- "1..*" MaterialLine : has
-MaterialLine "1" -- "1" Material : has
+Carport "1" -- "has 1" Roof
+Carport "1" -- "has 0..1" Shed
+Carport "1" -- "has 0..*" MaterialLine
+MaterialLine "1" -- "has 1" Material
 
-Carport <|-- PrefabricatedCarport : is
-Carport <|-- CustomCarport : is
-Roof <|-- FlatRoof : is
-Roof <|-- RaisedRoof : is
+Carport <|-- "is "PrefabricatedCarport
+Carport <|-- "is "CustomCarport
+
+Roof <|-- "is"FlatRoof
+Roof <|-- "is"RaisedRoof
 
 @enduml
