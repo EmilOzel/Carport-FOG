@@ -1,25 +1,62 @@
 @startuml
 
-class Customer
-class Salesperson
-class Order
+class User{
+- userId
+- name
+- email
+- passwordHash
+- role
+}
+class Order {
+- orderID
+- date
+- totalPrice
+- status
+}
 
-class Carport
-class PrefabricatedCarport
-class CustomCarport
+class Carport {
 
-class Roof
-class FlatRoof
-class RaisedRoof
+}
+class PrefabricatedCarport{
+- carportID
+- name
+- basePrice
+- width
+- length
+- height
+}
+class CustomCarport{
 
-class Shed
+}
 
-class MaterialList
-class MaterialLine
-class Material
+class Roof{
+- price
 
-Customer "1" -- "0..*" Order : has
-Salesperson "1" -- "0..*" Order : has
+}
+class FlatRoof{
+
+}
+class RaisedRoof{
+
+}
+
+class Shed{
+}
+
+class MaterialList{
+
+}
+class MaterialLine{
+- quantity
+- unitPrice
+}
+class Material{
+- materialID
+- name
+- price
+}
+
+User "1" -- "0..*" Order : has
 
 Order "1" -- "1" Carport : has
 Carport "1" -- "1" Roof : has
