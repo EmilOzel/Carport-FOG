@@ -10,10 +10,10 @@ public class CarportController {
     }
 
     private static void singleCarports(Context ctx) {
-        ctx.render("opret-bruger.html");
+        ctx.render("færdige-modeller.html");
     }
 
     private static void quickBuild(Context ctx) {
-        ctx.render("login-side.html");
+        ctx.render("byg-carport.html");
     }
 }

@@ -1,10 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick-Byg tilbud | FOG</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="../public/css/styles.css">
 </head>
 <body>
+<main class="figma-page">
+    <header class="topbar">
+        <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
+        <div class="top-icons">
+            <a href="/login-side"><img src="/images/person.png" alt="Log ind"></a>
+            <a href="/bruger-side"><img src="/images/kurv.png" alt="Kurv"></a>
+        </div>
+    </header>
 
+    <section class="quick-layout">
+        <div class="quick-copy">
+            <h1>Bestil Quick-Byg tilbud - carport med fladt tag</h1>
+            <p>Med et specialudviklet computerprogram kan vi lynhurtigt beregne en pris og udskrive en skitsetegning på en carport inden for vores standardprogram.<br>Tilbud og skitsetegning fremsendes på mail hurtigst muligt.<br>Ved bestilling medfølger standardbyggevejledning.</p>
+            <p>Udfyld formularen omhyggeligt og klik på "Bestil tilbud".</p>
+        </div>
+        <aside class="quick-form-panel">
+            <form class="quick-form" action="/opret-bruger-side" method="get">
+                <label>
+                    Tagtype
+                    <select name="tagtype">
+                        <option>Vælg tagtype</option>
+                        <option>Fladt tag</option>
+                        <option>Høj rejsning</option>
+                    </select>
+                </label>
+                <label>
+                    Carport bredde
+                    <input name="bredde" placeholder="Indtast bredde">
+                </label>
+                <label>
+                    Carport længde
+                    <input name="laengde" placeholder="Indtast længde">
+                </label>
+                <h2>Redskabsrum</h2>
+                <label>
+                    Redskabsrum
+                    <select name="redskabsrum">
+                        <option>Vælg med eller uden</option>
+                        <option>Med redskabsrum</option>
+                        <option>Uden redskabsrum</option>
+                    </select>
+                </label>
+                <label>
+                    Redskabsrum bredde
+                    <input name="skurBredde" placeholder="Indtast bredde">
+                </label>
+                <label>
+                    Redskabsrum længde
+                    <input name="skurLaengde" placeholder="Indtast længde">
+                </label>
+                <button class="btn" type="submit">Bestil tilbud</button>
+            </form>
+        </aside>
+    </section>
+</main>
 </body>
 </html>

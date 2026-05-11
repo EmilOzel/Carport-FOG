@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log på | FOG</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="../public/css/styles.css">
 </head>
 <body>
-
+<main class="auth-screen">
+    <section class="auth-card">
+        <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
+        <h1>Log på</h1>
+        <form class="auth-form" action="/bruger-side" method="get">
+            <label>
+                Log på med din mailadresse
+                <input type="email" name="email" placeholder="Mailadresse">
+            </label>
+            <label>
+                <span class="visually-hidden">Adgangskode</span>
+                <input type="password" name="password" placeholder="Adgangskode">
+            </label>
+            <a class="auth-link" href="/opret-bruger-side">Har du glemt din adgangskode?</a>
+            <button class="btn" type="submit">Log på</button>
+            <a class="btn" href="/opret-bruger-side">Registrer</a>
+        </form>
+    </section>
+</main>
 </body>
 </html>

@@ -1,10 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min carport-side | FOG</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="../public/css/styles.css">
 </head>
 <body>
+<main class="figma-page dashboard-page">
+    <header class="topbar">
+        <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
+        <span class="hamburger">=</span>
+    </header>
 
+    <h1 class="dashboard-title">Min carport-side - Velkommen (Bruger)</h1>
+
+    <section class="dashboard-shell">
+        <nav class="side-menu" aria-label="Bruger menu">
+            <a href="/bruger-side">Oversigt</a>
+            <a href="/bruger-side">Mine ordrer</a>
+            <a href="/bruger-side">Min profil</a>
+            <a href="/bruger-side">Mine carportskitser</a>
+            <a href="/bruger-side">Kontakt os</a>
+        </nav>
+
+        <div class="dashboard-grid">
+            <article class="dash-card">
+                <header>Mine nuværende ordrer</header>
+                <div class="dash-body">
+                    <table class="orders-table">
+                        <thead>
+                        <tr>
+                            <th>Ordrenr.</th>
+                            <th>Carportmodel</th>
+                            <th>Dato</th>
+                            <th>Status</th>
+                            <th>Handling</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <article class="dash-card">
+                <header>Mine carportskitser</header>
+                <div class="dash-body sketch-space">
+                    <a class="btn" href="/byg-carport">Nyt indlæg</a>
+                </div>
+            </article>
+
+            <article class="dash-card">
+                <header>Min brugerprofil</header>
+                <div class="dash-body profile-fields">
+                    <span>Navn</span><span class="placeholder"></span>
+                    <span>Email</span><span class="placeholder"></span>
+                    <span>Adresse</span><span class="placeholder"></span>
+                    <span>Telefon</span><span class="placeholder"></span>
+                </div>
+            </article>
+
+            <article class="dash-card">
+                <header>Tilbud og inspiration</header>
+                <div class="dash-body inspiration-grid">
+                    <a class="inspiration-card" href="/faerdige-modeller">
+                        <img src="/images/image 11.png" alt="Model A">
+                        Særtilbud på model A
+                    </a>
+                    <a class="inspiration-card" href="/faerdige-modeller">
+                        <img src="/images/image 12.png" alt="Model B">
+                        Ny model B med ekstra skur
+                    </a>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
 </body>
 </html>
