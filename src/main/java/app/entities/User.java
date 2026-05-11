@@ -10,9 +10,11 @@ public class User {
     private int phoneNumber;
     private int postalCode;
     private double balance;
+    private String role;
+
 
     public User(int userId, String email, String password, String firstName, String lastName,
-                String address, int phoneNumber, int postalCode, double balance) {
+                String address, int phoneNumber, int postalCode, double balance, String role) {
         this.userId = userId;
         this.email = email;
         this.password = password;
@@ -22,6 +24,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.postalCode = postalCode;
         this.balance = balance;
+        this.role = role;
     }
 
     public int getUserId() {
@@ -47,6 +50,10 @@ public class User {
     public String getAddress() {
         return address;
     }
+    public String getRole(){
+        return role;
+
+    }
 
     public int getPhoneNumber() {
         return phoneNumber;
@@ -59,6 +66,7 @@ public class User {
     public double getBalance() {
         return balance;
     }
+
 }
 
 
