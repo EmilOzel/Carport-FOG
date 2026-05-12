@@ -6,16 +6,11 @@ import io.javalin.http.Context;
 public class MainController {
     public static void addRoutes(Javalin app) {
         app.get("/", MainController::index);
-        app.get("/faerdige-modeller", MainController::finishedModels);
         app.get("/færdige-modeller", MainController::finishedModels);
         app.get("/byg-carport", MainController::buildCarport);
-        app.get("/vaelg-maal", MainController::chooseMeasurements);
         app.get("/vælg-mål", MainController::chooseMeasurements);
-        app.get("/login", MainController::login);
         app.get("/login-side", MainController::login);
         app.get("/opret-bruger", MainController::createUser);
-        app.get("/opret-bruger-side", MainController::createUser);
-        app.get("/bruger", MainController::userPage);
         app.get("/bruger-side", MainController::userPage);
     }
 
