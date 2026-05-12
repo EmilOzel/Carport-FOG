@@ -1,74 +1,90 @@
 package app.entities;
 
 public class User {
-    private int userId;
+    private int id;
     private String email;
     private String password;
     private String firstName;
     private String lastName;
+    private String phone;
     private String address;
-    private int phoneNumber;
-    private int postalCode;
-    private double balance;
-    private String role;
+    private int zipcode;
 
-
-    public User(int userId, String email, String password, String firstName, String lastName,
-                String address, int phoneNumber, int postalCode, double balance, String role) {
-        this.userId = userId;
+    public User(int id, String email, String password, String firstName, String lastName, String phone, String address, int zipcode) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.phone = phone;
         this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.postalCode = postalCode;
-        this.balance = balance;
-        this.role = role;
+        this.zipcode = zipcode;
+        }
+
+    public int getId() {
+        return id;
     }
 
-    public int getUserId() {
-        return userId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getLastName() {
         return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getAddress() {
         return address;
     }
-    public String getRole(){
-        return role;
 
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public int getPhoneNumber() {
-        return phoneNumber;
+    public int getZipcode() {
+        return zipcode;
     }
 
-    public int getPostalCode() {
-        return postalCode;
+    public void setZipcode(int zipcode) {
+        this.zipcode = zipcode;
     }
-
-    public double getBalance() {
-        return balance;
-    }
-
 }
-
 
 
 
