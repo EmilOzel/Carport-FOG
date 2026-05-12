@@ -322,7 +322,6 @@ select {
     margin-top: 48px;
 }
 
-/* Build carport */
 .build-content {
     margin-top: 58px;
     padding: 46px 0 62px;
@@ -536,7 +535,6 @@ select {
     margin-top: 40px;
 }
 
-/* User dashboard */
 .dashboard-page .topbar {
     justify-content: flex-start;
 }
@@ -639,64 +637,86 @@ select {
     margin-bottom: 8px;
 }
 
+@media (max-width: 900px) {
+    .hero,
+    .quick-layout,
+    .dashboard-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .catalog-tools {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .catalog-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 700px) {
     .site-header {
-        align-items: flex-start;
-        flex-direction: column;
+        align-items: center;
+        flex-direction: row;
         gap: 12px;
         min-height: 0;
         padding: 16px 20px;
     }
 
     .brand img {
-        width: 64px;
-        height: 64px;
+        width: 58px;
+        height: 58px;
     }
 
     .header-actions {
-        width: 100%;
+        width: auto;
         flex-wrap: wrap;
     }
 
     .hero {
         min-height: 0;
         grid-template-columns: 1fr;
-        gap: 28px;
-        padding: 38px 20px 50px;
+        gap: 24px;
+        padding: 28px 18px 36px;
     }
 
     .hero h1 {
-        font-size: 40px;
+        font-size: 34px;
     }
 
     .hero-media img {
-        min-height: 260px;
-        height: 320px;
+        min-height: 0;
+        height: 230px;
     }
 
     .figma-page {
-        width: 240px;
+        width: 100%;
         min-height: 100vh;
-        margin: 0 auto;
     }
 
     .topbar {
-        height: 88px;
-        padding: 12px 10px 0;
+        height: 78px;
+        align-items: flex-start;
+        padding: 10px 14px 0;
     }
 
     .logo {
-        width: 64px;
-        height: 64px;
+        width: 58px;
+        height: 58px;
     }
 
     .top-icons {
-        gap: 4px;
+        gap: 8px;
     }
 
     .top-icons img {
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
     }
 
     .hamburger {
@@ -704,23 +724,23 @@ select {
     }
 
     .auth-screen {
-        width: 240px;
-        margin: 0 auto;
+        width: 100%;
         align-items: flex-start;
-        padding: 70px 0 0;
+        padding: 76px 16px 32px;
     }
 
     .auth-card,
     .auth-card.wide {
         width: 100%;
+        max-width: 420px;
         min-height: 0;
-        padding: 30px 28px 32px;
-        border-radius: 0;
+        padding: 26px 22px 28px;
+        border-radius: 4px;
     }
 
     .auth-card .logo {
-        width: 72px;
-        height: 72px;
+        width: 68px;
+        height: 68px;
     }
 
     .auth-card h1 {
@@ -753,13 +773,13 @@ select {
 
     .build-content {
         margin-top: 0;
-        padding: 28px 0 34px;
+        padding: 26px 0 34px;
         background: #ffffff;
     }
 
     .build-text {
-        padding: 0 18px;
-        margin-bottom: 28px;
+        padding: 0 16px;
+        margin-bottom: 24px;
     }
 
     .build-text h1 {
@@ -768,15 +788,15 @@ select {
     }
 
     .build-text p {
-        margin-top: 46px;
+        margin-top: 18px;
         font-size: 16px;
-        line-height: 1.15;
+        line-height: 1.3;
     }
 
     .build-options {
         grid-template-columns: 1fr;
-        gap: 42px;
-        padding: 0;
+        gap: 28px;
+        padding: 0 16px;
     }
 
     .build-option {
@@ -784,16 +804,12 @@ select {
     }
 
     .build-option img {
-        height: 126px;
+        height: 190px;
         border-radius: 0;
     }
 
     .catalog-page {
         background: #ffffff;
-    }
-
-    .catalog-page .topbar {
-        margin-bottom: 26px;
     }
 
     .search-row,
@@ -803,8 +819,8 @@ select {
 
     .catalog-grid {
         grid-template-columns: 1fr;
-        gap: 44px;
-        padding: 0 18px 44px;
+        gap: 22px;
+        padding: 20px 16px 38px;
     }
 
     .product-card {
@@ -813,12 +829,12 @@ select {
     }
 
     .product-card .image-wrap {
-        height: 92px;
+        height: 130px;
     }
 
     .product-card img {
-        width: 132px;
-        height: 72px;
+        width: 170px;
+        height: 95px;
     }
 
     .quick-layout {
@@ -826,21 +842,21 @@ select {
     }
 
     .quick-copy {
-        padding: 46px 20px 34px;
+        padding: 32px 18px 26px;
     }
 
     .quick-copy h1 {
-        font-size: 16px;
-        text-decoration: underline;
+        font-size: 18px;
+        text-decoration: none;
     }
 
     .quick-copy p {
         font-size: 15px;
-        text-decoration: underline;
+        text-decoration: none;
     }
 
     .quick-form-panel {
-        padding: 26px 18px 28px;
+        padding: 24px 18px 28px;
     }
 
     .quick-form {
@@ -852,19 +868,24 @@ select {
         width: 100%;
     }
 
+    .quick-form .btn {
+        justify-self: stretch;
+        margin-top: 16px;
+    }
+
     .dashboard-page .topbar {
         justify-content: space-between;
     }
 
     .dashboard-title {
-        margin: 34px 10px 36px;
-        font-size: 16px;
-        line-height: 1.15;
+        margin: 28px 16px 28px;
+        font-size: 22px;
+        line-height: 1.2;
     }
 
     .dashboard-shell {
         display: block;
-        padding: 0 10px 28px;
+        padding: 0 16px 28px;
     }
 
     .side-menu {
