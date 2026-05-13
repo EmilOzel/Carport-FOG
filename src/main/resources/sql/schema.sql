@@ -20,7 +20,9 @@ CREATE TABLE carports (
                           width INT NOT NULL,
                           length INT NOT NULL,
                           height INT NOT NULL,
-                          with_shed BOOLEAN DEFAULT FALSE
+                          with_shed BOOLEAN DEFAULT FALSE,
+                          roof_type VARCHAR(20) NOT NULL
+
 );
 
 CREATE TABLE materials (
