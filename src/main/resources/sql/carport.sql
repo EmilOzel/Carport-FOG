@@ -9,7 +9,7 @@ CREATE TABLE users (
     last_name     VARCHAR(100) NOT NULL,
     email         VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    role          VARCHAR(20)  NOT NULL CHECK (role IN ('customer', 'salesperson')),
+    role          VARCHAR(20)  NOT NULL CHECK (role IN ('customer', 'salesperson', 'admin')),
     zip           CHAR(4)      NOT NULL REFERENCES zipcode(zip)
 );
 
@@ -47,7 +47,7 @@ CREATE TABLE roof (
 CREATE TABLE carport (
     carport_id SERIAL   PRIMARY KEY,
     order_id   INT      NOT NULL UNIQUE REFERENCES orders(order_id),
-    roof_id    INT      NOT NULL REFERENCES roof(roof_id),
+    roof_id    INT      NOT NULL UNIQUE REFERENCES roof(roof_id),
     width      SMALLINT NOT NULL CHECK (width  BETWEEN 240 AND 600),
     length     SMALLINT NOT NULL CHECK (length BETWEEN 240 AND 780)
 );
