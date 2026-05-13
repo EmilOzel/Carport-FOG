@@ -22,7 +22,6 @@ CREATE TABLE carports (
                           height INT NOT NULL,
                           with_shed BOOLEAN DEFAULT FALSE,
                           roof_type VARCHAR(20) NOT NULL
-
 );
 
 CREATE TABLE materials (
@@ -36,7 +35,8 @@ CREATE TABLE orders (
                         order_id SERIAL PRIMARY KEY,
                         customer_id INT REFERENCES customers(customer_id),
                         carport_id INT REFERENCES carports(carport_id),
-                        status VARCHAR(50) DEFAULT 'pending'
+                        status VARCHAR(50) DEFAULT 'pending',
+                        total_price DECIMAL(10,2)
 );
 
 CREATE TABLE order_items (
