@@ -4,13 +4,13 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 public class MainController {
+
     public static void addRoutes(Javalin app) {
         app.get("/", MainController::index);
         app.get("/færdige-modeller", MainController::finishedModels);
-        app.get("/byg-carport", MainController::buildCarport);
-        app.get("/vælg-mål", MainController::chooseMeasurements);
+        app.get("/f%C3%A6rdige-modeller", MainController::finishedModels);
         app.get("/login-side", MainController::login);
-        app.get("/opret-bruger", MainController::createUser);
+        app.get("/opret-bruger-side", MainController::createUser);
         app.get("/bruger-side", MainController::userPage);
     }
 
@@ -20,14 +20,6 @@ public class MainController {
 
     private static void finishedModels(Context ctx) {
         ctx.render("færdige-modeller.html");
-    }
-
-    private static void buildCarport(Context ctx) {
-        ctx.render("byg-carport.html");
-    }
-
-    private static void chooseMeasurements(Context ctx) {
-        ctx.render("vælg-mål.html");
     }
 
     private static void login(Context ctx) {

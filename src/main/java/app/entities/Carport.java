@@ -1,52 +1,32 @@
 package app.entities;
 
 public class Carport {
+    private int id;
     private int width;
+    private int length;
     private int height;
-    private String roofType;
+    private RoofType roofType;
     private boolean hasShed;
     private int shedWidth;
-    private int shedHeight;
+    private int shedLength;
 
-    public Carport(int width, int height, String roofType, boolean hasShed, int shedWidth, int shedHeight) {
+    public Carport(int width, int length, int height, RoofType roofType, boolean hasShed, int shedWidth, int shedLength) {
         this.width = width;
+        this.length = length;
         this.height = height;
         this.roofType = roofType;
         this.hasShed = hasShed;
         this.shedWidth = shedWidth;
-        this.shedHeight = shedHeight;
+        this.shedLength = shedLength;
     }
 
-    public int getWidth() {
-        return width;
+
+    public int getShedLength() {
+        return shedLength;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public String getRoofType() {
-        return roofType;
-    }
-
-    public void setRoofType(String roofType) {
-        this.roofType = roofType;
-    }
-
-    public boolean isHasShed() {
-        return hasShed;
-    }
-
-    public void setHasShed(boolean hasShed) {
-        this.hasShed = hasShed;
+    public void setShedLength(int shedLength) {
+        this.shedLength = shedLength;
     }
 
     public int getShedWidth() {
@@ -57,11 +37,51 @@ public class Carport {
         this.shedWidth = shedWidth;
     }
 
-    public int getShedHeight() {
-        return shedHeight;
+    public boolean isHasShed() {
+        return hasShed;
     }
 
-    public void setShedHeight(int shedHeight) {
-        this.shedHeight = shedHeight;
+    public void setHasShed(boolean hasShed) {
+        this.hasShed = hasShed;
+    }
+
+    public RoofType getRoofType() {
+        return roofType;
+    }
+
+    public void setRoofType(RoofType roofType) {
+        this.roofType = roofType;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
