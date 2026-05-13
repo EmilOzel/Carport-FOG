@@ -1,10 +1,11 @@
 package app.controllers;
 
+import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 public class MainController {
-    public static void addRoutes(Javalin app) {
+    public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/", MainController::index);
         app.get("/faerdige-modeller", MainController::finishedModels);
         app.get("/byg-carport", MainController::buildCarport);
