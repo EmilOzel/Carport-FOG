@@ -2,6 +2,7 @@ package app.persistence;
 
 import app.entities.User;
 import app.exceptions.DatabaseException;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 
@@ -9,17 +10,21 @@ public class UserMapper {
 
     public static User login(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT u.user_id, u.email, u.password_hash, u.first_name, u.last_name, u.phone, u.address, u.role, u.zip, z.city " +
-                     "FROM users u JOIN zipcode z ON u.zip = z.zip WHERE u.email = ? AND u.password_hash = ?";
+                     "FROM users u JOIN zipcode z ON u.zip = z.zip WHERE u.email = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, email);
-            ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                return mapRow(rs);
+                 User user = mapRow(rs);
+
+                // BCrypt password check
+                if (BCrypt.checkpw(password, user.getPassword())) {
+                    return user;
+                }
             }
         } catch (SQLException e) {
             throw new DatabaseException("Fejl ved login", e);
@@ -33,8 +38,10 @@ public class UserMapper {
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
+            String hashedPassword = BCrypt.hashpw(password,BCrypt.gensalt());
+
             ps.setString(1, email);
-            ps.setString(2, password);
+            ps.setString(2, hashedPassword);
             ps.setString(3, firstName);
             ps.setString(4, lastName);
             ps.setString(5, address);
@@ -42,7 +49,7 @@ public class UserMapper {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            if (e.getSQLState().equals("23505")) {
+            if ("23505".equals(e.getSQLState())) {
                 throw new DatabaseException("Email er allerede i brug");
             }
             throw new DatabaseException("Kunne ikke oprette bruger", e);
