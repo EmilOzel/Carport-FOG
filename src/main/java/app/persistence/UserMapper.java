@@ -60,7 +60,7 @@ public class UserMapper {
 
 
     public static void createUser(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO customers (email, password, balance, role) VALUES (?, ?, 0, ?)";
+        String sql = "INSERT INTO customers (email, password, role) VALUES (?, ?, 0, ?)";
 
 
         try (Connection conn = connectionPool.getConnection();
@@ -106,6 +106,7 @@ public class UserMapper {
             throw new DatabaseException("DB fejl", e);
         }
     }
+    //Ssd
 
 }
 

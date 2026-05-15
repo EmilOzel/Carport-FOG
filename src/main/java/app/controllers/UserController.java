@@ -19,7 +19,7 @@ public class UserController {
             ctx.render("login-side.html");
         });
 
-        app.post("/login", ctx -> {
+        app.post("/login-side", ctx -> {
             try {
                 User user = UserMapper.login(
                         ctx.formParam("email"),
