@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,7 @@
         <span class="hamburger">=</span>
     </header>
 
-    <h1 class="dashboard-title">Min carport-side - Velkommen (Bruger)</h1>
+    <h1 class="dashboard-title">Min carport-side - Velkommen <span th:text="${user.firstName}"></span></h1>
 
     <section class="dashboard-shell">
         <nav class="side-menu" aria-label="Bruger menu">
@@ -56,10 +56,11 @@
             <article class="dash-card">
                 <header>Min brugerprofil</header>
                 <div class="dash-body profile-fields">
-                    <span>Navn</span><span class="placeholder"></span>
-                    <span>Email</span><span class="placeholder"></span>
-                    <span>Adresse</span><span class="placeholder"></span>
-                    <span>Telefon</span><span class="placeholder"></span>
+                    <span>Navn</span><span th:text="${user.firstName + ' ' + user.lastName}"></span>
+                    <span>Email</span><span th:text="${user.email}"></span>
+                    <span>Adresse</span><span th:text="${user.address}"></span>
+                    <span>Postnummer</span><span th:text="${user.zipcode + ' ' + user.city}"></span>
+                    <span>Telefonnummer</span><span th:text="${user.phone}"></span>
                 </div>
             </article>
 

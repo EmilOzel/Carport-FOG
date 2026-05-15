@@ -10,7 +10,8 @@ public class AdminMapper {
 
     public static List<User> getAllUsers(ConnectionPool connectionPool) throws DatabaseException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT id, email, password, first_name, last_name, phone, address, zipcode, role FROM users";
+        String sql = "SELECT u.user_id, u.email, u.password_hash, u.first_name, u.last_name, u.phone, u.address, u.role, u.zip, z.city " +
+                     "FROM users u JOIN zipcode z ON u.zip = z.zip";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql);
@@ -26,7 +27,8 @@ public class AdminMapper {
     }
 
     public static User getUserById(int userId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT id, email, password, first_name, last_name, phone, address, zipcode, role FROM users WHERE id = ?";
+        String sql = "SELECT u.user_id, u.email, u.password_hash, u.first_name, u.last_name, u.phone, u.address, u.role, u.zip, z.city " +
+                     "FROM users u JOIN zipcode z ON u.zip = z.zip WHERE u.user_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -58,14 +60,15 @@ public class AdminMapper {
 
     private static User mapRow(ResultSet rs) throws SQLException {
         return new User(
-                rs.getInt("id"),
+                rs.getInt("user_id"),
                 rs.getString("email"),
-                rs.getString("password"),
+                rs.getString("password_hash"),
                 rs.getString("first_name"),
                 rs.getString("last_name"),
                 rs.getString("phone"),
                 rs.getString("address"),
-                rs.getInt("zipcode"),
+                Integer.parseInt(rs.getString("zip")),
+                rs.getString("city"),
                 rs.getString("role")
         );
     }

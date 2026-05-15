@@ -92,6 +92,7 @@ public class MainController {
             ctx.redirect("/login-side");
             return;
         }
+        ctx.attribute("user", user);
         ctx.render("bruger-side.html");
     }
 }

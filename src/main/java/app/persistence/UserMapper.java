@@ -8,7 +8,8 @@ import java.sql.*;
 public class UserMapper {
 
     public static User login(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT user_id, email, password_hash, first_name, last_name, address, role, zip FROM users WHERE email = ? AND password_hash = ?";
+        String sql = "SELECT u.user_id, u.email, u.password_hash, u.first_name, u.last_name, u.phone, u.address, u.role, u.zip, z.city " +
+                     "FROM users u JOIN zipcode z ON u.zip = z.zip WHERE u.email = ? AND u.password_hash = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -55,9 +56,10 @@ public class UserMapper {
                 rs.getString("password_hash"),
                 rs.getString("first_name"),
                 rs.getString("last_name"),
-                null,
+                rs.getString("phone"),
                 rs.getString("address"),
                 Integer.parseInt(rs.getString("zip")),
+                rs.getString("city"),
                 rs.getString("role")
         );
     }
