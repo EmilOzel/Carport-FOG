@@ -36,5 +36,12 @@ public class Main {
         CarportController.addRoutes(app);
 
         app.start(7070);
+
+
+        System.out.println(DB_USER);
+        System.out.println(DB_PASSWORD);
+        System.out.println(DB_URL);
+        System.out.println(DB_NAME);
     }
+
 }
