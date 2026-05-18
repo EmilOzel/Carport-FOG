@@ -16,7 +16,7 @@ public class OrderMapper {
         String sql = """
                 SELECT order_id, status, total_price
                 FROM orders
-                WHERE customer_id = ?
+                WHERE user_id = ?
                 ORDER BY order_id DESC
                 """;
         try (Connection conn = connectionPool.getConnection();
@@ -39,13 +39,15 @@ public class OrderMapper {
         return orders;
     }
     public static List<Object[]> getOrderLines(int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        List<Object[]> lines = new ArrayList<>();
+        List<Object[]> lines = new ArrayList<>();  // <-- manglede denne!
         String sql = """
-            SELECT m.name, oi.quantity, oi.description, m.unit, m.price
-            FROM order_items oi
-            JOIN materials m ON oi.material_id = m.material_id
-            WHERE oi.order_id = ?
-            """;
+        SELECT m.name, ml.quantity, ml.description, m.unit, ml.unit_price
+        FROM orders o
+        JOIN carport c ON c.order_id = o.order_id
+        JOIN material_line ml ON ml.carport_id = c.carport_id
+        JOIN material m ON m.material_id = ml.material_id
+        WHERE o.order_id = ?
+        """;
 
         try (Connection conn = connectionPool.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -59,7 +61,7 @@ public class OrderMapper {
                         rs.getInt("quantity"),
                         rs.getString("description"),
                         rs.getString("unit"),
-                        rs.getDouble("price")
+                        rs.getDouble("unit_price")
                 });
             }
         } catch (SQLException e) {
