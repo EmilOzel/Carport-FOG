@@ -35,7 +35,7 @@ public class Main {
 
         MainController.addRoutes(app);
         CarportController.addRoutes(app);
-        OrderController.addRoutes(app);
+        OrderController.addRoutes(app, connectionPool);
         app.start(7070);
     }
 }
