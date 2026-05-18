@@ -39,7 +39,7 @@ public class OrderMapper {
         return orders;
     }
     public static List<Object[]> getOrderLines(int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        List<Object[]> lines = new ArrayList<>();  // <-- manglede denne!
+        List<Object[]> lines = new ArrayList<>();
         String sql = """
         SELECT m.name, ml.quantity, ml.description, m.unit, ml.unit_price
         FROM orders o
@@ -68,6 +68,20 @@ public class OrderMapper {
             throw new DatabaseException("Kunne ikke hente ordrelinjer", e);
         }
         return lines;
+    }
+    public static int createOrder(int userId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "INSERT INTO orders (user_id, status) VALUES (?, 'pending') RETURNING order_id";
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("order_id");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Kunne ikke oprette ordre", e);
+        }
+        throw new DatabaseException("Ordre blev ikke oprettet");
     }
 
 }

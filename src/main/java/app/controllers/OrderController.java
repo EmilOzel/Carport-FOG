@@ -13,8 +13,22 @@ public class OrderController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/mine-ordrer", ctx -> getOrdersByUser(ctx, connectionPool));
         app.get("/ordre/{ordreId}", ctx -> getOrderLines(ctx, connectionPool));
+        app.post("/bestil-tilbud", ctx -> createOrder(ctx, connectionPool));
     }
-
+    private static void createOrder(Context ctx, ConnectionPool connectionPool) {
+        Integer userId = ctx.sessionAttribute("userId");
+        if (userId == null) {
+            ctx.redirect("/login-side");
+            return;
+        }
+        try {
+            int ordreId = OrderMapper.createOrder(userId, connectionPool);
+            ctx.redirect("/ordre/" + ordreId);
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.render("error.html");
+        }
+    }
     private static void getOrdersByUser(Context ctx, ConnectionPool connectionPool) {
         Integer userId = ctx.sessionAttribute("userId");
         if (userId == null) {
@@ -48,4 +62,5 @@ public class OrderController {
             ctx.render("error.html");
         }
     }
+
 }
