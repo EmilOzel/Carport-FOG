@@ -9,18 +9,15 @@ import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
-public class Main
-{
+public class Main {
 
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "postgres";
-    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
-    private static final String DB = "Carport";
+    private static final String DB_USER     = System.getenv("DB_USER");
+    private static final String DB_PASSWORD = System.getenv("DB_PASSWORD");
+    private static final String DB_URL      = System.getenv("DB_URL");
+    private static final String DB_NAME     = System.getenv("DB_NAME");
 
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
-
-
-
+    public static final ConnectionPool connectionPool =
+            ConnectionPool.getInstance(DB_USER, DB_PASSWORD, DB_URL, DB_NAME);
 
     public static void main(String[] args) {
         Javalin app = Javalin.create(config -> {
@@ -35,8 +32,8 @@ public class Main
             });
         });
 
-        MainController.addRoutes(app,connectionPool);
-        CarportController.addRoutes(app,connectionPool);
+        MainController.addRoutes(app);
+        CarportController.addRoutes(app);
 
         app.start(7070);
     }
