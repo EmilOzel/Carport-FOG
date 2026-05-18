@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Mine ordrer | FOG</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>Ordre ID</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th>Detaljer</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order[0]}"></td>
+        <td th:text="${order[1]}"></td>
+        <td th:text="${order[2]} + ' kr'"></td>
+        <td><a th:href="@{/ordre/{id}(id=${order[0]})}">Se detaljer</a></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
