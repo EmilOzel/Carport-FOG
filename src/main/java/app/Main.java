@@ -4,6 +4,7 @@ import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
 import app.controllers.CarportController;
 import app.controllers.MainController;
+import app.controllers.OrderController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
@@ -34,7 +35,7 @@ public class Main {
 
         MainController.addRoutes(app);
         CarportController.addRoutes(app);
-
+        OrderController.addRoutes(app);
         app.start(7070);
     }
 }
