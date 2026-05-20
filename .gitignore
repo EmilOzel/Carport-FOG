@@ -40,4 +40,4 @@ build/
 .DS_Store
 .idea/inspectionProfiles/
 
-.env
+.env.example

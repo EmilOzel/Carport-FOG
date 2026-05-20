@@ -71,9 +71,10 @@ public class MainController {
         String password = ctx.formParam("password");
         String adresse = ctx.formParam("adresse");
         String postnummer = ctx.formParam("postnummer");
+        int phone = Integer.parseInt(ctx.formParam("phone"));
 
         try {
-            UserMapper.createUser(email, password, fornavn, efternavn, adresse, postnummer, Main.connectionPool);
+            UserMapper.createUser(email, password, fornavn, efternavn, adresse, postnummer, phone, Main.connectionPool);
             ctx.redirect("/login-side");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());

@@ -65,7 +65,7 @@ public class AdminMapper {
                 rs.getString("password_hash"),
                 rs.getString("first_name"),
                 rs.getString("last_name"),
-                rs.getString("phone"),
+                rs.getInt("phone"),
                 rs.getString("address"),
                 Integer.parseInt(rs.getString("zip")),
                 rs.getString("city"),

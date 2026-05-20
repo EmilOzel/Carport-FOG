@@ -6,13 +6,13 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
-    private String phone;
+    private int phone;
     private String address;
     private int zipcode;
     private String city;
     private String role;
 
-    public User(int id, String email, String password, String firstName, String lastName, String phone, String address, int zipcode, String city, String role) {
+    public User(int id, String email, String password, String firstName, String lastName, int phone, String address, int zipcode, String city, String role) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -65,11 +65,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getPhone() {
+    public int getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(int phone) {
         this.phone = phone;
     }
 
