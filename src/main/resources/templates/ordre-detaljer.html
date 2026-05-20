@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Ordre detaljer | FOG</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<main class="figma-page">
+    <header class="topbar">
+        <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
+        <div class="top-icons">
+            <a href="/logout">Log ud</a>
+        </div>
+    </header>
+
+    <div style="padding: 32px 24px;">
+        <h1>Ordre #<span th:text="${ordreId}"></span></h1>
+
+        <article class="dash-card" style="margin-bottom: 24px;">
+            <header>Materialeliste</header>
+            <div class="dash-body">
+                <table class="orders-table">
+                    <thead>
+                    <tr>
+                        <th>Navn</th>
+                        <th>Antal</th>
+                        <th>Beskrivelse</th>
+                        <th>Enhed</th>
+                        <th>Pris</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="line : ${lines}">
+                        <td th:text="${line[0]}"></td>
+                        <td th:text="${line[1]}"></td>
+                        <td th:text="${line[2]}"></td>
+                        <td th:text="${line[3]}"></td>
+                        <td th:text="${line[4]} + ' kr'"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(lines)}">
+                        <td colspan="5" style="color: #777; font-style: italic;">
+                            Ingen materialer tilknyttet denne ordre endnu
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+
+        <a class="btn" href="/bruger-side">← Tilbage til min side</a>
+    </div>
+</main>
+</body>
+</html>

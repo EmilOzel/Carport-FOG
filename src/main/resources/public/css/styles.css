@@ -624,6 +624,8 @@ select {
 
 .dash-body {
     padding: 16px;
+    height: calc(100% - 42px);
+    box-sizing: border-box;
 }
 
 .orders-table {
@@ -647,9 +649,20 @@ select {
 
 .profile-fields {
     display: grid;
-    grid-template-columns: 70px 1fr;
-    gap: 10px;
-    font-size: 12px;
+    grid-template-columns: 130px 1fr;
+    font-size: 14px;
+    align-content: start;
+    height: 100%;
+}
+
+.profile-fields span {
+    padding: 10px 8px;
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.profile-fields span:nth-child(odd) {
+    font-weight: 600;
+    color: var(--grey-dark, #555);
 }
 
 .placeholder {
