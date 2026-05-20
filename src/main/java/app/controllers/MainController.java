@@ -9,10 +9,14 @@ public class MainController {
         app.get("/færdige-modeller", MainController::finishedModels);
         app.get("/login-side", MainController::loginPage);
         app.get("/opret-bruger", MainController::createUserPage);
+        app.get("/tegning/{ordreId}", MainController::tegning);
     }
 
     private static void index(Context ctx) {
         ctx.render("index.html");
+    }
+    private static void tegning(Context ctx) {
+        ctx.render("tegning.html");
     }
 
     private static void finishedModels(Context ctx) {

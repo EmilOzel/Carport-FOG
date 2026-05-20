@@ -10,6 +10,7 @@ import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.rendering.template.JavalinThymeleaf;
+import app.controllers.DrawingController;
 
 public class Main {
 
@@ -37,6 +38,7 @@ public class Main {
         MainController.addRoutes(app);
         CarportController.addRoutes(app);
         OrderController.addRoutes(app, connectionPool);
+        DrawingController.addRoutes(app);
         UserController.addRoutes(app,connectionPool);
         app.start(7070);
 

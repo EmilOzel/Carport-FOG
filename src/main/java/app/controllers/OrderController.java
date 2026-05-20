@@ -23,7 +23,7 @@ public class OrderController {
         }
         try {
             int ordreId = OrderMapper.createOrder(userId, connectionPool);
-            ctx.redirect("/ordre/" + ordreId);
+            ctx.redirect("/tegning/" + ordreId);
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
             ctx.render("error.html");
