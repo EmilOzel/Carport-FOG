@@ -14,20 +14,13 @@ public class MainController {
     public static void addRoutes(Javalin app) {
         app.get("/", MainController::index);
         app.get("/faerdige-modeller", MainController::finishedModels);
-        app.get("/færdige-modeller", MainController::finishedModels);
         app.get("/byg-carport", MainController::buildCarport);
         app.get("/vaelg-maal", MainController::chooseMeasurements);
-        app.get("/vælg-mål", MainController::chooseMeasurements);
-        app.get("/login", MainController::loginPage);
-        app.get("/login-side", MainController::loginPage);
-        app.post("/login", MainController::login);
-        app.get("/opret-bruger", MainController::createUserPage);
-        app.get("/opret-bruger-side", MainController::createUserPage);
-        app.post("/opret-bruger", MainController::createUser);
-        app.get("/logout", MainController::logout);
-        app.get("/bruger", MainController::userPage);
+        app.get("/login-side", MainController::login);
+        app.get("/opret-bruger-side", MainController::createUser);
         app.get("/bruger-side", MainController::userPage);
     }
+
 
     private static void index(Context ctx) {
         ctx.render("index.html");
