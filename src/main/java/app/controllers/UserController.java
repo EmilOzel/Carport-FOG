@@ -20,8 +20,8 @@ public class UserController {
         String password = ctx.formParam("password");
         try {
             User user = UserMapper.login(email, password, connectionPool);
-            ctx.sessionAttribute("userId", user.getId());
             ctx.sessionAttribute("currentUser", user);
+            ctx.sessionAttribute("userId", user.getId());
             ctx.redirect("/bruger-side");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
