@@ -6,6 +6,9 @@ import app.exceptions.DatabaseException;
 import app.persistence.UserMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import app.persistence.OrderMapper;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainController {
     public static void addRoutes(Javalin app) {
@@ -53,6 +56,7 @@ public class MainController {
         try {
             User user = UserMapper.login(email, password, Main.connectionPool);
             ctx.sessionAttribute("currentUser", user);
+            ctx.sessionAttribute("userId",user.getId());
             ctx.redirect("/bruger-side");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
@@ -93,6 +97,12 @@ public class MainController {
             return;
         }
         ctx.attribute("user", user);
+        try {
+            List<Object[]> orders = OrderMapper.getOrdersByUser(user.getId(), Main.connectionPool);
+            ctx.attribute("orders", orders);
+        } catch (DatabaseException e) {
+            ctx.attribute("orders", new ArrayList<>());
+        }
         ctx.render("bruger-side.html");
     }
 }

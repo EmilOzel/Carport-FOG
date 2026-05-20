@@ -5,6 +5,7 @@ import app.config.ThymeleafConfig;
 import app.controllers.CarportController;
 import app.controllers.MainController;
 import app.controllers.OrderController;
+import app.controllers.UserController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
