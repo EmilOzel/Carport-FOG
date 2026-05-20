@@ -10,6 +10,7 @@ public class MainController {
         app.get("/login-side", MainController::loginPage);
         app.get("/opret-bruger", MainController::createUserPage);
         app.get("/tegning/{ordreId}", MainController::tegning);
+        app.get("/opret-bruger-side", MainController::createUserPage);
     }
 
     private static void index(Context ctx) {
