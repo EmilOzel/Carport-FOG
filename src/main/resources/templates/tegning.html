@@ -14,8 +14,14 @@
 
     <section class="drawing-panel">
         <h1>Plantegning</h1>
-        <p>Din plantegning vises på siden med målvalg, hvor den opdateres live ud fra de valgte mål.</p>
-        <a class="btn" href="/vælg-mål">Tilbage til målvalg</a>
+        <div class="drawing-box" th:utext="${svg}"></div>
+
+        <div class="drawing-actions">
+            <a class="btn" href="/vælg-mål">Ret mål</a>
+            <form action="/bestil-tilbud" method="post">
+                <button class="btn" type="submit">Fortsæt</button>
+            </form>
+        </div>
     </section>
 </main>
 </body>
