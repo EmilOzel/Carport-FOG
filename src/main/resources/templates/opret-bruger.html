@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,17 +12,17 @@
     <section class="auth-card wide">
         <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
         <h2>Opret konto</h2>
-        <form class="auth-form" action="/bruger-side" method="get">
+        <form class="auth-form" action="/opret-bruger" method="post">
             <div class="register-grid">
-                <input name="fornavn" placeholder="Fornavn">
-                <input type="email" name="email" placeholder="Email">
-                <input name="efternavn" placeholder="Efternavn">
-                <input type="password" name="password" placeholder="Password">
+                <input name="fornavn" placeholder="Fornavn" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input name="efternavn" placeholder="Efternavn" required>
+                <input type="password" name="password" placeholder="Adgangskode" required>
                 <input name="adresse" placeholder="Adresse">
-                <input name="telefon" placeholder="Telefonnummer">
-                <input name="postnummer" placeholder="Postnummer">
+                <input name="postnummer" placeholder="Postnummer" required>
             </div>
             <div class="register-footer">
+                <p th:if="${error}" th:text="${error}" style="color:red;"></p>
                 <a class="auth-link" href="/login-side">Har du allerede en konto?</a>
                 <button class="btn" type="submit">Opret konto</button>
             </div>

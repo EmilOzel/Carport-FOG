@@ -1,0 +1,17 @@
+<form action="login" method="post">
+
+    <input type="email"
+           name="email"
+           placeholder="Email">
+
+    <input type="password"
+           name="password"
+           placeholder="Password">
+
+    <button type="submit">
+        Login
+    </button>
+
+</form>
+
+<p>${requestScope.error}</p>
