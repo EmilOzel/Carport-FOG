@@ -22,46 +22,98 @@
             <h1>Bestil Quick-Byg tilbud - carport med fladt tag</h1>
             <p>Med et specialudviklet computerprogram kan vi lynhurtigt beregne en pris og udskrive en skitsetegning på en carport inden for vores standardprogram.<br>Tilbud og skitsetegning fremsendes på mail hurtigst muligt.<br>Ved bestilling medfølger standardbyggevejledning.</p>
             <p>Udfyld formularen omhyggeligt og klik på "Bestil tilbud".</p>
+            <p class="form-error" th:if="${error}" th:text="${error}"></p>
         </div>
+
         <aside class="quick-form-panel">
-            <form class="quick-form" action="/bestil-tilbud" method="post">
+            <form class="quick-form" action="/carport/order" method="post">
                 <label>
                     Tagtype
-                    <select name="tagtype">
-                        <option>Vælg tagtype</option>
-                        <option>Uden Tagplader</option>
-                        <option>Plasttrapezplader</option>
+                    <select id="roofType" name="tagtype" required>
+                        <option value="FLAT">Fladt tag</option>
+                        <option value="RAISED">Høj rejsning</option>
                     </select>
                 </label>
+
                 <label>
                     Carport bredde
-                    <input name="bredde" placeholder="Indtast bredde">
-                </label>
-                <label>
-                    Carport længde
-                    <input name="laengde" placeholder="Indtast længde">
-                </label>
-                <h2>Redskabsrum</h2>
-                <label>
-                    Redskabsrum
-                    <select name="redskabsrum">
-                        <option>Vælg med eller uden</option>
-                        <option>Med redskabsrum</option>
-                        <option>Uden redskabsrum</option>
+                    <select id="carportWidth" name="bredde" required>
+                        <option value="300">300 cm</option>
+                        <option value="360">360 cm</option>
+                        <option value="480">480 cm</option>
+                        <option value="600" selected>600 cm</option>
+                        <option value="720">720 cm</option>
                     </select>
                 </label>
+
+                <label>
+                    Carport længde
+                    <select id="carportLength" name="længde" required>
+                        <option value="540">540 cm</option>
+                        <option value="600">600 cm</option>
+                        <option value="720">720 cm</option>
+                        <option value="780" selected>780 cm</option>
+                        <option value="900">900 cm</option>
+                    </select>
+                </label>
+
+                <label>
+                    Carport højde
+                    <select id="carportHeight" name="højde" required>
+                        <option value="210">210 cm</option>
+                        <option value="230" selected>230 cm</option>
+                        <option value="250">250 cm</option>
+                    </select>
+                </label>
+
+                <h2>Redskabsrum</h2>
+
+                <label>
+                    Redskabsrum
+                    <select id="shedChoice" name="redskabsrum" required>
+                        <option value="no">Uden redskabsrum</option>
+                        <option value="yes" selected>Med redskabsrum</option>
+                    </select>
+                </label>
+
                 <label>
                     Redskabsrum bredde
-                    <input name="skurBredde" placeholder="Indtast bredde">
+                    <select id="shedWidth" name="skurBredde">
+                        <option value="0">Intet redskabsrum</option>
+                        <option value="180">180 cm</option>
+                        <option value="210" selected>210 cm</option>
+                        <option value="240">240 cm</option>
+                        <option value="300">300 cm</option>
+                    </select>
                 </label>
+
                 <label>
                     Redskabsrum længde
-                    <input name="skurLaengde" placeholder="Indtast længde">
+                    <select id="shedLength" name="skurLængde">
+                        <option value="0">Intet redskabsrum</option>
+                        <option value="180">180 cm</option>
+                        <option value="210" selected>210 cm</option>
+                        <option value="240">240 cm</option>
+                        <option value="300">300 cm</option>
+                    </select>
                 </label>
+
                 <button class="btn" type="submit">Bestil tilbud</button>
             </form>
         </aside>
     </section>
+
+    <section class="drawing-panel">
+        <div class="technical-title">
+            <span>Værebro</span>
+            <strong>CarportE</strong>
+        </div>
+
+        <div id="sideView" class="drawing-box"></div>
+
+        <div id="topView" class="drawing-box"></div>
+    </section>
 </main>
+
 </body>
 </html>

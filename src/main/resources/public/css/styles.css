@@ -535,6 +535,46 @@ select {
     margin-top: 40px;
 }
 
+.drawing-panel {
+    padding: 34px 44px 44px;
+    background: #ffffff;
+}
+
+.technical-title {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    margin-bottom: 36px;
+    color: #000000;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.technical-title span {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: 18px;
+}
+
+.technical-title strong {
+    font-size: 62px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.drawing-box {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 28px;
+    background: #ffffff;
+}
+
+.drawing-box svg {
+    width: 100%;
+    min-width: 760px;
+    height: auto;
+    display: block;
+}
+
 .dashboard-page .topbar {
     justify-content: flex-start;
 }
@@ -884,6 +924,27 @@ select {
     .quick-form .btn {
         justify-self: stretch;
         margin-top: 16px;
+    }
+
+    .drawing-panel {
+        padding: 28px 12px 32px;
+    }
+
+    .technical-title {
+        margin-bottom: 24px;
+    }
+
+    .technical-title span {
+        font-size: 28px;
+        letter-spacing: 10px;
+    }
+
+    .technical-title strong {
+        font-size: 42px;
+    }
+
+    .drawing-box svg {
+        min-width: 720px;
     }
 
     .dashboard-page .topbar {
