@@ -42,7 +42,7 @@ public class CarportController {
 
             ctx.sessionAttribute("currentCarport", carport);
             ctx.sessionAttribute("currentOrder", order);
-            ctx.redirect("/opret-bruger-side");
+            ctx.redirect("/tegning");
         } catch (IllegalArgumentException e) {
             ctx.attribute("error", e.getMessage());
             ctx.render("vælg-mål.html");

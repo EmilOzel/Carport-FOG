@@ -3,16 +3,42 @@ package app.controllers;
 import app.entities.User;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
+import app.persistence.OrderMapper;
 import app.persistence.UserMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.get("/bruger", ctx -> userPage(ctx, connectionPool));
+        app.get("/bruger-side", ctx -> userPage(ctx, connectionPool));
         app.post("/login", ctx -> login(ctx, connectionPool));
         app.post("/opret-bruger", ctx -> createUser(ctx, connectionPool));
         app.get("/logout", ctx -> logout(ctx));
+    }
+
+    private static void userPage(Context ctx, ConnectionPool connectionPool) {
+        User user = ctx.sessionAttribute("currentUser");
+
+        if (user == null) {
+            ctx.redirect("/login-side");
+            return;
+        }
+
+        ctx.attribute("user", user);
+
+        try {
+            List<Object[]> orders = OrderMapper.getOrdersByUser(user.getId(), connectionPool);
+            ctx.attribute("orders", orders);
+        } catch (DatabaseException e) {
+            ctx.attribute("orders", new ArrayList<>());
+        }
+
+        ctx.render("bruger-side.html");
     }
 
     private static void login(Context ctx, ConnectionPool connectionPool) {
