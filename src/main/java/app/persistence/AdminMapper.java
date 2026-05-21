@@ -46,6 +46,22 @@ public class AdminMapper {
         throw new DatabaseException("Bruger ikke fundet");
     }
 
+    public static void createSalesperson(String email, String password, String firstName, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "INSERT INTO users (email, password_hash, first_name, last_name, address, role, zip) VALUES (?, ?, ?, '', '', 'salesperson', 2800)";
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.setString(2, org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt()));
+            ps.setString(3, firstName);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            if ("23505".equals(e.getSQLState())) {
+                throw new DatabaseException("Email er allerede i brug");
+            }
+            throw new DatabaseException("Kunne ikke oprette sælger", e);
+        }
+    }
+
     public static void deleteUser(int userId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "DELETE FROM users WHERE user_id = ?";
         try (Connection connection = connectionPool.getConnection();

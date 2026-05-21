@@ -16,6 +16,8 @@ public class AdminController {
         app.get("/admin",                         ctx -> adminDashboard(ctx, connectionPool));
         app.get("/admin/brugere",                 ctx -> adminUsers(ctx, connectionPool));
         app.get("/admin/statistik",               ctx -> adminStatistics(ctx, connectionPool));
+        app.get("/admin/opret-saelger",           ctx -> showCreateSalesperson(ctx));
+        app.post("/admin/opret-saelger",          ctx -> createSalesperson(ctx, connectionPool));
         app.post("/admin/ordre/{id}/status",      ctx -> updateOrderStatus(ctx, connectionPool));
         app.post("/admin/bruger/{id}/rolle",      ctx -> updateUserRole(ctx, connectionPool));
         app.post("/admin/bruger/{id}/slet",       ctx -> deleteUser(ctx, connectionPool));
@@ -98,6 +100,31 @@ public class AdminController {
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
             ctx.render("admin-statistics.html");
+        }
+    }
+
+    private static void showCreateSalesperson(Context ctx) {
+        if (!isAdmin(ctx)) {
+            ctx.redirect("/login");
+            return;
+        }
+        ctx.render("admin-create-salesperson.html");
+    }
+
+    private static void createSalesperson(Context ctx, ConnectionPool connectionPool) {
+        if (!isAdmin(ctx)) {
+            ctx.redirect("/login");
+            return;
+        }
+        String email      = ctx.formParam("email");
+        String firstName  = ctx.formParam("fornavn");
+        String password   = ctx.formParam("adgangskode");
+        try {
+            AdminMapper.createSalesperson(email, password, firstName, connectionPool);
+            ctx.redirect("/admin/brugere");
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.render("admin-create-salesperson.html");
         }
     }
 
