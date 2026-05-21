@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Statistik | FOG</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<main class="figma-page dashboard-page">
+    <header class="topbar">
+        <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
+    </header>
+
+    <h1 class="dashboard-title">Admin</h1>
+
+    <section class="admin-content">
+        <nav class="admin-tabs">
+            <a href="/admin" class="admin-tab">Ordrer</a>
+            <a href="/admin/brugere" class="admin-tab">Brugere</a>
+            <a href="/admin/statistik" class="admin-tab active">Statistik</a>
+        </nav>
+
+        <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+
+        <article class="dash-card">
+            <header>Statistik</header>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Ordrer i alt</span>
+                    <span class="stat-value" th:text="${stats['totalOrders']}">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Denne måned</span>
+                    <span class="stat-value" th:text="${stats['ordersThisMonth']}">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Kunder</span>
+                    <span class="stat-value" th:text="${stats['totalCustomers']}">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Betalt omsætning</span>
+                    <span class="stat-value" th:text="${#numbers.formatDecimal(stats['totalRevenue'], 0, 'COMMA', 0, 'POINT')} + ' kr'">0 kr</span>
+                </div>
+            </div>
+
+            <div class="stat-divider"></div>
+
+            <div class="stat-grid">
+                <div class="stat-card stat-card--pending">
+                    <span class="stat-label">Afventer</span>
+                    <span class="stat-value" th:text="${stats['pending']}">0</span>
+                </div>
+                <div class="stat-card stat-card--approved">
+                    <span class="stat-label">Godkendt</span>
+                    <span class="stat-value" th:text="${stats['approved']}">0</span>
+                </div>
+                <div class="stat-card stat-card--completed">
+                    <span class="stat-label">Færdig</span>
+                    <span class="stat-value" th:text="${stats['completed']}">0</span>
+                </div>
+                <div class="stat-card stat-card--rejected">
+                    <span class="stat-label">Afvist</span>
+                    <span class="stat-value" th:text="${stats['rejected']}">0</span>
+                </div>
+            </div>
+        </article>
+
+        <a class="btn back-btn" href="/bruger-side">Tilbage</a>
+    </section>
+</main>
+</body>
+</html>

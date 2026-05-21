@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Brugere | FOG</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<main class="figma-page dashboard-page">
+    <header class="topbar">
+        <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
+    </header>
+
+    <h1 class="dashboard-title">Admin</h1>
+
+    <section class="admin-content">
+        <nav class="admin-tabs">
+            <a href="/admin" class="admin-tab">Ordrer</a>
+            <a href="/admin/brugere" class="admin-tab active">Brugere</a>
+            <a href="/admin/statistik" class="admin-tab">Statistik</a>
+        </nav>
+
+        <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+
+        <article class="dash-card">
+            <header>Brugere</header>
+            <div class="dash-body">
+                <table class="orders-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Navn</th>
+                        <th>Email</th>
+                        <th>Adresse</th>
+                        <th>Postnummer</th>
+                        <th>By</th>
+                        <th>Rolle</th>
+                        <th>Skift rolle</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.firstName + ' ' + user.lastName}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.address}"></td>
+                        <td th:text="${user.zipcode}"></td>
+                        <td th:text="${user.city}"></td>
+                        <td th:text="${user.role}"></td>
+                        <td>
+                            <form th:action="@{/admin/bruger/{id}/rolle(id=${user.id})}" method="post" class="table-form">
+                                <select name="rolle">
+                                    <option value="customer"    th:selected="${user.role == 'customer'}">Kunde</option>
+                                    <option value="salesperson" th:selected="${user.role == 'salesperson'}">Sælger</option>
+                                    <option value="admin"       th:selected="${user.role == 'admin'}">Admin</option>
+                                </select>
+                                <button type="submit" class="btn">Gem</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form th:action="@{/admin/bruger/{id}/slet(id=${user.id})}" method="post"
+                                  onsubmit="return confirm('Er du sikker på du vil slette denne bruger?')">
+                                <button type="submit" class="btn" style="background:#c0392b;">Slet</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+        <a class="btn back-btn" href="/bruger-side">Tilbage</a>
+    </section>
+</main>
+</body>
+</html>
