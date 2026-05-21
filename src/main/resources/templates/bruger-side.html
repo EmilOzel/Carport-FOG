@@ -21,6 +21,7 @@
             <a href="/mine-ordrer">Mine ordrer</a>
             <a href="/bruger-side">Min profil</a>
             <a href="/byg-carport">Mine carportskitser</a>
+            <a th:if="${user.role == 'admin'}" href="/admin">Admin</a>
             <a href="/logout">Log ud</a>
         </nav>
 
@@ -67,7 +68,7 @@
                     <span>Navn</span><span th:text="${user.firstName + ' ' + user.lastName}"></span>
                     <span>Email</span><span th:text="${user.email}"></span>
                     <span>Adresse</span><span th:text="${user.address}"></span>
-                    <span>Postnummer</span><span th:text="${user.zipcode + ' ' + user.city}"></span>
+                    <span>Postnummer</span><span th:text="|${user.zipcode} ${user.city}|"></span>
                     <span>Telefonnummer</span><span th:text="${user.phone}"></span>
                 </div>
             </article>

@@ -14,6 +14,8 @@ import java.util.List;
 public class UserController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.get("/login-side", ctx -> ctx.render("login-side.html"));
+        app.get("/opret-bruger-side", ctx -> ctx.render("opret-bruger.html"));
         app.get("/bruger", ctx -> userPage(ctx, connectionPool));
         app.get("/bruger-side", ctx -> userPage(ctx, connectionPool));
         app.post("/login", ctx -> login(ctx, connectionPool));
@@ -23,21 +25,17 @@ public class UserController {
 
     private static void userPage(Context ctx, ConnectionPool connectionPool) {
         User user = ctx.sessionAttribute("currentUser");
-
         if (user == null) {
             ctx.redirect("/login-side");
             return;
         }
-
-        ctx.attribute("user", user);
-
         try {
             List<Object[]> orders = OrderMapper.getOrdersByUser(user.getId(), connectionPool);
             ctx.attribute("orders", orders);
         } catch (DatabaseException e) {
             ctx.attribute("orders", new ArrayList<>());
         }
-
+        ctx.attribute("user", user);
         ctx.render("bruger-side.html");
     }
 
