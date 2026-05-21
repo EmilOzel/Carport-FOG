@@ -14,8 +14,6 @@ import java.util.List;
 public class UserController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/login-side", ctx -> ctx.render("login-side.html"));
-        app.get("/opret-bruger-side", ctx -> ctx.render("opret-bruger.html"));
         app.get("/bruger", ctx -> userPage(ctx, connectionPool));
         app.get("/bruger-side", ctx -> userPage(ctx, connectionPool));
         app.post("/login", ctx -> login(ctx, connectionPool));

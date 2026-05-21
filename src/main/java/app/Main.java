@@ -5,7 +5,6 @@ import app.config.ThymeleafConfig;
 import app.controllers.AdminController;
 import app.controllers.CarportController;
 import app.controllers.DrawingController;
-import app.controllers.MainController;
 import app.controllers.OrderController;
 import app.controllers.UserController;
 import app.persistence.ConnectionPool;
@@ -36,13 +35,11 @@ public class Main {
             });
         });
 
-        MainController.addRoutes(app);
         CarportController.addRoutes(app);
         DrawingController.addRoutes(app);
         OrderController.addRoutes(app, connectionPool);
         UserController.addRoutes(app, connectionPool);
         AdminController.addRoutes(app, connectionPool);
-        UserController.addRoutes(app, connectionPool);
         app.start(7070);
 
 
