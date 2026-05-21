@@ -34,7 +34,8 @@
                         <th>Email</th>
                         <th>Dato</th>
                         <th>Status</th>
-                        <th>Pris</th>
+                        <th>Salgspris</th>
+                        <th>Kostpris</th>
                         <th>Betalt</th>
                         <th>Skift status</th>
                     </tr>
@@ -47,6 +48,7 @@
                         <td th:text="${order[3]}"></td>
                         <td th:text="${order[4]}"></td>
                         <td th:text="${order[5]} + ' kr'"></td>
+                        <td th:text="${order[7]} + ' kr'"></td>
                         <td th:text="${order[6] ? 'Ja' : 'Nej'}"></td>
                         <td>
                             <form th:action="@{/admin/ordre/{id}/status(id=${order[0]})}" method="post" class="table-form">

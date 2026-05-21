@@ -11,14 +11,15 @@ import java.util.List;
 public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/mine-ordrer", ctx -> getOrdersByUser(ctx, connectionPool));
-        app.get("/ordre/{ordreId}", ctx -> getOrderLines(ctx, connectionPool));
-        app.post("/bestil-tilbud", ctx -> createOrder(ctx, connectionPool));
+        app.get("/mine-ordrer",           ctx -> getOrdersByUser(ctx, connectionPool));
+        app.get("/ordre/{ordreId}",       ctx -> getOrderLines(ctx, connectionPool));
+        app.post("/bestil-tilbud",        ctx -> createOrder(ctx, connectionPool));
+        app.post("/ordre/{id}/betal",     ctx -> payOrder(ctx, connectionPool));
     }
     private static void createOrder(Context ctx, ConnectionPool connectionPool) {
         Integer userId = ctx.sessionAttribute("userId");
         if (userId == null) {
-            ctx.redirect("/login-side");
+            ctx.redirect("/login");
             return;
         }
         try {
@@ -32,7 +33,7 @@ public class OrderController {
     private static void getOrdersByUser(Context ctx, ConnectionPool connectionPool) {
         Integer userId = ctx.sessionAttribute("userId");
         if (userId == null) {
-            ctx.redirect("/login-side");
+            ctx.redirect("/login");
             return;
         }
         try {
@@ -45,10 +46,26 @@ public class OrderController {
         }
     }
 
+    private static void payOrder(Context ctx, ConnectionPool connectionPool) {
+        Integer userId = ctx.sessionAttribute("userId");
+        if (userId == null) {
+            ctx.redirect("/login");
+            return;
+        }
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("id"));
+            OrderMapper.payOrder(orderId, connectionPool);
+            ctx.redirect("/bruger-side");
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.redirect("/bruger-side");
+        }
+    }
+
     private static void getOrderLines(Context ctx, ConnectionPool connectionPool) {
         Integer userId = ctx.sessionAttribute("userId");
         if (userId == null) {
-            ctx.redirect("/login-side");
+            ctx.redirect("/login");
             return;
         }
         try {

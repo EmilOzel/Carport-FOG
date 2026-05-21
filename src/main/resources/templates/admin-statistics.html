@@ -42,6 +42,10 @@
                     <span class="stat-label">Omsætning</span>
                     <span class="stat-value" th:text="${#numbers.formatDecimal(stats['totalRevenue'], 0, 'COMMA', 0, 'POINT')} + ' kr'">0 kr</span>
                 </div>
+                <div class="stat-card stat-card--completed">
+                    <span class="stat-label">Indtjening</span>
+                    <span class="stat-value" th:text="${#numbers.formatDecimal(stats['totalProfit'], 0, 'COMMA', 0, 'POINT')} + ' kr'">0 kr</span>
+                </div>
             </div>
 
             <div class="stat-divider"></div>

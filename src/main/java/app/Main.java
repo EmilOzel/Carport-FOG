@@ -6,6 +6,7 @@ import app.controllers.AdminController;
 import app.controllers.CarportController;
 import app.controllers.DrawingController;
 import app.controllers.OrderController;
+import app.controllers.SalespersonController;
 import app.controllers.UserController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
@@ -40,6 +41,7 @@ public class Main {
         OrderController.addRoutes(app, connectionPool);
         UserController.addRoutes(app, connectionPool);
         AdminController.addRoutes(app, connectionPool);
+        SalespersonController.addRoutes(app, connectionPool);
         app.start(7070);
 
 

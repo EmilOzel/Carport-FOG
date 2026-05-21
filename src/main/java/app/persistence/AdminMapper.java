@@ -75,9 +75,14 @@ public class AdminMapper {
         List<Object[]> orders = new ArrayList<>();
         String sql = """
                 SELECT o.order_id, u.first_name, u.last_name, u.email,
-                       o.date, o.status, o.total_price, o.is_paid
+                       o.date, o.status, o.total_price, o.is_paid,
+                       COALESCE(SUM(ml.quantity * ml.unit_price), 0) AS cost_price
                 FROM orders o
                 JOIN users u ON u.user_id = o.user_id
+                LEFT JOIN carport c ON c.order_id = o.order_id
+                LEFT JOIN material_line ml ON ml.carport_id = c.carport_id
+                GROUP BY o.order_id, u.first_name, u.last_name, u.email,
+                         o.date, o.status, o.total_price, o.is_paid
                 ORDER BY o.order_id DESC
                 """;
 
@@ -93,7 +98,8 @@ public class AdminMapper {
                         rs.getDate("date"),
                         rs.getString("status"),
                         rs.getDouble("total_price"),
-                        rs.getBoolean("is_paid")
+                        rs.getBoolean("is_paid"),
+                        rs.getDouble("cost_price")
                 });
             }
         } catch (SQLException e) {
@@ -127,7 +133,16 @@ public class AdminMapper {
                     COUNT(*) FILTER (WHERE status = 'rejected')                    AS rejected,
                     COUNT(*) FILTER (WHERE is_paid = true)                         AS paid_orders,
                     COALESCE(SUM(total_price) FILTER (WHERE is_paid = true), 0)    AS total_revenue,
-                    COUNT(*) FILTER (WHERE date >= DATE_TRUNC('month', CURRENT_DATE)) AS orders_this_month
+                    COUNT(*) FILTER (WHERE date >= DATE_TRUNC('month', CURRENT_DATE)) AS orders_this_month,
+                    COALESCE(
+                        SUM(total_price) FILTER (WHERE is_paid = true), 0) -
+                    COALESCE((
+                        SELECT SUM(ml.quantity * ml.unit_price)
+                        FROM orders o2
+                        JOIN carport c ON c.order_id = o2.order_id
+                        JOIN material_line ml ON ml.carport_id = c.carport_id
+                        WHERE o2.is_paid = true
+                    ), 0)                                                           AS total_profit
                 FROM orders
                 """;
         try (Connection connection = connectionPool.getConnection();
@@ -142,6 +157,7 @@ public class AdminMapper {
                 stats.put("paidOrders",       rs.getInt("paid_orders"));
                 stats.put("totalRevenue",     rs.getDouble("total_revenue"));
                 stats.put("ordersThisMonth",  rs.getInt("orders_this_month"));
+                stats.put("totalProfit",      rs.getDouble("total_profit"));
             }
         } catch (SQLException e) {
             throw new DatabaseException("Kunne ikke hente statistik", e);

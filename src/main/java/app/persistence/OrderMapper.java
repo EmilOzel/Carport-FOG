@@ -69,6 +69,29 @@ public class OrderMapper {
         }
         return lines;
     }
+    public static void approveOrder(int orderId, double price, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET status = 'approved', total_price = ? WHERE order_id = ?";
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, price);
+            ps.setInt(2, orderId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseException("Kunne ikke godkende ordre", e);
+        }
+    }
+
+    public static void payOrder(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET is_paid = true, status = 'completed' WHERE order_id = ?";
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseException("Kunne ikke gennemføre betaling", e);
+        }
+    }
+
     public static int createOrder(int userId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO orders (user_id, status) VALUES (?, 'pending') RETURNING order_id";
         try (Connection conn = connectionPool.getConnection();

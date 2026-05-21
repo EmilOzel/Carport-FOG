@@ -22,6 +22,7 @@
             <a href="/bruger-side">Min profil</a>
             <a href="/byg-carport">Mine carportskitser</a>
             <a th:if="${user.role == 'admin'}" href="/admin">Admin</a>
+            <a th:if="${user.role == 'salesperson' or user.role == 'admin'}" href="/saelger">Sælger</a>
             <a href="/logout">Log ud</a>
         </nav>
 
@@ -45,7 +46,15 @@
                             <td>-</td>
                             <td>-</td>
                             <td th:text="${order[1]}"></td>
-                            <td><a th:href="@{/ordre/{id}(id=${order[0]})}">Se detaljer</a></td>
+                            <td>
+                                <a th:href="@{/ordre/{id}(id=${order[0]})}">Se detaljer</a>
+                                <form th:if="${order[1] == 'approved'}"
+                                      th:action="@{/ordre/{id}/betal(id=${order[0]})}"
+                                      method="post" style="display:inline; margin-left:8px;"
+                                      onsubmit="return confirm('Bekræft betaling af ' + /*[[${order[2]}]]*/ '0' + ' kr?')">
+                                    <button type="submit" class="btn btn--pay">Betal [[${order[2]}]] kr</button>
+                                </form>
+                            </td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(orders)}">
                             <td colspan="5">Ingen ordrer endnu</td>
