@@ -38,7 +38,7 @@ public class OrderController {
         try {
             List<Object[]> orders = OrderMapper.getOrdersByUser(userId, connectionPool);
             ctx.attribute("orders", orders);
-            ctx.render("mine-ordrer.html");
+            ctx.render("my-orders.html");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
             ctx.render("error.html");
@@ -56,7 +56,7 @@ public class OrderController {
             List<Object[]> lines = OrderMapper.getOrderLines(ordreId, connectionPool);
             ctx.attribute("lines", lines);
             ctx.attribute("ordreId", ordreId);
-            ctx.render("ordre-detaljer.html");
+            ctx.render("order-details.html");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
             ctx.render("error.html");

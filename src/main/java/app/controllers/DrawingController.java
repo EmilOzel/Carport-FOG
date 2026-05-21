@@ -15,7 +15,7 @@ public class DrawingController {
         Carport carport = ctx.sessionAttribute("currentCarport");
 
         if (carport == null) {
-            ctx.redirect("/vælg-mål");
+            ctx.redirect("/choose-dimensions");
             return;
         }
 
@@ -23,6 +23,6 @@ public class DrawingController {
 
         ctx.attribute("carport", carport);
         ctx.attribute("svg", svg);
-        ctx.render("tegning.html");
+        ctx.render("drawing.html");
     }
 }

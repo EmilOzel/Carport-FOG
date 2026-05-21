@@ -28,31 +28,31 @@ public class AdminController {
 
     private static void adminDashboard(Context ctx, ConnectionPool connectionPool) {
         if (!isAdmin(ctx)) {
-            ctx.redirect("/login-side");
+            ctx.redirect("/login");
             return;
         }
         try {
             List<Object[]> orders = AdminMapper.getAllOrders(connectionPool);
             ctx.attribute("orders", orders);
-            ctx.render("admin-side.html");
+            ctx.render("admin-orders.html");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
-            ctx.render("admin-side.html");
+            ctx.render("admin-orders.html");
         }
     }
 
     private static void adminUsers(Context ctx, ConnectionPool connectionPool) {
         if (!isAdmin(ctx)) {
-            ctx.redirect("/login-side");
+            ctx.redirect("/login");
             return;
         }
         try {
             List<User> users = AdminMapper.getAllUsers(connectionPool);
             ctx.attribute("users", users);
-            ctx.render("admin-brugere.html");
+            ctx.render("admin-users.html");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
-            ctx.render("admin-brugere.html");
+            ctx.render("admin-users.html");
         }
     }
 
@@ -89,15 +89,15 @@ public class AdminController {
 
     private static void adminStatistics(Context ctx, ConnectionPool connectionPool) {
         if (!isAdmin(ctx)) {
-            ctx.redirect("/login-side");
+            ctx.redirect("/login");
             return;
         }
         try {
             ctx.attribute("stats", AdminMapper.getStatistics(connectionPool));
-            ctx.render("admin-statistik.html");
+            ctx.render("admin-statistics.html");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
-            ctx.render("admin-statistik.html");
+            ctx.render("admin-statistics.html");
         }
     }
 

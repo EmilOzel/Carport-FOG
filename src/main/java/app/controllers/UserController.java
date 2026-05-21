@@ -14,17 +14,19 @@ import java.util.List;
 public class UserController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/bruger", ctx -> userPage(ctx, connectionPool));
-        app.get("/bruger-side", ctx -> userPage(ctx, connectionPool));
-        app.post("/login", ctx -> login(ctx, connectionPool));
-        app.post("/opret-bruger", ctx -> createUser(ctx, connectionPool));
-        app.get("/logout", ctx -> logout(ctx));
+        app.get("/login",        ctx -> ctx.render("login.html"));
+        app.get("/opret-bruger-side", ctx -> ctx.render("register.html"));
+        app.get("/bruger",            ctx -> userPage(ctx, connectionPool));
+        app.get("/bruger-side",       ctx -> userPage(ctx, connectionPool));
+        app.post("/login",            ctx -> login(ctx, connectionPool));
+        app.post("/opret-bruger",     ctx -> createUser(ctx, connectionPool));
+        app.get("/logout",            ctx -> logout(ctx));
     }
 
     private static void userPage(Context ctx, ConnectionPool connectionPool) {
         User user = ctx.sessionAttribute("currentUser");
         if (user == null) {
-            ctx.redirect("/login-side");
+            ctx.redirect("/login");
             return;
         }
         try {
@@ -34,7 +36,7 @@ public class UserController {
             ctx.attribute("orders", new ArrayList<>());
         }
         ctx.attribute("user", user);
-        ctx.render("bruger-side.html");
+        ctx.render("user-profile.html");
     }
 
     private static void login(Context ctx, ConnectionPool connectionPool) {
@@ -47,7 +49,7 @@ public class UserController {
             ctx.redirect("/bruger-side");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
-            ctx.render("login-side.html");
+            ctx.render("login.html");
         }
     }
 
@@ -60,10 +62,10 @@ public class UserController {
         String zip = ctx.formParam("postnummer");
         try {
             UserMapper.createUser(email, password, firstName, lastName, address, zip, connectionPool);
-            ctx.redirect("/login-side");
+            ctx.redirect("/login");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
-            ctx.render("opret-bruger.html");
+            ctx.render("register.html");
         }
     }
 
