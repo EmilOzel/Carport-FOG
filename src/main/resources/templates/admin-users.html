@@ -49,14 +49,15 @@
                         <td th:text="${user.city}"></td>
                         <td th:text="${user.role}"></td>
                         <td>
-                            <form th:action="@{/admin/bruger/{id}/rolle(id=${user.id})}" method="post" class="table-form">
+                            <form th:if="${user.role != 'customer'}"
+                                  th:action="@{/admin/bruger/{id}/rolle(id=${user.id})}" method="post" class="table-form">
                                 <select name="rolle">
-                                    <option value="customer"    th:selected="${user.role == 'customer'}">Kunde</option>
                                     <option value="salesperson" th:selected="${user.role == 'salesperson'}">Sælger</option>
                                     <option value="admin"       th:selected="${user.role == 'admin'}">Admin</option>
                                 </select>
                                 <button type="submit" class="btn">Gem</button>
                             </form>
+                            <span th:if="${user.role == 'customer'}" style="color:#888; font-size:12px;">—</span>
                         </td>
                         <td>
                             <form th:action="@{/admin/bruger/{id}/slet(id=${user.id})}" method="post"

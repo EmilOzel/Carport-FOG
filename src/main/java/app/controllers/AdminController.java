@@ -136,6 +136,11 @@ public class AdminController {
         try {
             int userId = Integer.parseInt(ctx.pathParam("id"));
             String newRole = ctx.formParam("rolle");
+            User target = AdminMapper.getUserById(userId, connectionPool);
+            if ("customer".equals(target.getRole())) {
+                ctx.redirect("/admin/brugere");
+                return;
+            }
             AdminMapper.updateUserRole(userId, newRole, connectionPool);
             ctx.redirect("/admin/brugere");
         } catch (DatabaseException e) {
