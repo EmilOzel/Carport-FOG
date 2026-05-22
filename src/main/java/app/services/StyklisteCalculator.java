@@ -9,6 +9,14 @@ import java.util.List;
 
 public class StyklisteCalculator {
     private static final int RAFTER_SPACING_CM = 55;
+    private static final double POST_PRICE = 400;
+    private static final double BEAM_PRICE = 950;
+    private static final double RAFTER_PRICE = 325;
+    private static final double BATTEN_PRICE = 55;
+    private static final double FASCIA_PRICE = 150;
+    private static final double CLADDING_PRICE = 35;
+    private static final double ROOF_TILE_PRICE = 16;
+    private static final double MOUNTING_PACKAGE_PRICE = 1200;
 
     public int calculatePosts(Carport carport) {
         if (carport.isHasShed()) {
@@ -34,7 +42,8 @@ public class StyklisteCalculator {
                 postDimensions(carport),
                 calculatePosts(carport),
                 "stk.",
-                "Ru trykimprægneret stolpe"
+                "Trykimprægneret stolpe",
+                POST_PRICE
         ));
 
         materialLines.add(new MaterialLine(
@@ -42,7 +51,8 @@ public class StyklisteCalculator {
                 "45 x 195 mm",
                 calculateBeams(carport),
                 "stk.",
-                beamDescription(carport)
+                beamDescription(carport),
+                BEAM_PRICE
         ));
 
         materialLines.add(new MaterialLine(
@@ -50,7 +60,8 @@ public class StyklisteCalculator {
                 rafterDimensions(carport),
                 calculateRafters(carport),
                 "stk.",
-                rafterDescription(carport)
+                rafterDescription(carport),
+                RAFTER_PRICE
         ));
 
         materialLines.add(new MaterialLine(
@@ -58,7 +69,8 @@ public class StyklisteCalculator {
                 "T1 38 x 73 mm",
                 calculateBattens(carport),
                 "stk.",
-                "Lægter til tagkonstruktion"
+                "Lægter til tagkonstruktion",
+                BATTEN_PRICE
         ));
 
         materialLines.add(new MaterialLine(
@@ -66,7 +78,8 @@ public class StyklisteCalculator {
                 "25 x 150 mm",
                 calculateFasciaBoards(),
                 "stk.",
-                "Ru trykimprægneret sternbræt"
+                "Trykimprægneret sternbræt",
+                FASCIA_PRICE
         ));
 
         if (carport.isHasShed()) {
@@ -75,7 +88,8 @@ public class StyklisteCalculator {
                     "19 x 100 mm",
                     calculateShedCladding(carport),
                     "stk.",
-                    "Trykimprægneret beklædning til redskabsrum"
+                    "Trykimprægneret beklædning til redskabsrum",
+                    CLADDING_PRICE
             ));
         }
 
@@ -84,7 +98,8 @@ public class StyklisteCalculator {
                 "Betontagsten",
                 calculateRoofTiles(carport),
                 "stk.",
-                "Sort betontagsten"
+                "Sort betontagsten",
+                ROOF_TILE_PRICE
         ));
 
         materialLines.add(new MaterialLine(
@@ -92,7 +107,8 @@ public class StyklisteCalculator {
                 "-",
                 1,
                 "pakke",
-                "Samlet pakke til montering"
+                "Samlet pakke til montering",
+                MOUNTING_PACKAGE_PRICE
         ));
 
         return materialLines;

@@ -20,7 +20,7 @@ CREATE TABLE orders (
     user_id     INT           NOT NULL REFERENCES users(user_id),
     date        DATE          NOT NULL DEFAULT CURRENT_DATE,
     status      VARCHAR(20)   NOT NULL DEFAULT 'pending'
-                              CHECK (status IN ('pending', 'approved', 'rejected', 'completed')),
+                              CHECK (status IN ('pending', 'offer', 'approved', 'rejected', 'completed')),
     total_price DECIMAL(10,2),
     remarks     TEXT,
     is_paid     BOOLEAN       NOT NULL DEFAULT FALSE
@@ -50,14 +50,14 @@ CREATE TABLE carport (
     carport_id SERIAL   PRIMARY KEY,
     order_id   INT      NOT NULL UNIQUE REFERENCES orders(order_id),
     roof_id    INT      NOT NULL UNIQUE REFERENCES roof(roof_id),
-    width      SMALLINT NOT NULL CHECK (width  BETWEEN 240 AND 600),
-    length     SMALLINT NOT NULL CHECK (length BETWEEN 240 AND 780)
+    width      SMALLINT NOT NULL CHECK (width  BETWEEN 240 AND 780),
+    length     SMALLINT NOT NULL CHECK (length BETWEEN 240 AND 1200)
 );
 
 CREATE TABLE shed (
     shed_id    SERIAL   PRIMARY KEY,
     carport_id INT      NOT NULL UNIQUE REFERENCES carport(carport_id),
-    width      SMALLINT NOT NULL CHECK (width  BETWEEN 210 AND 720),
+    width      SMALLINT NOT NULL CHECK (width  BETWEEN 180 AND 720),
     length     SMALLINT NOT NULL CHECK (length BETWEEN 150 AND 690)
 );
 

@@ -1,15 +1,19 @@
 package app.controllers;
 
+import app.entities.Carport;
+import app.entities.MaterialLine;
 import app.exceptions.DatabaseException;
 import app.persistence.AdminMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
+import app.services.StyklisteCalculator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import java.util.List;
 
 public class OrderController {
+    private static final String MATERIALS_SESSION_PREFIX = "materialsForOrder_";
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/mine-ordrer",           ctx -> getOrdersByUser(ctx, connectionPool));
@@ -28,6 +32,7 @@ public class OrderController {
         }
         try {
             int ordreId = OrderMapper.createOrder(userId, connectionPool);
+            saveCarportAndMaterialList(ctx, ordreId, connectionPool);
             ctx.redirect("/ordre/" + ordreId);
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
@@ -116,8 +121,13 @@ public class OrderController {
         try {
             int ordreId = Integer.parseInt(ctx.pathParam("ordreId"));
             List<Object[]> lines = OrderMapper.getOrderLines(ordreId, connectionPool);
+            List<MaterialLine> materials = createMaterialList(ctx, ordreId, lines, connectionPool);
+            saveMissingCarportData(ctx, ordreId, lines, materials, connectionPool);
+            lines = OrderMapper.getOrderLines(ordreId, connectionPool);
             Object[] order = AdminMapper.getOrderDetail(ordreId, connectionPool);
+            updateDisplayedPrice(order, materials);
             ctx.attribute("lines", lines);
+            ctx.attribute("materials", materials);
             ctx.attribute("ordreId", ordreId);
             ctx.attribute("order", order);
             ctx.render("order-details.html");
@@ -125,6 +135,77 @@ public class OrderController {
             ctx.attribute("error", e.getMessage());
             ctx.render("error.html");
         }
+    }
+
+    private static void saveCarportAndMaterialList(Context ctx, int ordreId, ConnectionPool connectionPool) throws DatabaseException {
+        Carport carport = ctx.sessionAttribute("currentCarport");
+
+        if (carport == null) {
+            return;
+        }
+
+        StyklisteCalculator calculator = new StyklisteCalculator();
+        List<MaterialLine> materials = calculator.calculateMaterialList(carport);
+
+        OrderMapper.saveCarportForOrder(ordreId, carport, materials, connectionPool);
+        ctx.sessionAttribute(materialSessionKey(ordreId), materials);
+    }
+
+    private static List<MaterialLine> createMaterialList(Context ctx, int ordreId, List<Object[]> lines, ConnectionPool connectionPool) throws DatabaseException {
+        if (!lines.isEmpty()) {
+            return List.of();
+        }
+
+        List<MaterialLine> materials = ctx.sessionAttribute(materialSessionKey(ordreId));
+
+        if (materials != null) {
+            return materials;
+        }
+
+        Carport carport = ctx.sessionAttribute("currentCarport");
+
+        if (carport == null) {
+            carport = OrderMapper.getCarportByOrder(ordreId, connectionPool);
+        }
+
+        if (carport == null) {
+            return List.of();
+        }
+
+        StyklisteCalculator calculator = new StyklisteCalculator();
+        return calculator.calculateMaterialList(carport);
+    }
+
+    private static void saveMissingCarportData(Context ctx, int ordreId, List<Object[]> lines, List<MaterialLine> materials, ConnectionPool connectionPool) throws DatabaseException {
+        if (!lines.isEmpty() || materials.isEmpty()) {
+            return;
+        }
+
+        Carport carport = ctx.sessionAttribute("currentCarport");
+
+        if (carport == null || OrderMapper.getCarportByOrder(ordreId, connectionPool) != null) {
+            return;
+        }
+
+        OrderMapper.saveCarportForOrder(ordreId, carport, materials, connectionPool);
+    }
+
+    private static void updateDisplayedPrice(Object[] order, List<MaterialLine> materials) {
+        if ((double) order[6] > 0 || materials.isEmpty()) {
+            return;
+        }
+
+        double totalPrice = 0;
+
+        for (MaterialLine material : materials) {
+            totalPrice += material.getTotalPrice();
+        }
+
+        order[6] = totalPrice;
+    }
+
+    private static String materialSessionKey(int ordreId) {
+        return MATERIALS_SESSION_PREFIX + ordreId;
     }
 
 }

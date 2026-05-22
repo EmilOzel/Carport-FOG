@@ -56,7 +56,14 @@
                         <td th:text="${line[3]}"></td>
                         <td th:text="${line[4]} + ' kr'"></td>
                     </tr>
-                    <tr th:if="${#lists.isEmpty(lines)}">
+                    <tr th:if="${#lists.isEmpty(lines)}" th:each="material : ${materials}">
+                        <td th:text="${material.name}"></td>
+                        <td th:text="${material.quantity}"></td>
+                        <td th:text="${material.dimensions + ' - ' + material.description}"></td>
+                        <td th:text="${material.unit}"></td>
+                        <td th:text="${#numbers.formatDecimal(material.unitPrice, 0, 0)} + ' kr'"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(lines) && #lists.isEmpty(materials)}">
                         <td colspan="5" style="color:#777; font-style:italic;">
                             Ingen materialer tilknyttet denne ordre endnu
                         </td>

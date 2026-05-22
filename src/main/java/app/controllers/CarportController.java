@@ -16,11 +16,8 @@ public class CarportController {
     public static void addRoutes(Javalin app) {
         app.get("/", ctx -> ctx.render("index.html"));
         app.get("/byg-carport", CarportController::showBuildPage);
-        app.get("/faerdige-modeller", ctx -> ctx.render("ready-models.html"));
         app.get("/færdige-modeller", ctx -> ctx.render("ready-models.html"));
         app.get("/choose-dimensions", CarportController::showMeasurementPage);
-        app.get("/vælg-mål", CarportController::showMeasurementPage);
-        app.get("/v%C3%A6lg-m%C3%A5l", CarportController::showMeasurementPage);
         app.post("/carport/order", CarportController::createOrder);
     }
 
