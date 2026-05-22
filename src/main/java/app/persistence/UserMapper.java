@@ -71,5 +71,17 @@ public class UserMapper {
                 rs.getString("role")
         );
     }
+
+    private static boolean zipExists(String zip, Connection connection) throws SQLException {
+        String sql = "SELECT zip FROM zipcode WHERE zip = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, zip);
+
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        }
+    }
+    //
     //sds asdasda
 }
