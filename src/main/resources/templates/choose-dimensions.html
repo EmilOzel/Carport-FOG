@@ -30,39 +30,41 @@
                 <label>
                     Tagtype
                     <select id="roofType" name="tagtype" required>
-                        <option value="FLAT">Fladt tag</option>
-                        <option value="RAISED">Høj rejsning</option>
+                        <option value="FLAT" th:selected="${selectedRoofType == 'FLAT'}">Fladt tag</option>
+                        <option value="RAISED" th:selected="${selectedRoofType == 'RAISED'}">Høj rejsning</option>
                     </select>
                 </label>
 
                 <label>
                     Carport bredde
                     <select id="carportWidth" name="bredde" required>
-                        <option value="300">300 cm</option>
-                        <option value="360">360 cm</option>
-                        <option value="480">480 cm</option>
-                        <option value="600" selected>600 cm</option>
-                        <option value="720">720 cm</option>
+                        <option th:each="width : ${widthOptions}"
+                                th:value="${width}"
+                                th:text="${width + ' cm'}"
+                                th:selected="${width == selectedWidth}"
+                                value="600">600 cm</option>
                     </select>
                 </label>
 
                 <label>
                     Carport længde
                     <select id="carportLength" name="længde" required>
-                        <option value="540">540 cm</option>
-                        <option value="600">600 cm</option>
-                        <option value="720">720 cm</option>
-                        <option value="780" selected>780 cm</option>
-                        <option value="900">900 cm</option>
+                        <option th:each="length : ${lengthOptions}"
+                                th:value="${length}"
+                                th:text="${length + ' cm'}"
+                                th:selected="${length == selectedLength}"
+                                value="780">780 cm</option>
                     </select>
                 </label>
 
                 <label>
                     Carport højde
                     <select id="carportHeight" name="højde" required>
-                        <option value="210">210 cm</option>
-                        <option value="230" selected>230 cm</option>
-                        <option value="250">250 cm</option>
+                        <option th:each="height : ${heightOptions}"
+                                th:value="${height}"
+                                th:text="${height + ' cm'}"
+                                th:selected="${height == selectedHeight}"
+                                value="230">230 cm</option>
                     </select>
                 </label>
 
@@ -71,30 +73,30 @@
                 <label>
                     Redskabsrum
                     <select id="shedChoice" name="redskabsrum" required>
-                        <option value="no">Uden redskabsrum</option>
-                        <option value="yes" selected>Med redskabsrum</option>
+                        <option value="no" th:selected="${!selectedHasShed}">Uden redskabsrum</option>
+                        <option value="yes" th:selected="${selectedHasShed}">Med redskabsrum</option>
                     </select>
                 </label>
 
                 <label>
                     Redskabsrum bredde
                     <select id="shedWidth" name="skurBredde">
-                        <option value="0">Intet redskabsrum</option>
-                        <option value="180">180 cm</option>
-                        <option value="210" selected>210 cm</option>
-                        <option value="240">240 cm</option>
-                        <option value="300">300 cm</option>
+                        <option th:each="shedWidth : ${shedWidthOptions}"
+                                th:value="${shedWidth}"
+                                th:text="${shedWidth == 0 ? 'Intet redskabsrum' : shedWidth + ' cm'}"
+                                th:selected="${shedWidth == selectedShedWidth}"
+                                value="210">210 cm</option>
                     </select>
                 </label>
 
                 <label>
                     Redskabsrum længde
                     <select id="shedLength" name="skurLængde">
-                        <option value="0">Intet redskabsrum</option>
-                        <option value="180">180 cm</option>
-                        <option value="210" selected>210 cm</option>
-                        <option value="240">240 cm</option>
-                        <option value="300">300 cm</option>
+                        <option th:each="shedLength : ${shedLengthOptions}"
+                                th:value="${shedLength}"
+                                th:text="${shedLength == 0 ? 'Intet redskabsrum' : shedLength + ' cm'}"
+                                th:selected="${shedLength == selectedShedLength}"
+                                value="210">210 cm</option>
                     </select>
                 </label>
 

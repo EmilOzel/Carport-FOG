@@ -5,25 +5,29 @@ import app.dto.CarportForm;
 public class CarportValidator {
 
     public void validate(CarportForm form) {
-        if (form.getWidth() < 240 || form.getWidth() > 800) {
-            throw new IllegalArgumentException("Bredde skal være mellem 240 og 800 cm");
+        if (!CarportDimensions.isValidWidth(form.getWidth())) {
+            throw new IllegalArgumentException("Vælg en gyldig carportbredde");
         }
 
-        if (form.getLength() < 240 || form.getLength() > 1200) {
-            throw new IllegalArgumentException("Længde skal være mellem 240 og 1200 cm");
+        if (!CarportDimensions.isValidLength(form.getLength())) {
+            throw new IllegalArgumentException("Vælg en gyldig carportlængde");
         }
 
-        if (form.getHeight() < 180 || form.getHeight() > 350) {
-            throw new IllegalArgumentException("Højde skal være mellem 180 og 350 cm");
+        if (!CarportDimensions.isValidHeight(form.getHeight())) {
+            throw new IllegalArgumentException("Vælg en gyldig carporthøjde");
         }
 
         if (form.isHasShed()) {
-            if (form.getShedWidth() <= 0 || form.getShedWidth() > form.getWidth()) {
-                throw new IllegalArgumentException("Skurbredde er ugyldig");
+            if (!CarportDimensions.isValidShedWidthForCarport(form.getShedWidth(), form.getWidth())) {
+                throw new IllegalArgumentException("Skurbredde skal være 60 cm mindre end carportbredden");
             }
 
-            if (form.getShedLength() <= 0 || form.getShedLength() > form.getLength()) {
+            if (!CarportDimensions.isValidShedLength(form.getShedLength()) || form.getShedLength() <= 0) {
                 throw new IllegalArgumentException("Skurlængde er ugyldig");
+            }
+
+            if (form.getShedLength() > form.getLength() / 3) {
+                throw new IllegalArgumentException("Skurlængde skal kunne være i den sidste tredjedel af carporten");
             }
         }
     }

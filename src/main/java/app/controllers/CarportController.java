@@ -3,6 +3,7 @@ package app.controllers;
 import app.dto.CarportForm;
 import app.entities.Carport;
 import app.entities.Order;
+import app.services.CarportDimensions;
 import app.services.CarportService;
 import app.services.PriceCalculator;
 import io.javalin.Javalin;
@@ -16,7 +17,8 @@ public class CarportController {
         app.get("/", ctx -> ctx.render("index.html"));
         app.get("/byg-carport", CarportController::showBuildPage);
         app.get("/faerdige-modeller", ctx -> ctx.render("ready-models.html"));
-        app.get("/f%C3%A6rdige-modeller", ctx -> ctx.render("ready-models.html"));
+        app.get("/færdige-modeller", ctx -> ctx.render("ready-models.html"));
+        app.get("/choose-dimensions", CarportController::showMeasurementPage);
         app.get("/vælg-mål", CarportController::showMeasurementPage);
         app.get("/v%C3%A6lg-m%C3%A5l", CarportController::showMeasurementPage);
         app.post("/carport/order", CarportController::createOrder);
@@ -27,12 +29,17 @@ public class CarportController {
     }
 
     private static void showMeasurementPage(Context ctx) {
+        setDimensionAttributes(ctx, null);
         ctx.render("choose-dimensions.html");
     }
 
     private static void createOrder(Context ctx) {
+        CarportForm form = null;
+
         try {
-            Carport carport = createCarportFromRequest(ctx);
+            form = readCarportForm(ctx);
+            CarportService carportService = new CarportService();
+            Carport carport = carportService.createCarportFromForm(form);
 
             PriceCalculator priceCalculator = new PriceCalculator();
             double basePrice = priceCalculator.calculateBasePrice(carport);
@@ -48,14 +55,9 @@ public class CarportController {
             ctx.redirect("/tegning");
         } catch (IllegalArgumentException e) {
             ctx.attribute("error", e.getMessage());
+            setDimensionAttributes(ctx, form);
             ctx.render("choose-dimensions.html");
         }
-    }
-
-    private static Carport createCarportFromRequest(Context ctx) {
-        CarportForm form = readCarportForm(ctx);
-        CarportService carportService = new CarportService();
-        return carportService.createCarportFromForm(form);
     }
 
     private static CarportForm readCarportForm(Context ctx) {
@@ -71,6 +73,22 @@ public class CarportController {
         int shedLength = parseOptionalInt(ctx.formParam("skurLængde"));
 
         return new CarportForm(width, length, height, roofType, hasShed, shedWidth, shedLength);
+    }
+
+    private static void setDimensionAttributes(Context ctx, CarportForm form) {
+        ctx.attribute("widthOptions", CarportDimensions.WIDTH_OPTIONS);
+        ctx.attribute("lengthOptions", CarportDimensions.LENGTH_OPTIONS);
+        ctx.attribute("heightOptions", CarportDimensions.HEIGHT_OPTIONS);
+        ctx.attribute("shedWidthOptions", CarportDimensions.SHED_WIDTH_OPTIONS);
+        ctx.attribute("shedLengthOptions", CarportDimensions.SHED_LENGTH_OPTIONS);
+
+        ctx.attribute("selectedWidth", form == null ? CarportDimensions.DEFAULT_WIDTH : form.getWidth());
+        ctx.attribute("selectedLength", form == null ? CarportDimensions.DEFAULT_LENGTH : form.getLength());
+        ctx.attribute("selectedHeight", form == null ? CarportDimensions.DEFAULT_HEIGHT : form.getHeight());
+        ctx.attribute("selectedRoofType", form == null ? "FLAT" : form.getRoofType());
+        ctx.attribute("selectedHasShed", form == null || form.isHasShed());
+        ctx.attribute("selectedShedWidth", form == null ? CarportDimensions.DEFAULT_SHED_WIDTH : form.getShedWidth());
+        ctx.attribute("selectedShedLength", form == null ? CarportDimensions.DEFAULT_SHED_LENGTH : form.getShedLength());
     }
 
     private static int parseRequiredInt(Context ctx, String paramName) {
