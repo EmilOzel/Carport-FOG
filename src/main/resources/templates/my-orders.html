@@ -6,37 +6,72 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<main class="figma-page">
+<main class="figma-page dashboard-page">
     <header class="topbar">
         <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
-        <div class="top-icons">
-            <a href="/logout">Log ud</a>
-        </div>
     </header>
 
-    <div style="padding: 32px 24px;">
-        <h1>Mine ordrer</h1>
-        <table class="orders-table">
-            <thead>
-            <tr>
-                <th>Ordre ID</th>
-                <th>Status</th>
-                <th>Total</th>
-                <th>Detaljer</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="order : ${orders}">
-                <td th:text="${order[0]}"></td>
-                <td th:text="${order[1]}"></td>
-                <td th:text="${order[2]} + ' kr'"></td>
-                <td><a th:href="@{/ordre/{id}(id=${order[0]})}">Se detaljer</a></td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <a class="btn" href="/bruger-side">← Tilbage til min side</a>
-    </div>
+    <h1 class="dashboard-title">Mine ordrer</h1>
+
+    <section class="admin-content">
+        <article class="dash-card">
+            <header>Ordrer</header>
+            <div class="dash-body">
+                <table class="orders-table">
+                    <thead>
+                    <tr>
+                        <th>Ordre ID</th>
+                        <th>Status</th>
+                        <th>Pris</th>
+                        <th>Handling</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="order : ${orders}">
+                        <td th:text="${order[0]}"></td>
+                        <td>
+                            <span th:switch="${order[1]}">
+                                <span th:case="'pending'">Afventer</span>
+                                <span th:case="'offer'">Tilbud modtaget</span>
+                                <span th:case="'approved'">Godkendt</span>
+                                <span th:case="'rejected'">Afvist</span>
+                                <span th:case="'completed'">Færdig</span>
+                                <span th:case="*" th:text="${order[1]}"></span>
+                            </span>
+                        </td>
+                        <td th:text="${order[2]} + ' kr'"></td>
+                        <td>
+                            <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                                <a th:href="@{/ordre/{id}(id=${order[0]})}" class="btn" style="font-size:12px;">Se detaljer</a>
+
+                                <span th:if="${order[1] == 'offer'}" style="display:contents;">
+                                    <form th:action="@{/ordre/{id}/accepter(id=${order[0]})}" method="post" style="display:inline;">
+                                        <button type="submit" class="btn btn--pay" style="font-size:12px;">Accepter [[${order[2]}]] kr</button>
+                                    </form>
+                                    <form th:action="@{/ordre/{id}/afvis(id=${order[0]})}" method="post" style="display:inline;"
+                                          onsubmit="return confirm('Er du sikker på du vil afvise tilbuddet?')">
+                                        <button type="submit" class="btn btn--reject" style="font-size:12px;">Afvis</button>
+                                    </form>
+                                </span>
+
+                                <a th:if="${order[1] == 'approved'}"
+                                   th:href="@{/ordre/{id}/betal(id=${order[0]})}"
+                                   class="btn btn--pay" style="font-size:12px;">
+                                    Betal <span th:text="${order[2]} + ' kr'"></span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(orders)}">
+                        <td colspan="4">Ingen ordrer endnu</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+
+        <a class="btn back-btn" href="/bruger-side">Tilbage</a>
+    </section>
 </main>
 </body>
 </html>

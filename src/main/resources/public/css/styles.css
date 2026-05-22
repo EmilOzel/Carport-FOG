@@ -777,6 +777,16 @@ select {
     color: #555;
 }
 
+.btn--reject {
+    background: #c0392b;
+}
+
+.saelger-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
 .btn--pay {
     background: #1a7a3a;
     font-size: 12px;

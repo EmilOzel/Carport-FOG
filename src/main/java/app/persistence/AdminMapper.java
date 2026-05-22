@@ -46,6 +46,42 @@ public class AdminMapper {
         throw new DatabaseException("Bruger ikke fundet");
     }
 
+    public static Object[] getOrderDetail(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = """
+                SELECT o.order_id, u.first_name, u.last_name, u.email, u.phone,
+                       o.date, o.status, o.total_price, o.is_paid,
+                       COALESCE(SUM(ml.quantity * ml.unit_price), 0) AS cost_price
+                FROM orders o
+                JOIN users u ON u.user_id = o.user_id
+                LEFT JOIN carport c ON c.order_id = o.order_id
+                LEFT JOIN material_line ml ON ml.carport_id = c.carport_id
+                WHERE o.order_id = ?
+                GROUP BY o.order_id, u.first_name, u.last_name, u.email, u.phone,
+                         o.date, o.status, o.total_price, o.is_paid
+                """;
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Object[]{
+                        rs.getInt("order_id"),
+                        rs.getString("first_name") + " " + rs.getString("last_name"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getDate("date"),
+                        rs.getString("status"),
+                        rs.getDouble("total_price"),
+                        rs.getBoolean("is_paid"),
+                        rs.getDouble("cost_price")
+                };
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Kunne ikke hente ordredetaljer", e);
+        }
+        throw new DatabaseException("Ordre ikke fundet");
+    }
+
     public static void createSalesperson(String email, String password, String firstName, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO users (email, password_hash, first_name, last_name, address, role, zip) VALUES (?, ?, ?, '', '', 'salesperson', 2800)";
         try (Connection connection = connectionPool.getConnection();

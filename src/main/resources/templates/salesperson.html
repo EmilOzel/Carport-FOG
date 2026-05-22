@@ -30,43 +30,29 @@
                         <th>Kostpris</th>
                         <th>Salgspris</th>
                         <th>Betalt</th>
-                        <th>Godkend</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="order : ${orders}">
-                        <td><a th:href="@{/ordre/{id}(id=${order[0]})}" th:text="${order[0]}"></a></td>
+                        <td th:text="${order[0]}"></td>
                         <td th:text="${order[1]}"></td>
                         <td th:text="${order[3]}"></td>
-                        <td th:text="${order[4]}"></td>
+                        <td>
+                            <span th:switch="${order[4]}">
+                                <span th:case="'pending'">Afventer</span>
+                                <span th:case="'offer'">Tilbud sendt</span>
+                                <span th:case="'approved'">Godkendt</span>
+                                <span th:case="'rejected'">Afvist</span>
+                                <span th:case="'completed'">Færdig</span>
+                                <span th:case="*" th:text="${order[4]}"></span>
+                            </span>
+                        </td>
                         <td th:text="${order[7]} + ' kr'"></td>
                         <td th:text="${order[5]} + ' kr'"></td>
                         <td th:text="${order[6] ? 'Ja' : 'Nej'}"></td>
                         <td>
-                            <form th:if="${order[4] == 'pending'}"
-                                  th:action="@{/saelger/ordre/{id}/godkend(id=${order[0]})}"
-                                  th:id="'form-' + ${order[0]}"
-                                  method="post" class="table-form pricing-form">
-                                <input type="hidden" name="kostpris"
-                                       th:value="${order[7]}">
-                                <label class="pricing-label">
-                                    Fortjeneste&nbsp;%
-                                    <input type="number" name="fortjeneste" min="0" max="200" step="1"
-                                           value="30" class="price-input"
-                                           th:data-kostpris="${order[7]}"
-                                           th:data-form="'form-' + ${order[0]}"
-                                           onchange="beregnPris(this)">
-                                </label>
-                                <label class="pricing-label">
-                                    Salgspris
-                                    <input type="number" name="pris" min="0" step="0.01"
-                                           class="price-input sale-price-input"
-                                           th:value="${order[7]} * 1.30" required>
-                                </label>
-                                <button type="submit" class="btn">Godkend</button>
-                            </form>
-                            <span th:unless="${order[4] == 'pending'}"
-                                  style="color:#888; font-size:12px;">—</span>
+                            <a th:href="@{/saelger/ordre/{id}(id=${order[0]})}" class="btn">Se ordre</a>
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(orders)}">
@@ -80,15 +66,5 @@
         <a class="btn back-btn" href="/bruger-side">Tilbage</a>
     </section>
 </main>
-
-<script>
-function beregnPris(input) {
-    const kostpris = parseFloat(input.dataset.kostpris) || 0;
-    const pct = parseFloat(input.value) || 0;
-    const salgspris = kostpris * (1 + pct / 100);
-    const form = input.closest('form');
-    form.querySelector('.sale-price-input').value = salgspris.toFixed(2);
-}
-</script>
 </body>
 </html>

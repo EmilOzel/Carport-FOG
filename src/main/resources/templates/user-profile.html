@@ -45,15 +45,34 @@
                             <td th:text="${order[0]}"></td>
                             <td>-</td>
                             <td>-</td>
-                            <td th:text="${order[1]}"></td>
+                            <td>
+                                <span th:switch="${order[1]}">
+                                    <span th:case="'pending'">Afventer</span>
+                                    <span th:case="'offer'">Tilbud modtaget</span>
+                                    <span th:case="'approved'">Godkendt</span>
+                                    <span th:case="'rejected'">Afvist</span>
+                                    <span th:case="'completed'">Færdig</span>
+                                    <span th:case="*" th:text="${order[1]}"></span>
+                                </span>
+                            </td>
                             <td>
                                 <a th:href="@{/ordre/{id}(id=${order[0]})}">Se detaljer</a>
-                                <form th:if="${order[1] == 'approved'}"
-                                      th:action="@{/ordre/{id}/betal(id=${order[0]})}"
-                                      method="post" style="display:inline; margin-left:8px;"
-                                      onsubmit="return confirm('Bekræft betaling af ' + /*[[${order[2]}]]*/ '0' + ' kr?')">
-                                    <button type="submit" class="btn btn--pay">Betal [[${order[2]}]] kr</button>
-                                </form>
+
+                                <span th:if="${order[1] == 'offer'}" style="display:inline-flex; gap:6px; margin-left:8px;">
+                                    <form th:action="@{/ordre/{id}/accepter(id=${order[0]})}" method="post" style="display:inline;">
+                                        <button type="submit" class="btn btn--pay">Accepter [[${order[2]}]] kr</button>
+                                    </form>
+                                    <form th:action="@{/ordre/{id}/afvis(id=${order[0]})}" method="post" style="display:inline;"
+                                          onsubmit="return confirm('Er du sikker på du vil afvise tilbuddet?')">
+                                        <button type="submit" class="btn btn--reject">Afvis</button>
+                                    </form>
+                                </span>
+
+                                <a th:if="${order[1] == 'approved'}"
+                                   th:href="@{/ordre/{id}/betal(id=${order[0]})}"
+                                   class="btn btn--pay" style="margin-left:8px;">
+                                    Betal <span th:text="${order[2]} + ' kr'"></span>
+                                </a>
                             </td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(orders)}">
