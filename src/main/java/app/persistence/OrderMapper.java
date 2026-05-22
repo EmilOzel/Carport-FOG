@@ -69,15 +69,37 @@ public class OrderMapper {
         }
         return lines;
     }
-    public static void approveOrder(int orderId, double price, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "UPDATE orders SET status = 'approved', total_price = ? WHERE order_id = ?";
+    public static void sendOffer(int orderId, double price, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET status = 'offer', total_price = ? WHERE order_id = ?";
         try (Connection conn = connectionPool.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDouble(1, price);
             ps.setInt(2, orderId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new DatabaseException("Kunne ikke godkende ordre", e);
+            throw new DatabaseException("Kunne ikke sende tilbud", e);
+        }
+    }
+
+    public static void acceptOffer(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET status = 'approved' WHERE order_id = ?";
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseException("Kunne ikke acceptere tilbud", e);
+        }
+    }
+
+    public static void rejectOffer(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET status = 'rejected' WHERE order_id = ?";
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseException("Kunne ikke afvise tilbud", e);
         }
     }
 

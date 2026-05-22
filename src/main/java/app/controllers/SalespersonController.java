@@ -13,8 +13,9 @@ import java.util.List;
 public class SalespersonController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("/saelger",                        ctx -> salespersonDashboard(ctx, connectionPool));
-        app.post("/saelger/ordre/{id}/godkend",    ctx -> approveOrder(ctx, connectionPool));
+        app.get("/saelger",                            ctx -> salespersonDashboard(ctx, connectionPool));
+        app.get("/saelger/ordre/{id}",                 ctx -> orderDetail(ctx, connectionPool));
+        app.post("/saelger/ordre/{id}/send-tilbud",    ctx -> sendOffer(ctx, connectionPool));
     }
 
     private static boolean isSalesperson(Context ctx) {
@@ -37,7 +38,23 @@ public class SalespersonController {
         }
     }
 
-    private static void approveOrder(Context ctx, ConnectionPool connectionPool) {
+    private static void orderDetail(Context ctx, ConnectionPool connectionPool) {
+        if (!isSalesperson(ctx)) {
+            ctx.redirect("/login");
+            return;
+        }
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("id"));
+            Object[] order = AdminMapper.getOrderDetail(orderId, connectionPool);
+            ctx.attribute("order", order);
+            ctx.render("salesperson-order.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.redirect("/saelger");
+        }
+    }
+
+    private static void sendOffer(Context ctx, ConnectionPool connectionPool) {
         if (!isSalesperson(ctx)) {
             ctx.status(403);
             return;
@@ -46,7 +63,7 @@ public class SalespersonController {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
             String priceStr = ctx.formParam("pris");
             double price = Double.parseDouble(priceStr.replace(",", "."));
-            OrderMapper.approveOrder(orderId, price, connectionPool);
+            OrderMapper.sendOffer(orderId, price, connectionPool);
             ctx.redirect("/saelger");
         } catch (NumberFormatException e) {
             ctx.attribute("error", "Ugyldig pris");

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordre | Sælger | FOG</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<main class="figma-page dashboard-page">
+    <header class="topbar">
+        <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
+    </header>
+
+    <h1 class="dashboard-title">Ordre <span th:text="'#' + ${order[0]}"></span></h1>
+
+    <section class="admin-content">
+        <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+
+        <article class="dash-card">
+            <header>Kundeoplysninger</header>
+            <div class="dash-body">
+                <div class="profile-fields">
+                    <span>Navn</span>       <span th:text="${order[1]}"></span>
+                    <span>Email</span>      <span th:text="${order[2]}"></span>
+                    <span>Telefon</span>    <span th:text="${order[3]}"></span>
+                    <span>Dato</span>       <span th:text="${order[4]}"></span>
+                    <span>Status</span>
+                    <span>
+                        <span th:switch="${order[5]}">
+                            <span th:case="'pending'">Afventer</span>
+                            <span th:case="'offer'">Tilbud sendt</span>
+                            <span th:case="'approved'">Godkendt</span>
+                            <span th:case="'rejected'">Afvist</span>
+                            <span th:case="'completed'">Færdig</span>
+                            <span th:case="*" th:text="${order[5]}"></span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </article>
+
+        <article class="dash-card" style="margin-top:16px;">
+            <header>Prissætning</header>
+            <div class="dash-body">
+                <div class="profile-fields" style="margin-bottom:24px;">
+                    <span>Kostpris</span>     <span th:text="${order[8]} + ' kr'"></span>
+                    <span>Salgspris</span>    <span id="salgspris-display" th:text="${order[6]} + ' kr'"></span>
+                    <span>Fortjeneste %</span><span id="fortjeneste-display">—</span>
+                </div>
+
+                <form th:if="${order[5] == 'pending' or order[5] == 'offer'}"
+                      th:action="@{/saelger/ordre/{id}/send-tilbud(id=${order[0]})}"
+                      method="post" class="offer-form">
+                    <label class="pricing-label">
+                        Salgspris (kr)
+                        <input type="number" id="pris" name="pris"
+                               min="0" step="0.01" class="price-input"
+                               th:data-kostpris="${order[8]}"
+                               placeholder="Indtast salgspris..."
+                               oninput="beregnFortjeneste(this)" required>
+                    </label>
+                    <button type="submit" class="btn">Send tilbud</button>
+                </form>
+
+                <p th:if="${order[5] != 'pending' and order[5] != 'offer'}"
+                   style="color:#888; font-size:13px;">
+                    Tilbud kan ikke ændres i nuværende status.
+                </p>
+            </div>
+        </article>
+
+        <a class="btn back-btn" href="/saelger">Tilbage</a>
+    </section>
+</main>
+
+<script>
+function beregnFortjeneste(input) {
+    const kostpris = parseFloat(input.dataset.kostpris) || 0;
+    const salgspris = parseFloat(input.value) || 0;
+    document.getElementById('salgspris-display').textContent = salgspris.toFixed(2) + ' kr';
+    if (kostpris > 0) {
+        const pct = ((salgspris - kostpris) / kostpris * 100).toFixed(1);
+        document.getElementById('fortjeneste-display').textContent = pct + ' %';
+    } else {
+        document.getElementById('fortjeneste-display').textContent = '—';
+    }
+}
+</script>
+</body>
+</html>

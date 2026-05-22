@@ -6,18 +6,36 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<main class="figma-page">
+<main class="figma-page dashboard-page">
     <header class="topbar">
         <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
-        <div class="top-icons">
-            <a href="/logout">Log ud</a>
-        </div>
     </header>
 
-    <div style="padding: 32px 24px;">
-        <h1>Ordre #<span th:text="${ordreId}"></span></h1>
+    <h1 class="dashboard-title">Ordre <span th:text="'#' + ${ordreId}"></span></h1>
 
-        <article class="dash-card" style="margin-bottom: 24px;">
+    <section class="admin-content">
+        <article class="dash-card" style="margin-bottom:16px;">
+            <header>Ordreoplysninger</header>
+            <div class="dash-body">
+                <div class="profile-fields">
+                    <span>Status</span>
+                    <span>
+                        <span th:switch="${order[5]}">
+                            <span th:case="'pending'">Afventer</span>
+                            <span th:case="'offer'">Tilbud modtaget</span>
+                            <span th:case="'approved'">Godkendt</span>
+                            <span th:case="'rejected'">Afvist</span>
+                            <span th:case="'completed'">Færdig</span>
+                            <span th:case="*" th:text="${order[5]}"></span>
+                        </span>
+                    </span>
+                    <span>Pris</span>     <span th:text="${order[6]} + ' kr'"></span>
+                    <span>Betalt</span>   <span th:text="${order[7] ? 'Ja' : 'Nej'}"></span>
+                </div>
+            </div>
+        </article>
+
+        <article class="dash-card" style="margin-bottom:16px;">
             <header>Materialeliste</header>
             <div class="dash-body">
                 <table class="orders-table">
@@ -39,7 +57,7 @@
                         <td th:text="${line[4]} + ' kr'"></td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(lines)}">
-                        <td colspan="5" style="color: #777; font-style: italic;">
+                        <td colspan="5" style="color:#777; font-style:italic;">
                             Ingen materialer tilknyttet denne ordre endnu
                         </td>
                     </tr>
@@ -48,8 +66,38 @@
             </div>
         </article>
 
-        <a class="btn" href="/bruger-side">← Tilbage til min side</a>
-    </div>
+        <article class="dash-card" style="margin-bottom:16px;">
+            <header>Næste skridt</header>
+            <div class="dash-body" style="padding:20px;">
+                <p th:switch="${order[5]}" style="margin:0 0 16px; font-size:14px;">
+                    <span th:case="'pending'">Din ordre afventer behandling af en sælger. Du hører fra os snart.</span>
+                    <span th:case="'offer'">Du har modtaget et tilbud på <strong th:text="${order[6]} + ' kr'"></strong>. Accepter eller afvis nedenfor.</span>
+                    <span th:case="'approved'">Dit tilbud er godkendt. Betal nedenfor for at færdiggøre din ordre.</span>
+                    <span th:case="'rejected'">Din ordre er afvist. Kontakt FOG for mere information.</span>
+                    <span th:case="'completed'">Din ordre er betalt og under behandling. Vi kontakter dig vedr. levering.</span>
+                </p>
+                <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                    <span th:if="${order[5] == 'offer'}" style="display:contents;">
+                        <form th:action="@{/ordre/{id}/accepter(id=${ordreId})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn--pay" style="min-height:36px; padding:0 20px;">
+                                Accepter <span th:text="${order[6]} + ' kr'"></span>
+                            </button>
+                        </form>
+                        <form th:action="@{/ordre/{id}/afvis(id=${ordreId})}" method="post" style="display:inline;"
+                              onsubmit="return confirm('Er du sikker på du vil afvise tilbuddet?')">
+                            <button type="submit" class="btn btn--reject" style="min-height:36px; padding:0 20px;">Afvis tilbud</button>
+                        </form>
+                    </span>
+                    <a th:if="${order[5] == 'approved'}"
+                       th:href="@{/ordre/{id}/betal(id=${ordreId})}"
+                       class="btn btn--pay" style="min-height:36px; padding:0 20px;">
+                        Betal <span th:text="${order[6]} + ' kr'"></span>
+                    </a>
+                    <a class="btn back-btn" href="/bruger-side">Tilbage</a>
+                </div>
+            </div>
+        </article>
+    </section>
 </main>
 </body>
 </html>
