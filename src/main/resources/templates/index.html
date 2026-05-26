@@ -1,21 +1,48 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOG Carport</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="../public/css/styles.css">
 </head>
 <body class="home-page">
 <header class="site-header">
     <a class="brand" href="/" aria-label="FOG forside">
         <img src="/images/fog.png" alt="FOG">
     </a>
+    ```html id="c8f2g1"
     <div class="header-actions">
-        <a class="icon-link" href="/login" aria-label="Log ind"><img src="/images/person.png" alt=""></a>
-        <a class="icon-link" href="/bruger-side" aria-label="Kurv"><img src="/images/kurv.png" alt=""></a>
+
+        <!-- Hvis bruger IKKE er logget ind -->
+        <a th:if="${session.currentUser == null}"
+           class="icon-link"
+           href="/login"
+           aria-label="Log ind">
+
+            <img src="/images/person.png" alt="">
+        </a>
+
+        <!-- Hvis bruger ER logget ind -->
+        <a th:if="${session.currentUser != null}"
+           class="icon-link"
+           href="/bruger-side"
+           aria-label="Min profil">
+
+            <img src="/images/person.png" alt="">
+        </a>
+
+        <!-- Kurv ikon -->
+        <a class="icon-link"
+           href="/kurv"
+           aria-label="Kurv">
+
+            <img src="/images/kurv.png" alt="">
+        </a>
+
     </div>
+    ```
+
 </header>
 
 <main>
