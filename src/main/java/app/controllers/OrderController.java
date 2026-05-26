@@ -6,6 +6,7 @@ import app.exceptions.DatabaseException;
 import app.persistence.AdminMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
+import app.services.CarportSvg;
 import app.services.StyklisteCalculator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -120,14 +121,25 @@ public class OrderController {
         }
         try {
             int ordreId = Integer.parseInt(ctx.pathParam("ordreId"));
-            List<Object[]> lines = OrderMapper.getOrderLines(ordreId, connectionPool);
-            List<MaterialLine> materials = createMaterialList(ctx, ordreId, lines, connectionPool);
-            saveMissingCarportData(ctx, ordreId, lines, materials, connectionPool);
-            lines = OrderMapper.getOrderLines(ordreId, connectionPool);
             Object[] order = AdminMapper.getOrderDetail(ordreId, connectionPool);
-            updateDisplayedPrice(order, materials);
+            boolean isCompleted = "completed".equals(order[5]);
+            List<Object[]> lines = List.of();
+            List<MaterialLine> materials = List.of();
+            String svg = null;
+
+            if (isCompleted) {
+                lines = OrderMapper.getOrderLines(ordreId, connectionPool);
+                materials = createMaterialList(ctx, ordreId, lines, connectionPool);
+                saveMissingCarportData(ctx, ordreId, lines, materials, connectionPool);
+                lines = OrderMapper.getOrderLines(ordreId, connectionPool);
+                updateDisplayedPrice(order, materials);
+                svg = createDrawing(ordreId, connectionPool);
+            }
+
             ctx.attribute("lines", lines);
             ctx.attribute("materials", materials);
+            ctx.attribute("isCompleted", isCompleted);
+            ctx.attribute("svg", svg);
             ctx.attribute("ordreId", ordreId);
             ctx.attribute("order", order);
             ctx.render("order-details.html");
@@ -202,6 +214,16 @@ public class OrderController {
         }
 
         order[6] = totalPrice;
+    }
+
+    private static String createDrawing(int ordreId, ConnectionPool connectionPool) throws DatabaseException {
+        Carport carport = OrderMapper.getCarportByOrder(ordreId, connectionPool);
+
+        if (carport == null) {
+            return null;
+        }
+
+        return new CarportSvg(carport).toString();
     }
 
     private static String materialSessionKey(int ordreId) {

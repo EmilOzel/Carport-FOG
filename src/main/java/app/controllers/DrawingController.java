@@ -1,7 +1,6 @@
 package app.controllers;
 
 import app.entities.Carport;
-import app.services.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -19,10 +18,7 @@ public class DrawingController {
             return;
         }
 
-        String svg = new CarportSvg(carport).toString();
-
         ctx.attribute("carport", carport);
-        ctx.attribute("svg", svg);
         ctx.render("drawing.html");
     }
 }

@@ -35,8 +35,8 @@
             </div>
         </article>
 
-        <article class="dash-card" style="margin-bottom:16px;">
-            <header>Materialeliste</header>
+        <article class="dash-card" style="margin-bottom:16px;" th:if="${isCompleted}">
+            <header>Materialeliste / stykliste</header>
             <div class="dash-body">
                 <table class="orders-table">
                     <thead>
@@ -70,6 +70,22 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+        </article>
+
+        <article class="dash-card" style="margin-bottom:16px;" th:if="${isCompleted && svg != null}">
+            <header>Plantegning</header>
+            <div class="dash-body">
+                <div class="drawing-box" th:utext="${svg}"></div>
+            </div>
+        </article>
+
+        <article class="dash-card" style="margin-bottom:16px;" th:unless="${isCompleted}">
+            <header>Materialeliste, stykliste og plantegning</header>
+            <div class="dash-body" style="padding:20px;">
+                <p style="margin:0;">
+                    Materialeliste, stykliste og plantegning kan først ses, når ordren er færdig.
+                </p>
             </div>
         </article>
 
