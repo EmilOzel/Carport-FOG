@@ -17,6 +17,7 @@ public class UserController {
         app.get("/login",             ctx -> ctx.render("login.html"));
         app.get("/opret-bruger",      ctx -> ctx.render("register.html"));
         app.get("/opret-bruger-side", ctx -> ctx.render("register.html"));
+
         app.get("/bruger",            ctx -> userPage(ctx, connectionPool));
         app.get("/bruger-side",       ctx -> userPage(ctx, connectionPool));
         app.post("/login",            ctx -> login(ctx, connectionPool));
