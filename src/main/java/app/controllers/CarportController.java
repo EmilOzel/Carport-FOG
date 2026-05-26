@@ -3,6 +3,7 @@ package app.controllers;
 import app.dto.CarportForm;
 import app.entities.Carport;
 import app.entities.Order;
+import app.entities.User;
 import app.services.CarportDimensions;
 import app.services.CarportService;
 import app.services.PriceCalculator;
@@ -15,7 +16,25 @@ public class CarportController {
 
     public static void addRoutes(Javalin app) {
         app.get("/", ctx -> ctx.render("index.html"));
-        app.get("/byg-carport", CarportController::showBuildPage);
+
+        app.get("/byg-carport", ctx -> {
+
+            User user = ctx.sessionAttribute("currentUser");
+
+            if (user == null) {
+
+                // gem hvor brugeren ville hen
+                ctx.sessionAttribute("redirectAfterLogin", "/byg-carport");
+
+                // send til login
+                ctx.redirect("/login");
+                return;
+            }
+
+            CarportController.showBuildPage(ctx);
+        });
+
+
         app.get("/færdige-modeller", ctx -> ctx.render("ready-models.html"));
         app.get("/choose-dimensions", CarportController::showMeasurementPage);
         app.post("/carport/order", CarportController::createOrder);
