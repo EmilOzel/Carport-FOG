@@ -36,6 +36,7 @@ public class AdminController {
         try {
             List<Object[]> orders = AdminMapper.getAllOrders(connectionPool);
             ctx.attribute("orders", orders);
+            ctx.attribute("user", ctx.sessionAttribute("currentUser"));
             ctx.render("admin-orders.html");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
@@ -51,6 +52,7 @@ public class AdminController {
         try {
             List<User> users = AdminMapper.getAllUsers(connectionPool);
             ctx.attribute("users", users);
+            ctx.attribute("user", ctx.sessionAttribute("currentUser"));
             ctx.render("admin-users.html");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
@@ -96,6 +98,7 @@ public class AdminController {
         }
         try {
             ctx.attribute("stats", AdminMapper.getStatistics(connectionPool));
+            ctx.attribute("user", ctx.sessionAttribute("currentUser"));
             ctx.render("admin-statistics.html");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());

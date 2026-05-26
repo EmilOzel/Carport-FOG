@@ -17,7 +17,7 @@ public class OrderMapper {
     public static List<Object[]> getOrdersByUser(int userId, ConnectionPool connectionPool) throws DatabaseException {
         List<Object[]> orders = new ArrayList<>();
         String sql = """
-                SELECT order_id, status, total_price
+                SELECT order_id, status, total_price, date
                 FROM orders
                 WHERE user_id = ?
                 ORDER BY order_id DESC
@@ -33,7 +33,7 @@ public class OrderMapper {
                         rs.getInt("order_id"),
                         rs.getString("status"),
                         rs.getDouble("total_price"),
-
+                        rs.getDate("date")
                 });
             }
         } catch (SQLException e) {

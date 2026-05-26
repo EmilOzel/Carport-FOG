@@ -71,10 +71,80 @@ img {
     height: 24px;
 }
 
-.hamburger {
+/* ── Hamburger button (3-bar → X) ── */
+.hamburger-btn {
     display: none;
-    font-size: 26px;
-    line-height: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    flex-shrink: 0;
+}
+.hamburger-btn span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+    transform-origin: center;
+}
+.hamburger-btn.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.hamburger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger-btn.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* ── Off-canvas overlay ── */
+.mob-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.mob-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ── Off-canvas nav drawer ── */
+.mob-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100%;
+    background: #ffffff;
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    padding: 80px 0 32px;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+}
+.mob-nav.open { transform: translateX(0); }
+.mob-nav a {
+    padding: 16px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text);
+    border-bottom: 1px solid #f0f0f0;
+}
+.mob-nav a:first-child { border-top: 1px solid #f0f0f0; }
+.mob-nav .mob-nav-logout {
+    margin-top: auto;
+    border-top: 1px solid #f0f0f0;
+    color: #c0392b;
 }
 
 .btn {
@@ -761,7 +831,8 @@ select {
     margin-top: 16px;
 }
 
-.pricing-form {
+.pricing-form,
+.offer-form {
     display: flex;
     align-items: flex-end;
     gap: 8px;
@@ -868,6 +939,7 @@ select {
     margin-bottom: 8px;
 }
 
+/* ── 900px breakpoint ── */
 @media (max-width: 900px) {
     .hero,
     .quick-layout,
@@ -890,283 +962,198 @@ select {
     }
 }
 
+/* ── 700px (mobile) breakpoint ── */
 @media (max-width: 700px) {
+
+    /* ── General ── */
+    .figma-page {
+        width: 100%;
+    }
+
+    /* ── Front page header ── */
     .site-header {
         align-items: center;
         flex-direction: row;
         gap: 12px;
         min-height: 0;
-        padding: 16px 20px;
+        padding: 14px 16px;
     }
-
     .brand img {
-        width: 58px;
-        height: 58px;
+        width: 52px;
+        height: 52px;
     }
-
     .header-actions {
         width: auto;
         flex-wrap: wrap;
     }
 
+    /* ── Hero ── */
     .hero {
         min-height: 0;
         grid-template-columns: 1fr;
         gap: 24px;
-        padding: 28px 18px 36px;
+        padding: 28px 16px 36px;
     }
+    .hero h1 { font-size: 30px; }
+    .hero-media img { height: 210px; }
 
-    .hero h1 {
-        font-size: 34px;
-    }
-
-    .hero-media img {
-        min-height: 0;
-        height: 230px;
-    }
-
-    .figma-page {
-        width: 100%;
-        min-height: 100vh;
-    }
-
+    /* ── Topbar (dashboard pages) ── */
     .topbar {
-        height: 78px;
-        align-items: flex-start;
-        padding: 10px 14px 0;
+        height: 68px;
+        align-items: center;
+        padding: 0 14px;
     }
+    .logo { width: 52px; height: 52px; }
+    .top-icons { gap: 8px; }
+    .top-icons img { width: 18px; height: 18px; }
 
-    .logo {
-        width: 58px;
-        height: 58px;
-    }
+    /* Show hamburger on mobile */
+    .hamburger-btn { display: flex; }
+    .dashboard-page .topbar { justify-content: space-between; }
 
-    .top-icons {
-        gap: 8px;
-    }
-
-    .top-icons img {
-        width: 18px;
-        height: 18px;
-    }
-
-    .hamburger {
-        display: block;
-    }
-
+    /* ── Auth screens ── */
     .auth-screen {
         width: 100%;
         align-items: flex-start;
-        padding: 76px 16px 32px;
+        padding: 52px 16px 32px;
     }
-
     .auth-card,
     .auth-card.wide {
         width: 100%;
-        max-width: 420px;
+        max-width: 100%;
         min-height: 0;
-        padding: 26px 22px 28px;
-        border-radius: 4px;
+        padding: 24px 20px 28px;
+        border-radius: 6px;
     }
+    .auth-card .logo { width: 60px; height: 60px; }
+    .auth-card h1 { font-size: 24px; }
+    .auth-card h2 { margin-bottom: 18px; font-size: 14px; }
+    .auth-form { gap: 14px; }
+    .auth-form input { height: 48px; font-size: 13px; }
+    .auth-form .btn { width: 100%; }
+    .register-grid { grid-template-columns: 1fr; gap: 14px; }
+    .register-footer { display: grid; justify-items: center; margin-top: 18px; }
 
-    .auth-card .logo {
-        width: 68px;
-        height: 68px;
-    }
+    /* ── Build / Catalog ── */
+    .build-content { margin-top: 0; padding: 26px 0 34px; }
+    .build-text { padding: 0 16px; margin-bottom: 24px; }
+    .build-text h1 { font-size: 17px; }
+    .build-text p { margin-top: 14px; font-size: 15px; }
+    .build-options { grid-template-columns: 1fr; gap: 24px; padding: 0 16px; }
+    .build-option { gap: 12px; }
+    .build-option img { height: 180px; }
+    .catalog-page { background: #ffffff; }
+    .search-row, .catalog-tools { display: none; }
+    .catalog-grid { grid-template-columns: 1fr; gap: 20px; padding: 16px 16px 36px; }
+    .product-card { min-height: 0; padding: 16px 14px 10px; }
+    .product-card .image-wrap { height: 120px; }
+    .product-card img { width: 160px; height: 90px; }
 
-    .auth-card h1 {
-        font-size: 26px;
-    }
+    /* ── Quick build ── */
+    .quick-layout { grid-template-columns: 1fr; }
+    .quick-copy { padding: 28px 16px 22px; }
+    .quick-copy h1 { font-size: 17px; }
+    .quick-copy p { font-size: 14px; }
+    .quick-form-panel { padding: 22px 16px 28px; }
+    .quick-form { gap: 16px; }
+    .quick-form input, .quick-form select { width: 100%; }
+    .quick-form .btn { justify-self: stretch; margin-top: 14px; }
 
-    .auth-card h2 {
-        margin-bottom: 22px;
-    }
+    /* ── Drawing ── */
+    .drawing-panel { padding: 24px 10px 28px; }
+    .technical-title { margin-bottom: 20px; }
+    .technical-title span { font-size: 24px; letter-spacing: 8px; }
+    .technical-title strong { font-size: 36px; }
+    .drawing-box svg { min-width: 680px; }
 
-    .auth-form {
-        gap: 14px;
-    }
-
-    .auth-form input {
-        height: 52px;
-        font-size: 12px;
-    }
-
-    .register-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
-
-    .register-footer {
-        display: grid;
-        justify-items: center;
-        margin-top: 18px;
-    }
-
-    .build-content {
-        margin-top: 0;
-        padding: 26px 0 34px;
-        background: #ffffff;
-    }
-
-    .build-text {
-        padding: 0 16px;
-        margin-bottom: 24px;
-    }
-
-    .build-text h1 {
-        font-size: 17px;
-        line-height: 1.15;
-    }
-
-    .build-text p {
-        margin-top: 18px;
-        font-size: 16px;
-        line-height: 1.3;
-    }
-
-    .build-options {
-        grid-template-columns: 1fr;
-        gap: 28px;
-        padding: 0 16px;
-    }
-
-    .build-option {
-        gap: 12px;
-    }
-
-    .build-option img {
-        height: 190px;
-        border-radius: 0;
-    }
-
-    .catalog-page {
-        background: #ffffff;
-    }
-
-    .search-row,
-    .catalog-tools {
-        display: none;
-    }
-
-    .catalog-grid {
-        grid-template-columns: 1fr;
-        gap: 22px;
-        padding: 20px 16px 38px;
-    }
-
-    .product-card {
-        min-height: 266px;
-        padding: 18px 16px 10px;
-    }
-
-    .product-card .image-wrap {
-        height: 130px;
-    }
-
-    .product-card img {
-        width: 170px;
-        height: 95px;
-    }
-
-    .quick-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .quick-copy {
-        padding: 32px 18px 26px;
-    }
-
-    .quick-copy h1 {
-        font-size: 18px;
-        text-decoration: none;
-    }
-
-    .quick-copy p {
-        font-size: 15px;
-        text-decoration: none;
-    }
-
-    .quick-form-panel {
-        padding: 24px 18px 28px;
-    }
-
-    .quick-form {
-        gap: 18px;
-    }
-
-    .quick-form input,
-    .quick-form select {
-        width: 100%;
-    }
-
-    .quick-form .btn {
-        justify-self: stretch;
-        margin-top: 16px;
-    }
-
-    .drawing-panel {
-        padding: 28px 12px 32px;
-    }
-
-    .technical-title {
-        margin-bottom: 24px;
-    }
-
-    .technical-title span {
-        font-size: 28px;
-        letter-spacing: 10px;
-    }
-
-    .technical-title strong {
-        font-size: 42px;
-    }
-
-    .drawing-box svg {
-        min-width: 720px;
-    }
-
-    .dashboard-page .topbar {
-        justify-content: space-between;
-    }
-
+    /* ── Dashboard pages ── */
     .dashboard-title {
-        margin: 28px 16px 28px;
-        font-size: 22px;
+        margin: 20px 16px 20px;
+        font-size: 20px;
         line-height: 1.2;
     }
+    .dashboard-shell { display: block; padding: 0 12px 28px; }
+    .side-menu { display: none; }          /* replaced by mob-nav drawer */
+    .dashboard-grid { grid-template-columns: 1fr; gap: 14px; }
+    .dash-card header { justify-content: center; }
 
-    .dashboard-shell {
+    /* Admin tables — horizontal scroll */
+    .admin-content { padding: 0 12px 32px; }
+    .admin-content .dash-body { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0; }
+    .admin-content .orders-table { min-width: 640px; white-space: nowrap; }
+    .admin-content .orders-table td,
+    .admin-content .orders-table th { padding: 10px 12px; }
+
+    /* Card-table — each row becomes a stacked card (no scroll) */
+    .card-table { min-width: 0 !important; width: 100% !important; }
+    .card-table thead { display: none; }
+    .card-table tbody { display: block; padding: 10px; }
+    .card-table tbody tr {
         display: block;
-        padding: 0 16px 28px;
+        border: 1px solid #d2d2d2;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        overflow: hidden;
+    }
+    .card-table tbody tr:last-child { margin-bottom: 0; }
+    .card-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-bottom: 1px solid #eeeeee;
+        font-size: 13px;
+        white-space: normal;
+        min-width: 0;
+    }
+    .card-table td:last-child { border-bottom: none; }
+    .card-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #555;
+        flex-shrink: 0;
+        min-width: 100px;
+    }
+    /* Handling-celle: knapper grupperedes til højre */
+    .card-table .card-btns {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
     }
 
-    .side-menu {
-        display: none;
+    /* Admin tabs — scroll horizontally */
+    .admin-tabs {
+        margin-left: 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap;
+        padding-bottom: 0;
+        scrollbar-width: none;
     }
+    .admin-tabs::-webkit-scrollbar { display: none; }
+    .admin-tab { white-space: nowrap; padding: 10px 16px; font-size: 13px; }
 
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-        gap: 18px;
-    }
+    /* Profile fields — allow label wrap */
+    .profile-fields { grid-template-columns: 110px 1fr; font-size: 13px; }
+    .profile-fields span { padding: 8px 6px; }
 
-    .dash-card header {
-        justify-content: center;
-    }
+    /* Stat cards — 2 per row on mobile */
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-card { border-right: none; border-bottom: 1px solid #d2d2d2; }
+    .stat-value { font-size: 26px; }
 
-    .orders-table th,
-    .orders-table td {
-        display: block;
-        border-bottom: 0;
-    }
+    /* Pricing form — stack vertically */
+    .pricing-form, .offer-form { flex-direction: column; align-items: stretch; }
+    .price-input { width: 100%; }
+    .pricing-label { font-size: 12px; }
 
-    .orders-table tr {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        border-bottom: 1px solid #d2d2d2;
-    }
+    /* Buttons — better touch targets */
+    .btn { min-height: 40px; font-size: 14px; padding: 0 18px; }
+    .btn--pay, .btn--reject { min-height: 40px; }
+    .back-btn { width: 100%; justify-content: center; margin-top: 14px; }
 
-    .inspiration-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
+    /* Inspiration */
+    .inspiration-grid { grid-template-columns: 1fr; gap: 12px; }
 }

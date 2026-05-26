@@ -7,64 +7,125 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+
+<!-- Mobile overlay + off-canvas drawer -->
+<div class="mob-overlay" id="mobOverlay"></div>
+<nav class="mob-nav" id="mobNav" aria-label="Sælger menu">
+    <a href="/bruger-side">Oversigt</a>
+    <a href="/mine-ordrer">Mine ordrer</a>
+    <a href="/byg-carport">Byg Carport</a>
+    <a href="/saelger">Sælger</a>
+    <a th:if="${user != null and user.role == 'admin'}" href="/admin">Admin</a>
+    <a href="/logout" class="mob-nav-logout">Log ud</a>
+</nav>
+
 <main class="figma-page dashboard-page">
     <header class="topbar">
         <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Åbn menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
 
     <h1 class="dashboard-title">Sælger</h1>
 
-    <section class="admin-content">
-        <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+    <section class="dashboard-shell">
+        <nav class="side-menu" aria-label="Sælger menu">
+            <a href="/bruger-side">Oversigt</a>
+            <a href="/mine-ordrer">Mine ordrer</a>
+            <a href="/byg-carport">Byg Carport</a>
+            <a href="/saelger">Sælger</a>
+            <a th:if="${user != null and user.role == 'admin'}" href="/admin">Admin</a>
+            <a href="/logout">Log ud</a>
+        </nav>
 
-        <article class="dash-card">
-            <header>Ordrer</header>
-            <div class="dash-body">
-                <table class="orders-table">
-                    <thead>
-                    <tr>
-                        <th>Ordre ID</th>
-                        <th>Kunde</th>
-                        <th>Dato</th>
-                        <th>Status</th>
-                        <th>Kostpris</th>
-                        <th>Salgspris</th>
-                        <th>Betalt</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="order : ${orders}">
-                        <td th:text="${order[0]}"></td>
-                        <td th:text="${order[1]}"></td>
-                        <td th:text="${order[3]}"></td>
-                        <td>
-                            <span th:switch="${order[4]}">
-                                <span th:case="'pending'">Afventer</span>
-                                <span th:case="'offer'">Tilbud sendt</span>
-                                <span th:case="'approved'">Godkendt</span>
-                                <span th:case="'rejected'">Afvist</span>
-                                <span th:case="'completed'">Færdig</span>
-                                <span th:case="*" th:text="${order[4]}"></span>
-                            </span>
-                        </td>
-                        <td th:text="${order[7]} + ' kr'"></td>
-                        <td th:text="${order[5]} + ' kr'"></td>
-                        <td th:text="${order[6] ? 'Ja' : 'Nej'}"></td>
-                        <td>
-                            <a th:href="@{/saelger/ordre/{id}(id=${order[0]})}" class="btn">Se ordre</a>
-                        </td>
-                    </tr>
-                    <tr th:if="${#lists.isEmpty(orders)}">
-                        <td colspan="8">Ingen ordrer endnu</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </article>
+        <div>
+            <p th:if="${error}" th:text="${error}" style="color:red; margin-bottom:12px;"></p>
 
-        <a class="btn back-btn" href="/bruger-side">Tilbage</a>
+            <article class="dash-card" style="overflow-x:visible; margin-bottom:16px;">
+                <header>Ordrer</header>
+                <div class="dash-body" style="overflow-x:visible;">
+                    <table class="orders-table card-table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Kunde</th>
+                            <th>Dato</th>
+                            <th>Status</th>
+                            <th>Kostpris</th>
+                            <th>Salgspris</th>
+                            <th>Betalt</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td data-label="#"         th:text="${order[0]}"></td>
+                            <td data-label="Kunde"     th:text="${order[1]}"></td>
+                            <td data-label="Dato"      th:text="${order[3]}"></td>
+                            <td data-label="Status">
+                                <span th:switch="${order[4]}">
+                                    <span th:case="'pending'">Afventer</span>
+                                    <span th:case="'offer'">Tilbud sendt</span>
+                                    <span th:case="'approved'">Godkendt</span>
+                                    <span th:case="'rejected'">Afvist</span>
+                                    <span th:case="'completed'">Færdig</span>
+                                    <span th:case="*" th:text="${order[4]}"></span>
+                                </span>
+                            </td>
+                            <td data-label="Kostpris"  th:text="${order[7]} + ' kr'"></td>
+                            <td data-label="Salgspris" th:text="${order[5]} + ' kr'"></td>
+                            <td data-label="Betalt"    th:text="${order[6] ? 'Ja' : 'Nej'}"></td>
+                            <td data-label="Handling">
+                                <div class="card-btns">
+                                    <a th:href="@{/saelger/ordre/{id}(id=${order[0]})}"
+                                       class="btn" style="font-size:11px; min-height:26px; padding:0 10px;">Se ordre</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(orders)}">
+                            <td colspan="8" style="color:#777; font-style:italic; text-align:center; padding:24px;">
+                                Ingen ordrer endnu
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <a class="btn" href="/bruger-side" style="font-size:13px; min-height:34px; padding:0 16px;">Tilbage</a>
+        </div>
     </section>
 </main>
+
+<script>
+    const btn     = document.getElementById('hamburgerBtn');
+    const overlay = document.getElementById('mobOverlay');
+    const nav     = document.getElementById('mobNav');
+
+    function openMenu() {
+        btn.classList.add('open');
+        overlay.classList.add('open');
+        nav.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+        btn.classList.remove('open');
+        overlay.classList.remove('open');
+        nav.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+
+    btn.addEventListener('click', () => {
+        btn.classList.contains('open') ? closeMenu() : openMenu();
+    });
+    overlay.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+</script>
 </body>
 </html>

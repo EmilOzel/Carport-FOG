@@ -7,10 +7,26 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+
+<!-- Mobile overlay + off-canvas drawer -->
+<div class="mob-overlay" id="mobOverlay"></div>
+<nav class="mob-nav" id="mobNav" aria-label="Bruger menu">
+    <a href="/bruger-side">Oversigt</a>
+    <a href="/mine-ordrer">Mine ordrer</a>
+    <a href="/byg-carport">Byg Carport</a>
+    <a th:if="${user.role == 'salesperson' or user.role == 'admin'}" href="/saelger">Sælger</a>
+    <a th:if="${user.role == 'admin'}" href="/admin">Admin</a>
+    <a href="/logout" class="mob-nav-logout">Log ud</a>
+</nav>
+
 <main class="figma-page dashboard-page">
     <header class="topbar">
         <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
-        <span class="hamburger">=</span>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Åbn menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
 
     <h1 class="dashboard-title">Min carport-side - Velkommen <span th:text="${user.firstName}"></span></h1>
@@ -19,33 +35,32 @@
         <nav class="side-menu" aria-label="Bruger menu">
             <a href="/bruger-side">Oversigt</a>
             <a href="/mine-ordrer">Mine ordrer</a>
-            <a href="/bruger-side">Min profil</a>
-            <a href="/byg-carport">Mine carportskitser</a>
-            <a th:if="${user.role == 'admin'}" href="/admin">Admin</a>
+            <a href="/byg-carport">Byg Carport</a>
             <a th:if="${user.role == 'salesperson' or user.role == 'admin'}" href="/saelger">Sælger</a>
+            <a th:if="${user.role == 'admin'}" href="/admin">Admin</a>
             <a href="/logout">Log ud</a>
         </nav>
 
         <div class="dashboard-grid">
+
+            <!-- Ordrer -->
             <article class="dash-card">
-                <header>Mine nuværende ordrer</header>
+                <header>Mine nuværende ordre</header>
                 <div class="dash-body">
-                    <table class="orders-table">
+                    <table class="orders-table card-table">
                         <thead>
                         <tr>
                             <th>Ordrenr.</th>
-                            <th>Carportmodel</th>
-                            <th>Dato</th>
+                            <th>Sidst opdateret</th>
                             <th>Status</th>
                             <th>Handling</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="order : ${orders}">
-                            <td th:text="${order[0]}"></td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>
+                            <td data-label="Ordrenr." th:text="${order[0]}"></td>
+                            <td data-label="Sidst opdateret" th:text="${order[3]}"></td>
+                            <td data-label="Status">
                                 <span th:switch="${order[1]}">
                                     <span th:case="'pending'">Afventer</span>
                                     <span th:case="'offer'">Tilbud modtaget</span>
@@ -55,67 +70,89 @@
                                     <span th:case="*" th:text="${order[1]}"></span>
                                 </span>
                             </td>
-                            <td>
-                                <a th:href="@{/ordre/{id}(id=${order[0]})}">Se detaljer</a>
-
-                                <span th:if="${order[1] == 'offer'}" style="display:inline-flex; gap:6px; margin-left:8px;">
-                                    <form th:action="@{/ordre/{id}/accepter(id=${order[0]})}" method="post" style="display:inline;">
-                                        <button type="submit" class="btn btn--pay">Accepter [[${order[2]}]] kr</button>
-                                    </form>
-                                    <form th:action="@{/ordre/{id}/afvis(id=${order[0]})}" method="post" style="display:inline;"
-                                          onsubmit="return confirm('Er du sikker på du vil afvise tilbuddet?')">
-                                        <button type="submit" class="btn btn--reject">Afvis</button>
-                                    </form>
-                                </span>
-
-                                <a th:if="${order[1] == 'approved'}"
-                                   th:href="@{/ordre/{id}/betal(id=${order[0]})}"
-                                   class="btn btn--pay" style="margin-left:8px;">
-                                    Betal <span th:text="${order[2]} + ' kr'"></span>
-                                </a>
+                            <td data-label="Handling">
+                                <div class="card-btns">
+                                    <a th:href="@{/ordre/{id}(id=${order[0]})}"
+                                       class="btn" style="font-size:11px; min-height:26px; padding:0 10px;">
+                                        Se detaljer
+                                    </a>
+                                    <span th:if="${order[1] == 'offer'}" style="display:contents;">
+                                        <form th:action="@{/ordre/{id}/accepter(id=${order[0]})}" method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn--pay" style="font-size:11px; min-height:26px; padding:0 10px;">
+                                                Accepter [[${order[2]}]] kr
+                                            </button>
+                                        </form>
+                                        <form th:action="@{/ordre/{id}/afvis(id=${order[0]})}" method="post" style="display:inline;"
+                                              onsubmit="return confirm('Er du sikker på du vil afvise tilbuddet?')">
+                                            <button type="submit" class="btn btn--reject" style="font-size:11px; min-height:26px; padding:0 10px;">Afvis</button>
+                                        </form>
+                                    </span>
+                                    <a th:if="${order[1] == 'approved'}"
+                                       th:href="@{/ordre/{id}/betal(id=${order[0]})}"
+                                       class="btn btn--pay" style="font-size:11px; min-height:26px; padding:0 10px;">
+                                        Betal <span th:text="${order[2]} + ' kr'"></span>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(orders)}">
-                            <td colspan="5">Ingen ordrer endnu</td>
+                            <td colspan="3" style="color:#777; font-style:italic; text-align:center; padding:24px;">
+                                Ingen ordrer endnu
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </article>
 
-            <article class="dash-card">
-                <header>Mine carportskitser</header>
-                <div class="dash-body sketch-space">
-                    <a class="btn" href="/byg-carport">Nyt indlæg</a>
-                </div>
-            </article>
-
+            <!-- Profil -->
             <article class="dash-card">
                 <header>Min brugerprofil</header>
                 <div class="dash-body profile-fields">
-                    <span>Navn</span><span th:text="${user.firstName + ' ' + user.lastName}"></span>
-                    <span>Email</span><span th:text="${user.email}"></span>
-                    <span>Adresse</span><span th:text="${user.address}"></span>
-                    <span>Postnummer</span><span th:text="|${user.zipcode} ${user.city}|"></span>
+                    <span>Navn</span>         <span th:text="${user.firstName + ' ' + user.lastName}"></span>
+                    <span>Email</span>        <span th:text="${user.email}"></span>
+                    <span>Adresse</span>      <span th:text="${user.address}"></span>
+                    <span>Postnummer</span>   <span th:text="|${user.zipcode} ${user.city}|"></span>
                     <span>Telefonnummer</span><span th:text="${user.phone}"></span>
+                    <div style="grid-column:1/-1; display:flex; justify-content:flex-end; padding:10px 8px 4px;">
+                        <a href="/rediger-profil" class="btn"
+                           style="font-size:12px; min-height:28px; padding:0 14px;">
+                            Rediger profil
+                        </a>
+                    </div>
                 </div>
             </article>
 
-            <article class="dash-card">
-                <header>Tilbud og inspiration</header>
-                <div class="dash-body inspiration-grid">
-                    <a class="inspiration-card" href="/færdige-modeller">
-                        <img src="/images/image 11.png" alt="Model A">
-                        Særtilbud på model A
-                    </a>
-                    <a class="inspiration-card" href="/færdige-modeller">
-                        <img src="/images/image 12.png" alt="Model B">
-                        Ny model B med ekstra skur
-                    </a>
-                </div>
-            </article>
         </div>
     </section>
 </main>
+
+<script>
+    const btn     = document.getElementById('hamburgerBtn');
+    const overlay = document.getElementById('mobOverlay');
+    const nav     = document.getElementById('mobNav');
+
+    function openMenu() {
+        btn.classList.add('open');
+        overlay.classList.add('open');
+        nav.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+        btn.classList.remove('open');
+        overlay.classList.remove('open');
+        nav.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+
+    btn.addEventListener('click', () => {
+        btn.classList.contains('open') ? closeMenu() : openMenu();
+    });
+    overlay.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+</script>
 </body>
 </html>

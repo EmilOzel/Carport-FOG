@@ -49,6 +49,7 @@ public class OrderController {
         try {
             List<Object[]> orders = OrderMapper.getOrdersByUser(userId, connectionPool);
             ctx.attribute("orders", orders);
+            ctx.attribute("user", AdminMapper.getUserById(userId, connectionPool));
             ctx.render("my-orders.html");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());

@@ -31,6 +31,7 @@ public class SalespersonController {
         try {
             List<Object[]> orders = AdminMapper.getAllOrders(connectionPool);
             ctx.attribute("orders", orders);
+            ctx.attribute("user", ctx.sessionAttribute("currentUser"));
             ctx.render("salesperson.html");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
@@ -47,6 +48,7 @@ public class SalespersonController {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
             Object[] order = AdminMapper.getOrderDetail(orderId, connectionPool);
             ctx.attribute("order", order);
+            ctx.attribute("user", ctx.sessionAttribute("currentUser"));
             ctx.render("salesperson-order.html");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
