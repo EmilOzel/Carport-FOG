@@ -791,10 +791,12 @@ select {
 .admin-content .dash-card {
     overflow-x: auto;
     border-top: none;
+    min-width: 0;
 }
 
 .admin-content .dash-body {
     padding: 0;
+    overflow-x: auto;
 }
 
 .admin-content .orders-table {
@@ -804,7 +806,8 @@ select {
 
 .admin-content .orders-table td,
 .admin-content .orders-table th {
-    padding: 10px 20px;
+    padding: 10px 10px;
+    white-space: nowrap;
 }
 
 .admin-content .orders-table tr:last-child td {
@@ -818,17 +821,25 @@ select {
 }
 
 .admin-content .table-form select {
+    width: auto;
     font-size: 12px;
     padding: 4px 6px;
+    height: 30px;
     border: 1px solid var(--border);
     border-radius: 4px;
+}
+
+.admin-content .table-form .btn {
+    min-height: 30px;
+    font-size: 12px;
+    padding: 0 10px;
+    white-space: nowrap;
 }
 
 .admin-content .back-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-top: 16px;
 }
 
 .pricing-form,
@@ -874,50 +885,6 @@ select {
     border-radius: 4px;
 }
 
-.stat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 0;
-}
-
-.stat-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 16px;
-    border-right: 1px solid #d2d2d2;
-    gap: 8px;
-}
-
-.stat-card:last-child {
-    border-right: none;
-}
-
-.stat-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-.stat-value {
-    font-size: 36px;
-    font-weight: 800;
-    color: var(--blue);
-    line-height: 1;
-}
-
-.stat-divider {
-    height: 1px;
-    background: #d2d2d2;
-}
-
-.stat-card--pending   .stat-value { color: #b07d00; }
-.stat-card--approved  .stat-value { color: #1a7a3a; }
-.stat-card--completed .stat-value { color: var(--blue); }
-.stat-card--rejected  .stat-value { color: #c0392b; }
 
 .inspiration-grid {
     display: grid;
@@ -1138,11 +1105,6 @@ select {
     /* Profile fields — allow label wrap */
     .profile-fields { grid-template-columns: 110px 1fr; font-size: 13px; }
     .profile-fields span { padding: 8px 6px; }
-
-    /* Stat cards — 2 per row on mobile */
-    .stat-grid { grid-template-columns: repeat(2, 1fr); }
-    .stat-card { border-right: none; border-bottom: 1px solid #d2d2d2; }
-    .stat-value { font-size: 26px; }
 
     /* Pricing form — stack vertically */
     .pricing-form, .offer-form { flex-direction: column; align-items: stretch; }

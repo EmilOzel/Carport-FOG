@@ -55,7 +55,7 @@
                             <tr>
                                 <th>#</th><th>Kunde</th><th>Email</th><th>Dato</th>
                                 <th>Status</th><th>Salgspris</th><th>Kostpris</th>
-                                <th>Betalt</th><th>Skift status</th>
+                                <th>Betalt</th><th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -70,16 +70,14 @@
                                 <td data-label="Salgspris" th:text="${order[5]} + ' kr'"></td>
                                 <td data-label="Kostpris"  th:text="${order[7]} + ' kr'"></td>
                                 <td data-label="Betalt"    th:text="${order[6] ? 'Ja' : 'Nej'}"></td>
-                                <td data-label="Skift status">
-                                    <form th:action="@{/admin/ordre/{id}/status(id=${order[0]})}" method="post" class="table-form">
-                                        <select name="status">
-                                            <option value="pending"   th:selected="${order[4] == 'pending'}">Afventer</option>
-                                            <option value="approved"  th:selected="${order[4] == 'approved'}">Godkendt</option>
-                                            <option value="rejected"  th:selected="${order[4] == 'rejected'}">Afvist</option>
-                                            <option value="completed" th:selected="${order[4] == 'completed'}">Færdig</option>
-                                        </select>
-                                        <button type="submit" class="btn">Gem</button>
-                                    </form>
+                                <td data-label="Slet">
+                                    <div class="card-btns">
+                                        <form th:action="@{/admin/ordre/{id}/slet(id=${order[0]})}" method="post"
+                                              onsubmit="return confirm('Er du sikker på du vil slette ordre #' + [[${order[0]}]] + '?')">
+                                            <button type="submit" class="btn btn--reject"
+                                                    style="font-size:11px; min-height:26px; padding:0 10px;">Slet</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(orders)}">
@@ -89,7 +87,7 @@
                         </table>
                     </div>
                 </article>
-                <a class="btn back-btn" href="/bruger-side">Tilbage</a>
+                <a class="btn back-btn" href="#" onclick="history.back(); return false;">Tilbage</a>
             </section>
         </div>
     </section>

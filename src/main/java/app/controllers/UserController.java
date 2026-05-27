@@ -33,11 +33,17 @@ public class UserController {
             ctx.redirect("/login");
             return;
         }
+        String flashError = ctx.sessionAttribute("flashError");
+        if (flashError != null) {
+            ctx.sessionAttribute("flashError", null);
+            ctx.attribute("error", flashError);
+        }
         try {
             List<Object[]> orders = OrderMapper.getOrdersByUser(user.getId(), connectionPool);
             ctx.attribute("orders", orders);
         } catch (DatabaseException e) {
             ctx.attribute("orders", new ArrayList<>());
+            ctx.attribute("error", e.getMessage());
         }
         ctx.attribute("user", user);
         ctx.render("user-profile.html");
@@ -72,9 +78,10 @@ public class UserController {
         String firstName = ctx.formParam("fornavn");
         String lastName = ctx.formParam("efternavn");
         String address = ctx.formParam("adresse");
+        String phone = ctx.formParam("telefon");
         String zip = ctx.formParam("postnummer");
         try {
-            UserMapper.createUser(email, password, firstName, lastName, address, zip, connectionPool);
+            UserMapper.createUser(email, password, firstName, lastName, address, phone, zip, connectionPool);
             ctx.redirect("/login");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());

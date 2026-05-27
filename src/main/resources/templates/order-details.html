@@ -14,6 +14,9 @@
     <h1 class="dashboard-title">Ordre <span th:text="'#' + ${ordreId}"></span></h1>
 
     <section class="admin-content">
+        <p th:if="${error}" th:text="${error}" style="color:red; padding:0 4px 12px;"></p>
+
+        <th:block th:if="${order != null}">
         <article class="dash-card" style="margin-bottom:16px;">
             <header>Ordreoplysninger</header>
             <div class="dash-body">
@@ -29,7 +32,9 @@
                             <span th:case="*" th:text="${order[5]}"></span>
                         </span>
                     </span>
-                    <span>Pris</span>     <span th:text="${order[6]} + ' kr'"></span>
+                    <th:block th:if="${order[5] == 'offer' or order[5] == 'approved' or order[5] == 'completed'}">
+                        <span>Pris</span> <span th:text="${order[6]} + ' kr'"></span>
+                    </th:block>
                     <span>Betalt</span>   <span th:text="${order[7] ? 'Ja' : 'Nej'}"></span>
                 </div>
             </div>
@@ -116,10 +121,11 @@
                        class="btn btn--pay" style="min-height:36px; padding:0 20px;">
                         Betal <span th:text="${order[6]} + ' kr'"></span>
                     </a>
-                    <a class="btn back-btn" href="/bruger-side">Tilbage</a>
+                    <a class="btn back-btn" href="#" onclick="history.back(); return false;">Tilbage</a>
                 </div>
             </div>
         </article>
+        </th:block>
     </section>
 </main>
 </body>

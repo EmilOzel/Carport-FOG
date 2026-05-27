@@ -32,8 +32,8 @@ public class UserMapper {
         throw new DatabaseException("Forkert email eller adgangskode");
     }
 
-    public static void createUser(String email, String password, String firstName, String lastName, String address, String zip, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO users (email, password_hash, first_name, last_name, address, role, zip) VALUES (?, ?, ?, ?, ?, 'customer', ?)";
+    public static void createUser(String email, String password, String firstName, String lastName, String address, String phone, String zip, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "INSERT INTO users (email, password_hash, first_name, last_name, address, role, zip, phone) VALUES (?, ?, ?, ?, ?, 'customer', ?, ?)";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -46,6 +46,7 @@ public class UserMapper {
             ps.setString(4, lastName);
             ps.setString(5, address);
             ps.setString(6, zip);
+            ps.setString(7, phone);
             ps.executeUpdate();
 
         } catch (SQLException e) {

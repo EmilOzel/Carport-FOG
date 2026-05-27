@@ -33,7 +33,7 @@
 
     <section class="dashboard-shell">
         <nav class="side-menu" aria-label="Bruger menu">
-            <a href="/bruger-side">Bruger Profil</a>
+            <a href="/bruger-side">Profil</a>
             <a href="/mine-ordrer">Mine ordrer</a>
             <a href="/byg-carport">Byg Carport</a>
             <a th:if="${user.role == 'salesperson' or user.role == 'admin'}" href="/saelger">Sælger</a>
@@ -41,7 +41,11 @@
             <a href="/logout">Log ud</a>
         </nav>
 
+        <p th:if="${error}" th:text="${error}" style="color:red; margin:0 0 12px;"></p>
+
         <div class="dashboard-grid">
+
+
 
 
             <!-- Profil -->

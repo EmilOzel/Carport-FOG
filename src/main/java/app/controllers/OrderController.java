@@ -24,6 +24,8 @@ public class OrderController {
         app.post("/ordre/{id}/betal",      ctx -> payOrder(ctx, connectionPool));
         app.post("/ordre/{id}/accepter",   ctx -> acceptOffer(ctx, connectionPool));
         app.post("/ordre/{id}/afvis",      ctx -> rejectOffer(ctx, connectionPool));
+        app.post("/ordre/{id}/annuller",   ctx -> cancelOrder(ctx, connectionPool));
+        app.post("/ordre/{id}/slet",       ctx -> deleteOwnOrder(ctx, connectionPool));
     }
     private static void createOrder(Context ctx, ConnectionPool connectionPool) {
         Integer userId = ctx.sessionAttribute("userId");
@@ -36,8 +38,8 @@ public class OrderController {
             saveCarportAndMaterialList(ctx, ordreId, connectionPool);
             ctx.redirect("/ordre/" + ordreId);
         } catch (DatabaseException e) {
-            ctx.attribute("error", e.getMessage());
-            ctx.render("error.html");
+            ctx.sessionAttribute("flashError", e.getMessage());
+            ctx.redirect("/bruger-side");
         }
     }
     private static void getOrdersByUser(Context ctx, ConnectionPool connectionPool) {
@@ -52,8 +54,10 @@ public class OrderController {
             ctx.attribute("user", AdminMapper.getUserById(userId, connectionPool));
             ctx.render("my-orders.html");
         } catch (DatabaseException e) {
+            ctx.attribute("orders", List.of());
+            ctx.attribute("user", ctx.sessionAttribute("currentUser"));
             ctx.attribute("error", e.getMessage());
-            ctx.render("error.html");
+            ctx.render("my-orders.html");
         }
     }
 
@@ -114,6 +118,34 @@ public class OrderController {
         }
     }
 
+    private static void cancelOrder(Context ctx, ConnectionPool connectionPool) {
+        Integer userId = ctx.sessionAttribute("userId");
+        if (userId == null) { ctx.redirect("/login"); return; }
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("id"));
+            OrderMapper.cancelOrder(orderId, userId, connectionPool);
+            ctx.redirect("/mine-ordrer");
+        } catch (DatabaseException e) {
+            ctx.redirect("/mine-ordrer");
+        }
+    }
+
+    private static void deleteOwnOrder(Context ctx, ConnectionPool connectionPool) {
+        Integer userId = ctx.sessionAttribute("userId");
+        if (userId == null) { ctx.redirect("/login"); return; }
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("id"));
+            if (!OrderMapper.isOrderOwner(orderId, userId, connectionPool)) {
+                ctx.redirect("/mine-ordrer");
+                return;
+            }
+            AdminMapper.deleteOrder(orderId, connectionPool);
+            ctx.redirect("/mine-ordrer");
+        } catch (DatabaseException e) {
+            ctx.redirect("/mine-ordrer");
+        }
+    }
+
     private static void getOrderLines(Context ctx, ConnectionPool connectionPool) {
         Integer userId = ctx.sessionAttribute("userId");
         if (userId == null) {
@@ -145,8 +177,14 @@ public class OrderController {
             ctx.attribute("order", order);
             ctx.render("order-details.html");
         } catch (DatabaseException e) {
+            ctx.attribute("lines", List.of());
+            ctx.attribute("materials", List.of());
+            ctx.attribute("isCompleted", false);
+            ctx.attribute("svg", null);
+            ctx.attribute("ordreId", null);
+            ctx.attribute("order", null);
             ctx.attribute("error", e.getMessage());
-            ctx.render("error.html");
+            ctx.render("order-details.html");
         }
     }
 
