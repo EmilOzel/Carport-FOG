@@ -98,6 +98,61 @@ public class AdminMapper {
         }
     }
 
+    public static void deleteOrder(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        try (Connection conn = connectionPool.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                // Find carport + roof tilknyttet ordren (hvis de findes)
+                Integer carportId = null;
+                Integer roofId    = null;
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "SELECT carport_id, roof_id FROM carport WHERE order_id = ?")) {
+                    ps.setInt(1, orderId);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        carportId = rs.getInt("carport_id");
+                        roofId    = rs.getInt("roof_id");
+                    }
+                }
+
+                if (carportId != null) {
+                    try (PreparedStatement ps = conn.prepareStatement(
+                            "DELETE FROM material_line WHERE carport_id = ?")) {
+                        ps.setInt(1, carportId); ps.executeUpdate();
+                    }
+                    try (PreparedStatement ps = conn.prepareStatement(
+                            "DELETE FROM shed WHERE carport_id = ?")) {
+                        ps.setInt(1, carportId); ps.executeUpdate();
+                    }
+                    try (PreparedStatement ps = conn.prepareStatement(
+                            "DELETE FROM carport WHERE carport_id = ?")) {
+                        ps.setInt(1, carportId); ps.executeUpdate();
+                    }
+                    if (roofId != null) {
+                        try (PreparedStatement ps = conn.prepareStatement(
+                                "DELETE FROM roof WHERE roof_id = ?")) {
+                            ps.setInt(1, roofId); ps.executeUpdate();
+                        }
+                    }
+                }
+
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE FROM orders WHERE order_id = ?")) {
+                    ps.setInt(1, orderId); ps.executeUpdate();
+                }
+
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Kunne ikke slette ordre", e);
+        }
+    }
+
     public static void deleteUser(int userId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "DELETE FROM users WHERE user_id = ?";
         try (Connection connection = connectionPool.getConnection();
