@@ -69,7 +69,10 @@
                                     <span th:case="*" th:text="${order[1]}"></span>
                                 </span>
                             </td>
-                            <td data-label="Pris" th:text="${order[2]} + ' kr'"></td>
+                            <td data-label="Pris">
+                                <span th:if="${order[1] == 'pending' or order[1] == 'rejected'}" style="color:#888;">—</span>
+                                <span th:unless="${order[1] == 'pending' or order[1] == 'rejected'}" th:text="${order[2]} + ' kr'"></span>
+                            </td>
                             <td data-label="Handling">
                                 <div class="card-btns">
                                     <a th:href="@{/ordre/{id}(id=${order[0]})}"

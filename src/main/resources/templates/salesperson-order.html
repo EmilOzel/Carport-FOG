@@ -114,7 +114,15 @@
                 </div>
             </article>
 
-            <a class="btn" href="/saelger" style="font-size:13px; min-height:34px; padding:0 16px;">Tilbage</a>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn" href="/saelger" style="font-size:13px; min-height:34px; padding:0 16px;">Tilbage</a>
+                <form th:if="${order[5] != 'rejected' and order[5] != 'completed'}"
+                      th:action="@{/saelger/ordre/{id}/annuller(id=${order[0]})}" method="post"
+                      onsubmit="return confirm('Er du sikker på du vil annullere ordre #' + [[${order[0]}]] + '?')">
+                    <button type="submit" class="btn btn--reject"
+                            style="font-size:13px; min-height:34px; padding:0 16px;">Annuller ordre</button>
+                </form>
+            </div>
         </div>
     </section>
 </main>

@@ -29,7 +29,9 @@
                             <span th:case="*" th:text="${order[5]}"></span>
                         </span>
                     </span>
-                    <span>Pris</span>     <span th:text="${order[6]} + ' kr'"></span>
+                    <th:block th:if="${order[5] == 'offer' or order[5] == 'approved' or order[5] == 'completed'}">
+                        <span>Pris</span> <span th:text="${order[6]} + ' kr'"></span>
+                    </th:block>
                     <span>Betalt</span>   <span th:text="${order[7] ? 'Ja' : 'Nej'}"></span>
                 </div>
             </div>
