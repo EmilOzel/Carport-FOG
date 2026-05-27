@@ -50,7 +50,7 @@ CREATE TABLE carport (
     carport_id SERIAL   PRIMARY KEY,
     order_id   INT      NOT NULL UNIQUE REFERENCES orders(order_id),
     roof_id    INT      NOT NULL UNIQUE REFERENCES roof(roof_id),
-    width      SMALLINT NOT NULL CHECK (width  BETWEEN 240 AND 780),
+    width      SMALLINT NOT NULL CHECK (width  BETWEEN 240 AND 840),
     length     SMALLINT NOT NULL CHECK (length BETWEEN 240 AND 1200)
 );
 

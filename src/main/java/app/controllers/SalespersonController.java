@@ -1,10 +1,12 @@
 package app.controllers;
 
+import app.entities.Carport;
 import app.entities.User;
 import app.exceptions.DatabaseException;
 import app.persistence.AdminMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
+import app.services.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -47,7 +49,11 @@ public class SalespersonController {
         try {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
             Object[] order = AdminMapper.getOrderDetail(orderId, connectionPool);
+            Carport carport = OrderMapper.getCarportByOrder(orderId, connectionPool);
+            String svg = carport == null ? null : new CarportSvg(carport).toString();
+
             ctx.attribute("order", order);
+            ctx.attribute("svg", svg);
             ctx.attribute("user", ctx.sessionAttribute("currentUser"));
             ctx.render("salesperson-order.html");
         } catch (DatabaseException e) {
