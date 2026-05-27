@@ -1,20 +1,34 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quick-Byg tilbud | FOG</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="../public/css/styles.css">
+
 </head>
 <body>
 <main class="figma-page">
     <header class="topbar">
         <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
         <div class="top-icons">
-            <a href="/login"><img src="/images/person.png" alt="Log ind"></a>
-            <a href="/bruger-side"><img src="/images/kurv.png" alt="Kurv"></a>
+
+            <!-- Ikke logget ind -->
+            <a th:if="${session.currentUser == null}"
+               href="/login">
+
+                <img src="/images/person.png" alt="Log ind">
+            </a>
+
+            <!-- Logget ind -->
+            <a th:if="${session.currentUser != null}"
+               href="/bruger-side">
+
+                <img src="/images/person.png" alt="Min profil">
+            </a>
+
         </div>
+
     </header>
 
     <section class="quick-layout">
