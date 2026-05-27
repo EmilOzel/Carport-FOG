@@ -18,6 +18,7 @@ public class SalespersonController {
         app.get("/saelger",                            ctx -> salespersonDashboard(ctx, connectionPool));
         app.get("/saelger/ordre/{id}",                 ctx -> orderDetail(ctx, connectionPool));
         app.post("/saelger/ordre/{id}/send-tilbud",    ctx -> sendOffer(ctx, connectionPool));
+        app.post("/saelger/ordre/{id}/annuller",       ctx -> cancelOrder(ctx, connectionPool));
     }
 
     private static boolean isSalesperson(Context ctx) {
@@ -56,6 +57,18 @@ public class SalespersonController {
             ctx.attribute("svg", svg);
             ctx.attribute("user", ctx.sessionAttribute("currentUser"));
             ctx.render("salesperson-order.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.redirect("/saelger");
+        }
+    }
+
+    private static void cancelOrder(Context ctx, ConnectionPool connectionPool) {
+        if (!isSalesperson(ctx)) { ctx.status(403); return; }
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("id"));
+            AdminMapper.updateOrderStatus(orderId, "rejected", connectionPool);
+            ctx.redirect("/saelger");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
             ctx.redirect("/saelger");
