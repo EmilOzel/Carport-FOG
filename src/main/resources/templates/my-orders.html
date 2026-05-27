@@ -42,6 +42,7 @@
         </nav>
 
         <div>
+            <p th:if="${error}" th:text="${error}" style="color:red; margin:0 0 12px;"></p>
             <article class="dash-card" style="overflow-x:visible; margin-bottom:16px;">
                 <header>Ordrer</header>
                 <div class="dash-body" style="overflow-x:visible;">

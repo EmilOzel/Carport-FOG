@@ -33,11 +33,17 @@ public class UserController {
             ctx.redirect("/login");
             return;
         }
+        String flashError = ctx.sessionAttribute("flashError");
+        if (flashError != null) {
+            ctx.sessionAttribute("flashError", null);
+            ctx.attribute("error", flashError);
+        }
         try {
             List<Object[]> orders = OrderMapper.getOrdersByUser(user.getId(), connectionPool);
             ctx.attribute("orders", orders);
         } catch (DatabaseException e) {
             ctx.attribute("orders", new ArrayList<>());
+            ctx.attribute("error", e.getMessage());
         }
         ctx.attribute("user", user);
         ctx.render("user-profile.html");
