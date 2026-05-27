@@ -7,11 +7,11 @@ import java.util.List;
 public final class CarportDimensions {
     public static final int SHED_WIDTH_DIFFERENCE = 60;
 
-    public static final List<Integer> WIDTH_OPTIONS = range(240, 840, 60);
+    public static final List<Integer> WIDTH_OPTIONS = range(240, 780, 60);
     public static final List<Integer> LENGTH_OPTIONS = range(240, 1200, 60);
     public static final List<Integer> HEIGHT_OPTIONS = List.of(210, 230, 250);
     public static final List<Integer> SHED_WIDTH_OPTIONS = range(180, 720, 60);
-    public static final List<Integer> SHED_LENGTH_OPTIONS = range(180, 540, 60);
+    public static final List<Integer> SHED_LENGTH_OPTIONS = range(180, 400, 60);
 
     public static final int DEFAULT_WIDTH = 600;
     public static final int DEFAULT_LENGTH = 780;
