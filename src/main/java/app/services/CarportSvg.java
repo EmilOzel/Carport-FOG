@@ -10,8 +10,10 @@ public class CarportSvg {
     private static final int TOP_X = 120;
     private static final int TOP_Y = 380;
 
-    private static final int MAX_LENGTH = 1200;
-    private static final int MAX_WIDTH = 780;
+    private static final int VIEWBOX_WIDTH = 1200;
+    private static final int VIEWBOX_HEIGHT = 1000;
+    private static final int MAX_LENGTH = 880;
+    private static final int MAX_WIDTH = 420;
     private static final int BEAM_OFFSET_CM = 30;
     private static final int RAFTER_SPACING_CM = 55;
 
@@ -29,7 +31,7 @@ public class CarportSvg {
     public CarportSvg(Carport carport) {
         this.carport = carport;
         this.scale = findScale();
-        this.svgDrawing = new Svg(0, 0, "0 0 1000 900", "100%", "auto");
+        this.svgDrawing = new Svg(0, 0, "0 0 " + VIEWBOX_WIDTH + " " + VIEWBOX_HEIGHT, "100%", "auto");
     }
 
     public String toString() {
