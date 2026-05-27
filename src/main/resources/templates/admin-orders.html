@@ -55,7 +55,7 @@
                             <tr>
                                 <th>#</th><th>Kunde</th><th>Email</th><th>Dato</th>
                                 <th>Status</th><th>Salgspris</th><th>Kostpris</th>
-                                <th>Betalt</th><th>Skift status</th><th></th>
+                                <th>Betalt</th><th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -70,17 +70,6 @@
                                 <td data-label="Salgspris" th:text="${order[5]} + ' kr'"></td>
                                 <td data-label="Kostpris"  th:text="${order[7]} + ' kr'"></td>
                                 <td data-label="Betalt"    th:text="${order[6] ? 'Ja' : 'Nej'}"></td>
-                                <td data-label="Skift status">
-                                    <form th:action="@{/admin/ordre/{id}/status(id=${order[0]})}" method="post" class="table-form">
-                                        <select name="status">
-                                            <option value="pending"   th:selected="${order[4] == 'pending'}">Afventer</option>
-                                            <option value="approved"  th:selected="${order[4] == 'approved'}">Godkendt</option>
-                                            <option value="rejected"  th:selected="${order[4] == 'rejected'}">Afvist</option>
-                                            <option value="completed" th:selected="${order[4] == 'completed'}">Færdig</option>
-                                        </select>
-                                        <button type="submit" class="btn">Gem</button>
-                                    </form>
-                                </td>
                                 <td data-label="Slet">
                                     <div class="card-btns">
                                         <form th:action="@{/admin/ordre/{id}/slet(id=${order[0]})}" method="post"
