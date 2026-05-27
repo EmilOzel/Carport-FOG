@@ -1,0 +1,158 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+package "config" {
+
+    class SessionConfig
+    class ThymeleafConfig
+}
+
+package "controllers" {
+
+    class AdminController
+    class CarportController
+    class DrawingController
+    class OrderController
+    class SalespersonController
+    class UserController
+}
+
+package "dto" {
+
+    class CarportForm
+}
+
+package "entities" {
+
+    class User {
+        - int userId
+        - String email
+        - String passwordHash
+        - String firstName
+        - String lastName
+        - String phone
+        - String address
+        - int zip
+        - Role role
+    }
+
+    class Order {
+        - int orderId
+        - Date createdAt
+        - String status
+        - double totalPrice
+    }
+
+    class Carport {
+        - double width
+        - double length
+        - RoofType roofType
+        - boolean hasShed
+    }
+
+    class MaterialLine {
+        - int quantity
+        - double price
+        - String description
+    }
+
+    enum Role {
+        CUSTOMER
+        SALESPERSON
+        ADMIN
+    }
+
+    enum RoofType {
+        FLAT
+        RAISED
+    }
+}
+
+package "exceptions" {
+
+    class DatabaseException
+}
+
+package "persistence" {
+
+    class ConnectionPool
+
+    class UserMapper {
+        + login()
+        + createUser()
+        + getUserById()
+    }
+
+    class OrderMapper {
+        + createOrder()
+        + getOrdersByUser()
+    }
+
+    class AdminMapper {
+        + getAllUsers()
+        + updateUserRole()
+    }
+}
+
+package "services" {
+
+}
+
+class Main
+
+' =========================
+' ENTITY RELATIONS
+' =========================
+
+User "1" --> "0..*" Order : places
+Order "1" --> "1" Carport : contains
+Carport "1" --> "0..*" MaterialLine : consists of
+
+User --> Role
+Carport --> RoofType
+
+' =========================
+' CONTROLLER DEPENDENCIES
+' =========================
+
+UserController --> UserMapper
+OrderController --> OrderMapper
+AdminController --> AdminMapper
+CarportController --> CarportForm
+
+' =========================
+' MAPPER DEPENDENCIES
+' =========================
+
+UserMapper --> ConnectionPool
+OrderMapper --> ConnectionPool
+AdminMapper --> ConnectionPool
+
+UserMapper --> User
+OrderMapper --> Order
+OrderMapper --> Carport
+AdminMapper --> User
+
+' =========================
+' EXCEPTION USAGE
+' =========================
+
+UserMapper --> DatabaseException
+OrderMapper --> DatabaseException
+AdminMapper --> DatabaseException
+
+' =========================
+' MAIN APPLICATION
+' =========================
+
+Main --> SessionConfig
+Main --> ThymeleafConfig
+Main --> UserController
+Main --> OrderController
+Main --> CarportController
+Main --> AdminController
+Main --> SalespersonController
+Main --> DrawingController
+
+@enduml

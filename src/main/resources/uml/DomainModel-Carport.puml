@@ -1,69 +1,52 @@
 @startuml
 
 class User {
-- userId
-- name
-- email
-- passwordHash
-- role
+    - int userId
+    - String email
+    - String passwordHash
+    - String firstName
+    - String lastName
+    - String phone
+    - String address
+    - int zip
+    - Role role
 }
 
 class Order {
-- orderId
-- date
-- status
-- totalPrice
+    - int orderId
+    - Date createdAt
+    - String status
+    - double totalPrice
 }
 
 class Carport {
-- width
-- length
-}
-
-class PrefabricatedCarport {
-- name
-- basePrice
-}
-
-class CustomCarport
-
-class Roof {
-- price
-}
-
-class FlatRoof {
-}
-class RaisedRoof {
-}
-
-class Shed {
-- width
-- length
+    - double width
+    - double length
+    - RoofType roofType
+    - boolean hasShed
 }
 
 class MaterialLine {
-- quantity
-- unitPrice
+    - int quantity
+    - double price
+    - String description
 }
 
-class Material {
-- materialId
-- name
-- price
+class Role {
+    <<enumeration>>
+    CUSTOMER
+    SALESPERSON
+    ADMIN
 }
 
-User "has 1 " -- "has 0..*" Order
-Order "1" -- "has 1" Carport
+class RoofType {
+    <<enumeration>>
+    FLAT
+    RAISED
+}
 
-Carport "1" -- "has 1" Roof
-Carport "1" -- "has 0..1" Shed
-Carport "1" -- "has 0..*" MaterialLine
-MaterialLine "1" -- "has 1" Material
-
-Carport <|-- "is "PrefabricatedCarport
-Carport <|-- "is "CustomCarport
-
-Roof <|-- "is"FlatRoof
-Roof <|-- "is"RaisedRoof
+User "1" -- "0..*" Order : places
+Order "1" -- "1" Carport : contains
+Carport "1" -- "0..*" MaterialLine : consists of
 
 @enduml

@@ -39,7 +39,7 @@ img {
 }
 
 .figma-page {
-    width: min(100%, 1280px);
+    width: min(100%, 1500px);
     min-height: 100vh;
     margin: 0 auto;
     background: #ffffff;
@@ -671,8 +671,8 @@ select {
 
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 16px;
+    grid-template-columns: 3fr 1fr;
+    gap: 24px;
 }
 
 .dash-card {

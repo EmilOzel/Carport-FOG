@@ -13,7 +13,7 @@
 <nav class="mob-nav" id="mobNav" aria-label="Bruger menu">
     <a href="/bruger-side">Bruger <Profil></Profil></a>
     <a href="/mine-ordrer">Mine ordrer</a>
-    <a href="/byg-carport">Byg Carport</a>
+    <a href="/choose-dimensions">Byg Carport</a>
     <a th:if="${user.role == 'salesperson' or user.role == 'admin'}" href="/saelger">Sælger</a>
     <a th:if="${user.role == 'admin'}" href="/admin">Admin</a>
     <a href="/logout" class="mob-nav-logout">Log ud</a>
