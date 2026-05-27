@@ -1,0 +1,42 @@
+@startuml
+
+title Aktivitetsdiagram – Carport FOG
+
+|Kunde|
+start
+
+:Forside;
+:Vælg dimensioner;
+
+if (Er logget ind?) then (nej)
+  :Logger ind / opretter bruger;
+else (ja)
+endif
+
+:Bekræftelsesside;
+:Send bestilling;
+
+|System|
+:Gemmer ordre;
+
+|Sælger|
+:Gennemgår bestilling;
+:Send tilbud;
+
+|Kunde|
+if (Accepterer tilbud?) then (ja)
+  :Gennemfører betaling;
+else (nej)
+  :Afviser tilbud;
+  stop
+endif
+
+|System|
+:Ordre completed;
+
+|Kunde|
+:Får tegning og stykliste;
+:Bestilling afsluttet;
+stop
+
+@enduml
