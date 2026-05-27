@@ -92,6 +92,16 @@
                                        class="btn btn--pay" style="font-size:11px; min-height:26px; padding:0 10px;">
                                         Betal <span th:text="${order[2]} + ' kr'"></span>
                                     </a>
+                                    <form th:if="${order[1] == 'pending'}"
+                                          th:action="@{/ordre/{id}/annuller(id=${order[0]})}" method="post" style="display:inline;"
+                                          onsubmit="return confirm('Er du sikker på du vil annullere ordre #' + [[${order[0]}]] + '?')">
+                                        <button type="submit" class="btn btn--reject" style="font-size:11px; min-height:26px; padding:0 10px;">Annuller</button>
+                                    </form>
+                                    <form th:if="${order[1] == 'rejected'}"
+                                          th:action="@{/ordre/{id}/slet(id=${order[0]})}" method="post" style="display:inline;"
+                                          onsubmit="return confirm('Er du sikker på du vil slette ordre #' + [[${order[0]}]] + '?')">
+                                        <button type="submit" class="btn btn--reject" style="font-size:11px; min-height:26px; padding:0 10px;">Slet</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
