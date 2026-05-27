@@ -21,6 +21,7 @@ public class AdminController {
         app.post("/admin/ordre/{id}/status",      ctx -> updateOrderStatus(ctx, connectionPool));
         app.post("/admin/bruger/{id}/rolle",      ctx -> updateUserRole(ctx, connectionPool));
         app.post("/admin/bruger/{id}/slet",       ctx -> deleteUser(ctx, connectionPool));
+        app.post("/admin/ordre/{id}/slet",        ctx -> deleteOrder(ctx, connectionPool));
     }
 
     private static boolean isAdmin(Context ctx) {
@@ -57,6 +58,18 @@ public class AdminController {
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
             ctx.render("admin-users.html");
+        }
+    }
+
+    private static void deleteOrder(Context ctx, ConnectionPool connectionPool) {
+        if (!isAdmin(ctx)) { ctx.status(403); return; }
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("id"));
+            AdminMapper.deleteOrder(orderId, connectionPool);
+            ctx.redirect("/admin");
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.redirect("/admin");
         }
     }
 

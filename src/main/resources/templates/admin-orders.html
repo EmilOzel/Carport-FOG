@@ -43,6 +43,7 @@
                 <nav class="admin-tabs">
                     <a href="/admin" class="admin-tab active">Ordrer</a>
                     <a href="/admin/brugere" class="admin-tab">Brugere</a>
+                    <a href="/admin/statistik" class="admin-tab">Statistik</a>
                 </nav>
 
                 <p th:if="${error}" th:text="${error}" style="color:red; padding:0 4px;"></p>
@@ -55,7 +56,7 @@
                             <tr>
                                 <th>#</th><th>Kunde</th><th>Email</th><th>Dato</th>
                                 <th>Status</th><th>Salgspris</th><th>Kostpris</th>
-                                <th>Betalt</th><th>Skift status</th>
+                                <th>Betalt</th><th>Skift status</th><th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -80,6 +81,15 @@
                                         </select>
                                         <button type="submit" class="btn">Gem</button>
                                     </form>
+                                </td>
+                                <td data-label="Slet">
+                                    <div class="card-btns">
+                                        <form th:action="@{/admin/ordre/{id}/slet(id=${order[0]})}" method="post"
+                                              onsubmit="return confirm('Er du sikker på du vil slette ordre #' + [[${order[0]}]] + '?')">
+                                            <button type="submit" class="btn btn--reject"
+                                                    style="font-size:11px; min-height:26px; padding:0 10px;">Slet</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(orders)}">
