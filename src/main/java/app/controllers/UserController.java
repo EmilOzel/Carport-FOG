@@ -70,9 +70,10 @@ public class UserController {
         String firstName = ctx.formParam("fornavn");
         String lastName = ctx.formParam("efternavn");
         String address = ctx.formParam("adresse");
+        String phone = ctx.formParam("telefon");
         String zip = ctx.formParam("postnummer");
         try {
-            UserMapper.createUser(email, password, firstName, lastName, address, zip, connectionPool);
+            UserMapper.createUser(email, password, firstName, lastName, address, phone, zip, connectionPool);
             ctx.redirect("/login");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
