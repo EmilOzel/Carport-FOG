@@ -4,9 +4,7 @@ import app.entities.User;
 import app.exceptions.DatabaseException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AdminMapper {
 
@@ -227,59 +225,6 @@ public class AdminMapper {
         } catch (SQLException e) {
             throw new DatabaseException("Kunne ikke opdatere ordrestatus", e);
         }
-    }
-
-    public static Map<String, Object> getStatistics(ConnectionPool connectionPool) throws DatabaseException {
-        Map<String, Object> stats = new LinkedHashMap<>();
-        String sql = """
-                SELECT
-                    COUNT(*)                                                        AS total_orders,
-                    COUNT(*) FILTER (WHERE status = 'pending')                     AS pending,
-                    COUNT(*) FILTER (WHERE status = 'approved')                    AS approved,
-                    COUNT(*) FILTER (WHERE status = 'completed')                   AS completed,
-                    COUNT(*) FILTER (WHERE status = 'rejected')                    AS rejected,
-                    COUNT(*) FILTER (WHERE is_paid = true)                         AS paid_orders,
-                    COALESCE(SUM(total_price) FILTER (WHERE is_paid = true), 0)    AS total_revenue,
-                    COUNT(*) FILTER (WHERE date >= DATE_TRUNC('month', CURRENT_DATE)) AS orders_this_month,
-                    COALESCE(
-                        SUM(total_price) FILTER (WHERE is_paid = true), 0) -
-                    COALESCE((
-                        SELECT SUM(ml.quantity * ml.unit_price)
-                        FROM orders o2
-                        JOIN carport c ON c.order_id = o2.order_id
-                        JOIN material_line ml ON ml.carport_id = c.carport_id
-                        WHERE o2.is_paid = true
-                    ), 0)                                                           AS total_profit
-                FROM orders
-                """;
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                stats.put("totalOrders",      rs.getInt("total_orders"));
-                stats.put("pending",          rs.getInt("pending"));
-                stats.put("approved",         rs.getInt("approved"));
-                stats.put("completed",        rs.getInt("completed"));
-                stats.put("rejected",         rs.getInt("rejected"));
-                stats.put("paidOrders",       rs.getInt("paid_orders"));
-                stats.put("totalRevenue",     rs.getDouble("total_revenue"));
-                stats.put("ordersThisMonth",  rs.getInt("orders_this_month"));
-                stats.put("totalProfit",      rs.getDouble("total_profit"));
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException("Kunne ikke hente statistik", e);
-        }
-
-        String userSql = "SELECT COUNT(*) FROM users WHERE role = 'customer'";
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(userSql);
-             ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) stats.put("totalCustomers", rs.getInt(1));
-        } catch (SQLException e) {
-            throw new DatabaseException("Kunne ikke hente brugerantal", e);
-        }
-
-        return stats;
     }
 
     private static User mapRow(ResultSet rs) throws SQLException {

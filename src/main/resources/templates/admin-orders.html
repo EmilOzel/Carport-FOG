@@ -43,7 +43,6 @@
                 <nav class="admin-tabs">
                     <a href="/admin" class="admin-tab active">Ordrer</a>
                     <a href="/admin/brugere" class="admin-tab">Brugere</a>
-                    <a href="/admin/statistik" class="admin-tab">Statistik</a>
                 </nav>
 
                 <p th:if="${error}" th:text="${error}" style="color:red; padding:0 4px;"></p>
@@ -99,7 +98,7 @@
                         </table>
                     </div>
                 </article>
-                <a class="btn back-btn" href="/bruger-side">Tilbage</a>
+                <a class="btn back-btn" href="#" onclick="history.back(); return false;">Tilbage</a>
             </section>
         </div>
     </section>
