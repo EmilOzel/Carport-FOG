@@ -5,24 +5,23 @@ title Aktivitetsdiagram – Carport FOG
 |Kunde|
 start
 
-:Besøger forsiden;
-:Start byg selv;
-:Vælger dimensioner;
+:Forside;
+:Vælg dimensioner;
 
 if (Er logget ind?) then (nej)
   :Logger ind / opretter bruger;
 else (ja)
 endif
 
-:Ser bekræftelsesside;
-:Afgiver bestilling;
+:Bekræftelsesside;
+:Send bestilling;
 
 |System|
-:Gemmer ordre i database;
+:Gemmer ordre;
 
 |Sælger|
 :Gennemgår bestilling;
-:Sender tilbud til kunden;
+:Send tilbud;
 
 |Kunde|
 if (Accepterer tilbud?) then (ja)
@@ -33,10 +32,10 @@ else (nej)
 endif
 
 |System|
-:Ordre markeres som completed;
+:Ordre completed;
 
 |Kunde|
-:Ser tegning og stykliste;
+:Får tegning og stykliste;
 :Bestilling afsluttet;
 stop
 
