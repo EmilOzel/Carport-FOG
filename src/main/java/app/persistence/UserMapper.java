@@ -70,4 +70,43 @@ public class UserMapper {
                 rs.getString("role")
         );
     }
+
+    public static void updateUser(
+            int userId,
+            String firstName,
+            String lastName,
+            String email,
+            String address,
+            String zip,
+            ConnectionPool connectionPool
+    ) throws DatabaseException {
+
+        String sql = """
+        UPDATE users
+        SET first_name = ?,
+            last_name = ?,
+            email = ?,
+            address = ?,
+            zip = ?
+        WHERE user_id = ?
+        """;
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+
+            ps.setString(1, firstName);
+            ps.setString(2, lastName);
+            ps.setString(3, email);
+            ps.setString(4, address);
+            ps.setString(5, zip);
+            ps.setInt(6, userId);
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Kunne ikke opdatere bruger");
+        }
+    }
 }
