@@ -98,6 +98,22 @@
                 </div>
             </article>
 
+            <article class="dash-card" style="margin-bottom:16px;" th:if="${svg != null}">
+                <header>Plantegning</header>
+                <div class="dash-body">
+                    <div class="drawing-box" th:utext="${svg}"></div>
+                </div>
+            </article>
+
+            <article class="dash-card" style="margin-bottom:16px;" th:if="${svg == null}">
+                <header>Plantegning</header>
+                <div class="dash-body" style="padding:20px;">
+                    <p style="margin:0;">
+                        Der er ikke gemt en plantegning til denne ordre endnu.
+                    </p>
+                </div>
+            </article>
+
             <a class="btn" href="/saelger" style="font-size:13px; min-height:34px; padding:0 16px;">Tilbage</a>
         </div>
     </section>

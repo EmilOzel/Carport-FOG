@@ -166,7 +166,7 @@ public class OrderMapper {
                 conn.setAutoCommit(true);
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Kunne ikke gemme carport og materialeliste", e);
+            throw new DatabaseException(createCarportSaveErrorMessage(e), e);
         }
     }
 
@@ -315,6 +315,44 @@ public class OrderMapper {
         }
 
         return total;
+    }
+
+    private static String createCarportSaveErrorMessage(SQLException e) {
+        String message = e.getMessage();
+
+        if ("23514".equals(e.getSQLState())) {
+            if (message.contains("carport_width_check")) {
+                return "Carportbredden passer ikke med databasens tilladte mål. Kør update-existing-database.sql og prøv igen.";
+            }
+
+            if (message.contains("carport_length_check")) {
+                return "Carportlængden passer ikke med databasens tilladte mål. Kør update-existing-database.sql og prøv igen.";
+            }
+
+            if (message.contains("shed_width_check")) {
+                return "Skurbredden passer ikke med databasens tilladte mål. Kør update-existing-database.sql og prøv igen.";
+            }
+
+            if (message.contains("shed_length_check")) {
+                return "Skurlængden passer ikke med databasens tilladte mål.";
+            }
+
+            if (message.contains("orders_status_check")) {
+                return "Ordrestatus passer ikke med databasens tilladte værdier. Kør update-existing-database.sql og prøv igen.";
+            }
+
+            return "Et af de valgte mål passer ikke med databasens regler. Tjek bredde, længde og skurmål.";
+        }
+
+        if ("23505".equals(e.getSQLState())) {
+            return "Der findes allerede carportdata til denne ordre.";
+        }
+
+        if ("23503".equals(e.getSQLState())) {
+            return "Ordren kunne ikke kobles korrekt sammen med carport, tag eller materialer.";
+        }
+
+        return "Carporten kunne ikke gemmes. Tjek databaseforbindelsen og prøv igen.";
     }
 
 }
