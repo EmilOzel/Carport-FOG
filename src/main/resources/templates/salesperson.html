@@ -82,6 +82,12 @@
                                 <div class="card-btns">
                                     <a th:href="@{/saelger/ordre/{id}(id=${order[0]})}"
                                        class="btn" style="font-size:11px; min-height:26px; padding:0 10px;">Se ordre</a>
+                                    <form th:if="${order[4] != 'rejected' and order[4] != 'completed'}"
+                                          th:action="@{/saelger/ordre/{id}/annuller(id=${order[0]})}" method="post" style="display:inline;"
+                                          onsubmit="return confirm('Er du sikker på du vil annullere ordre #' + [[${order[0]}]] + '?')">
+                                        <button type="submit" class="btn btn--reject"
+                                                style="font-size:11px; min-height:26px; padding:0 10px;">Annuller</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -95,7 +101,7 @@
                 </div>
             </article>
 
-            <a class="btn" href="/bruger-side" style="font-size:13px; min-height:34px; padding:0 16px;">Tilbage</a>
+            <a class="btn" href="#" onclick="history.back(); return false;" style="font-size:13px; min-height:34px; padding:0 16px;">Tilbage</a>
         </div>
     </section>
 </main>

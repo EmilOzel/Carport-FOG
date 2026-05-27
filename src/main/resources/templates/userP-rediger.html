@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rediger profil | FOG</title>
+
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+
+<main class="auth-screen">
+
+    <section class="auth-card">
+
+        <a href="/">
+            <img class="logo" src="/images/fog.png" alt="FOG">
+        </a>
+
+        <h1>Rediger profil</h1>
+
+        <form class="auth-form"
+              action="/rediger-profil"
+              method="post">
+
+            <label>
+                Fornavn
+                <input type="text"
+                       name="fornavn"
+                       th:value="${user.firstName}"
+                       placeholder="Fornavn"
+                       required>
+            </label>
+
+            <label>
+                Efternavn
+                <input type="text"
+                       name="efternavn"
+                       th:value="${user.lastName}"
+                       placeholder="Efternavn"
+                       required>
+            </label>
+
+            <label>
+                Email
+                <input type="email"
+                       name="email"
+                       th:value="${user.email}"
+                       placeholder="Email"
+                       required>
+            </label>
+
+            <label>
+                Adresse
+                <input type="text"
+                       name="adresse"
+                       th:value="${user.address}"
+                       placeholder="Adresse">
+            </label>
+
+            <label>
+                Postnummer
+                <input type="text"
+                       name="postnummer"
+                       th:value="${user.zipcode}"
+                       placeholder="Postnummer">
+            </label>
+
+
+
+            <p th:if="${success}"
+               th:text="${success}"
+               style="color: green;">
+            </p>
+
+            <p th:if="${error}"
+               th:text="${error}"
+               style="color: red;">
+            </p>
+
+            <button class="btn" type="submit">
+                Gem ændringer
+            </button>
+
+        </form>
+
+    </section>
+
+</main>
+
+</body>
+</html>
+

@@ -15,12 +15,12 @@ public class AdminController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/admin",                         ctx -> adminDashboard(ctx, connectionPool));
         app.get("/admin/brugere",                 ctx -> adminUsers(ctx, connectionPool));
-        app.get("/admin/statistik",               ctx -> adminStatistics(ctx, connectionPool));
         app.get("/admin/opret-saelger",           ctx -> showCreateSalesperson(ctx));
         app.post("/admin/opret-saelger",          ctx -> createSalesperson(ctx, connectionPool));
         app.post("/admin/ordre/{id}/status",      ctx -> updateOrderStatus(ctx, connectionPool));
         app.post("/admin/bruger/{id}/rolle",      ctx -> updateUserRole(ctx, connectionPool));
         app.post("/admin/bruger/{id}/slet",       ctx -> deleteUser(ctx, connectionPool));
+        app.post("/admin/ordre/{id}/slet",        ctx -> deleteOrder(ctx, connectionPool));
     }
 
     private static boolean isAdmin(Context ctx) {
@@ -60,6 +60,18 @@ public class AdminController {
         }
     }
 
+    private static void deleteOrder(Context ctx, ConnectionPool connectionPool) {
+        if (!isAdmin(ctx)) { ctx.status(403); return; }
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("id"));
+            AdminMapper.deleteOrder(orderId, connectionPool);
+            ctx.redirect("/admin");
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.redirect("/admin");
+        }
+    }
+
     private static void updateOrderStatus(Context ctx, ConnectionPool connectionPool) {
         if (!isAdmin(ctx)) {
             ctx.status(403);
@@ -88,21 +100,6 @@ public class AdminController {
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
             ctx.redirect("/admin/brugere");
-        }
-    }
-
-    private static void adminStatistics(Context ctx, ConnectionPool connectionPool) {
-        if (!isAdmin(ctx)) {
-            ctx.redirect("/login");
-            return;
-        }
-        try {
-            ctx.attribute("stats", AdminMapper.getStatistics(connectionPool));
-            ctx.attribute("user", ctx.sessionAttribute("currentUser"));
-            ctx.render("admin-statistics.html");
-        } catch (DatabaseException e) {
-            ctx.attribute("error", e.getMessage());
-            ctx.render("admin-statistics.html");
         }
     }
 

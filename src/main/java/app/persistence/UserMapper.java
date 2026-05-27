@@ -32,8 +32,8 @@ public class UserMapper {
         throw new DatabaseException("Forkert email eller adgangskode");
     }
 
-    public static void createUser(String email, String password, String firstName, String lastName, String address, String zip, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO users (email, password_hash, first_name, last_name, address, role, zip) VALUES (?, ?, ?, ?, ?, 'customer', ?)";
+    public static void createUser(String email, String password, String firstName, String lastName, String address, String phone, String zip, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "INSERT INTO users (email, password_hash, first_name, last_name, address, role, zip, phone) VALUES (?, ?, ?, ?, ?, 'customer', ?, ?)";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -46,6 +46,7 @@ public class UserMapper {
             ps.setString(4, lastName);
             ps.setString(5, address);
             ps.setString(6, zip);
+            ps.setString(7, phone);
             ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -69,5 +70,44 @@ public class UserMapper {
                 rs.getString("city"),
                 rs.getString("role")
         );
+    }
+
+    public static void updateUser(
+            int userId,
+            String firstName,
+            String lastName,
+            String email,
+            String address,
+            String zip,
+            ConnectionPool connectionPool
+    ) throws DatabaseException {
+
+        String sql = """
+        UPDATE users
+        SET first_name = ?,
+            last_name = ?,
+            email = ?,
+            address = ?,
+            zip = ?
+        WHERE user_id = ?
+        """;
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+
+            ps.setString(1, firstName);
+            ps.setString(2, lastName);
+            ps.setString(3, email);
+            ps.setString(4, address);
+            ps.setString(5, zip);
+            ps.setInt(6, userId);
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Kunne ikke opdatere bruger");
+        }
     }
 }

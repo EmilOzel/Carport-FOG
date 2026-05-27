@@ -203,6 +203,31 @@ public class OrderMapper {
         }
     }
 
+    public static void cancelOrder(int orderId, int userId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET status = 'rejected' WHERE order_id = ? AND user_id = ? AND status = 'pending'";
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseException("Kunne ikke annullere ordre", e);
+        }
+    }
+
+    public static boolean isOrderOwner(int orderId, int userId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT 1 FROM orders WHERE order_id = ? AND user_id = ?";
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.setInt(2, userId);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new DatabaseException("Kunne ikke verificere ordre-ejerskab", e);
+        }
+    }
+
     public static int createOrder(int userId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO orders (user_id, status) VALUES (?, 'pending') RETURNING order_id";
         try (Connection conn = connectionPool.getConnection();

@@ -55,7 +55,7 @@
                             <tr>
                                 <th>#</th><th>Kunde</th><th>Email</th><th>Dato</th>
                                 <th>Status</th><th>Salgspris</th><th>Kostpris</th>
-                                <th>Betalt</th><th>Skift status</th>
+                                <th>Betalt</th><th>Skift status</th><th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -81,6 +81,15 @@
                                         <button type="submit" class="btn">Gem</button>
                                     </form>
                                 </td>
+                                <td data-label="Slet">
+                                    <div class="card-btns">
+                                        <form th:action="@{/admin/ordre/{id}/slet(id=${order[0]})}" method="post"
+                                              onsubmit="return confirm('Er du sikker på du vil slette ordre #' + [[${order[0]}]] + '?')">
+                                            <button type="submit" class="btn btn--reject"
+                                                    style="font-size:11px; min-height:26px; padding:0 10px;">Slet</button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(orders)}">
                                 <td colspan="9" style="color:#777; font-style:italic; text-align:center; padding:24px;">Ingen ordrer endnu</td>
@@ -89,7 +98,7 @@
                         </table>
                     </div>
                 </article>
-                <a class="btn back-btn" href="/bruger-side">Tilbage</a>
+                <a class="btn back-btn" href="#" onclick="history.back(); return false;">Tilbage</a>
             </section>
         </div>
     </section>

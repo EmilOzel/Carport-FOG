@@ -24,6 +24,8 @@ public class OrderController {
         app.post("/ordre/{id}/betal",      ctx -> payOrder(ctx, connectionPool));
         app.post("/ordre/{id}/accepter",   ctx -> acceptOffer(ctx, connectionPool));
         app.post("/ordre/{id}/afvis",      ctx -> rejectOffer(ctx, connectionPool));
+        app.post("/ordre/{id}/annuller",   ctx -> cancelOrder(ctx, connectionPool));
+        app.post("/ordre/{id}/slet",       ctx -> deleteOwnOrder(ctx, connectionPool));
     }
     private static void createOrder(Context ctx, ConnectionPool connectionPool) {
         Integer userId = ctx.sessionAttribute("userId");
@@ -111,6 +113,34 @@ public class OrderController {
             ctx.redirect("/bruger-side");
         } catch (DatabaseException e) {
             ctx.redirect("/bruger-side");
+        }
+    }
+
+    private static void cancelOrder(Context ctx, ConnectionPool connectionPool) {
+        Integer userId = ctx.sessionAttribute("userId");
+        if (userId == null) { ctx.redirect("/login"); return; }
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("id"));
+            OrderMapper.cancelOrder(orderId, userId, connectionPool);
+            ctx.redirect("/mine-ordrer");
+        } catch (DatabaseException e) {
+            ctx.redirect("/mine-ordrer");
+        }
+    }
+
+    private static void deleteOwnOrder(Context ctx, ConnectionPool connectionPool) {
+        Integer userId = ctx.sessionAttribute("userId");
+        if (userId == null) { ctx.redirect("/login"); return; }
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("id"));
+            if (!OrderMapper.isOrderOwner(orderId, userId, connectionPool)) {
+                ctx.redirect("/mine-ordrer");
+                return;
+            }
+            AdminMapper.deleteOrder(orderId, connectionPool);
+            ctx.redirect("/mine-ordrer");
+        } catch (DatabaseException e) {
+            ctx.redirect("/mine-ordrer");
         }
     }
 
