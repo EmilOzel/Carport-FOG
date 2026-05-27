@@ -6,6 +6,7 @@ title Aktivitetsdiagram – Carport FOG
 start
 
 :Besøger forsiden;
+:Start byg selv;
 :Vælger dimensioner;
 
 if (Er logget ind?) then (nej)
