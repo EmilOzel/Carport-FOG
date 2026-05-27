@@ -1,0 +1,93 @@
+@startuml
+title Navigationsdiagram - Admin og Sælger
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam roundcorner 12
+
+skinparam state {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    StartColor black
+    EndColor white
+}
+
+[*] --> Login
+
+state "Login" as Login
+Login : /login
+
+state "Brugerside" as Brugerside
+Brugerside : /bruger-side
+
+state "Sælger" as Saelger
+Saelger : /saelger
+
+state "Sælger ordre" as SaelgerOrdre
+SaelgerOrdre : /saelger/ordre/{id}
+
+state "Send tilbud" as SendTilbud
+SendTilbud : POST /saelger/ordre/{id}/send-tilbud
+
+state "Admin ordrer" as AdminOrdrer
+AdminOrdrer : /admin
+
+state "Admin brugere" as AdminBrugere
+AdminBrugere : /admin/brugere
+
+state "Admin statistik" as AdminStatistik
+AdminStatistik : /admin/statistik
+
+state "Opret sælger" as OpretSaelger
+OpretSaelger : /admin/opret-saelger
+
+state "Opdater ordrestatus" as OpdaterStatus
+OpdaterStatus : POST /admin/ordre/{id}/status
+
+state "Opdater brugerrolle" as OpdaterRolle
+OpdaterRolle : POST /admin/bruger/{id}/rolle
+
+state "Slet bruger" as SletBruger
+SletBruger : POST /admin/bruger/{id}/slet
+
+state "Log ud" as LogUd
+LogUd : /logout
+
+Login --> Brugerside : POST /login korrekt
+Login --> Login : POST /login forkert
+
+Brugerside --> Saelger : sælger
+Brugerside --> AdminOrdrer : admin
+Brugerside --> LogUd : log ud
+LogUd --> Login
+
+Saelger --> SaelgerOrdre : vælg ordre
+SaelgerOrdre --> SendTilbud : send tilbud
+SendTilbud --> Saelger : tilbud sendt
+SaelgerOrdre --> Saelger : tilbage
+
+AdminOrdrer --> AdminBrugere : administrer brugere
+AdminOrdrer --> AdminStatistik : se statistik
+AdminOrdrer --> OpretSaelger : opret sælger
+AdminOrdrer --> OpdaterStatus : ændr ordrestatus
+OpdaterStatus --> AdminOrdrer : status opdateret
+
+AdminOrdrer --> SaelgerOrdre : se ordre
+
+AdminBrugere --> OpdaterRolle : ændr rolle
+OpdaterRolle --> AdminBrugere : rolle opdateret
+AdminBrugere --> SletBruger : slet bruger
+SletBruger --> AdminBrugere : bruger slettet
+AdminBrugere --> AdminOrdrer : tilbage
+
+AdminStatistik --> AdminOrdrer : tilbage
+
+OpretSaelger --> AdminBrugere : POST /admin/opret-saelger oprettet
+OpretSaelger --> OpretSaelger : POST /admin/opret-saelger fejl
+
+AdminOrdrer --> LogUd : log ud
+
+@enduml

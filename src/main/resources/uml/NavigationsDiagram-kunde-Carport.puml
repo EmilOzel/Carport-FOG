@@ -1,0 +1,85 @@
+@startuml
+title Navigationsdiagram - Kunde
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam roundcorner 12
+
+skinparam state {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    StartColor black
+    EndColor white
+}
+
+[*] --> Forside
+
+state "Forside" as Forside
+Forside : /
+
+state "Login" as Login
+Login : /login
+
+state "Opret konto" as OpretKonto
+OpretKonto : /opret-bruger
+
+state "Brugerside" as Brugerside
+Brugerside : /bruger-side
+
+state "Log ud" as LogUd
+LogUd : /logout
+
+state "Byg carport" as BygCarport
+BygCarport : /byg-carport
+
+state "Vælg mål" as VaelgMaal
+VaelgMaal : /choose-dimensions
+
+state "Bestil tilbud" as BestilTilbud
+BestilTilbud : /tegning
+
+state "Mine ordrer" as MineOrdrer
+MineOrdrer : /mine-ordrer
+
+state "Ordredetaljer" as OrdreDetaljer
+OrdreDetaljer : /ordre/{ordreId}
+
+state "Betaling" as Betaling
+Betaling : /ordre/{id}/betal
+
+Forside --> Login : vælg login
+Forside --> OpretKonto : opret konto
+Forside --> BygCarport : byg carport
+Forside --> [*] : luk system
+
+Login --> Brugerside : POST /login korrekt
+Login --> Login : POST /login forkert
+Login --> OpretKonto : opret konto
+
+OpretKonto --> Login : POST /opret-bruger konto oprettet
+OpretKonto --> OpretKonto : POST /opret-bruger fejl
+
+Brugerside --> LogUd : log ud
+LogUd --> Forside
+
+Brugerside --> BygCarport : byg carport
+BygCarport --> VaelgMaal : vælg carporttype
+VaelgMaal --> BygCarport : tilbage
+
+VaelgMaal --> BestilTilbud : POST /carport/order
+BestilTilbud --> VaelgMaal : ret mål
+BestilTilbud --> OrdreDetaljer : POST /bestil-tilbud
+
+Brugerside --> MineOrdrer : se mine ordrer
+MineOrdrer --> OrdreDetaljer : se detaljer
+OrdreDetaljer --> MineOrdrer : tilbage
+
+OrdreDetaljer --> OrdreDetaljer : POST /ordre/{id}/accepter
+OrdreDetaljer --> OrdreDetaljer : POST /ordre/{id}/afvis
+OrdreDetaljer --> Betaling : gå til betaling
+Betaling --> Brugerside : POST /ordre/{id}/betal
+
+@enduml
