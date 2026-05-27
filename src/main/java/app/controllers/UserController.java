@@ -48,7 +48,16 @@ public class UserController {
             User user = UserMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("currentUser", user);
             ctx.sessionAttribute("userId", user.getId());
-            ctx.redirect("/bruger-side");
+
+            String redirectUrl = ctx.sessionAttribute("redirectAfterLogin");
+            if (redirectUrl != null) {
+                ctx.sessionAttribute("redirectAfterLogin", null);
+                ctx.redirect(redirectUrl);
+            } else {
+
+                ctx.redirect("/bruger-side");
+            }
+
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
             ctx.render("login.html");
