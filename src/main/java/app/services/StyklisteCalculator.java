@@ -2,7 +2,6 @@ package app.services;
 
 import app.entities.Carport;
 import app.entities.MaterialLine;
-import app.entities.RoofType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,18 +130,10 @@ public class StyklisteCalculator {
     }
 
     private String rafterDimensions(Carport carport) {
-        if (carport.getRoofType() == RoofType.RAISED) {
-            return "Tilskåret spær";
-        }
-
         return "45 x 120 mm";
     }
 
     private String rafterDescription(Carport carport) {
-        if (carport.getRoofType() == RoofType.RAISED) {
-            return "Tilskåret spær - ikke samlet";
-        }
-
         return "Spær til fladt tag";
     }
 

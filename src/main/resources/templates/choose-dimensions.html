@@ -42,14 +42,6 @@
         <aside class="quick-form-panel">
             <form class="quick-form" action="/carport/order" method="post">
                 <label>
-                    Tagtype
-                    <select id="roofType" name="tagtype" required>
-                        <option value="FLAT" th:selected="${selectedRoofType == 'FLAT'}">Fladt tag</option>
-                        <option value="RAISED" th:selected="${selectedRoofType == 'RAISED'}">Høj rejsning</option>
-                    </select>
-                </label>
-
-                <label>
                     Carport bredde
                     <select id="carportWidth" name="bredde" required>
                         <option th:each="width : ${widthOptions}"
