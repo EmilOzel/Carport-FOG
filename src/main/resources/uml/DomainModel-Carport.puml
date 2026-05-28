@@ -1,46 +1,132 @@
 @startuml
 
+skinparam classAttributeIconSize 0
+
+title Domain Model - Carport
+
 class User {
-    - int userId
+    - int id
     - String email
-    - String passwordHash
+    - String password
     - String firstName
     - String lastName
     - String phone
     - String address
-    - int zip
-    - Role role
+    - int zipcode
+    - String city
+    - String role
+}
+
+class Zipcode {
+    - String zip
+    - String city
 }
 
 class Order {
-    - int orderId
-    - Date createdAt
+    - int id
+    - int userId
+    - int carportId
     - String status
+    - LocalDateTime createdAt
     - double totalPrice
+    - double basePrice
+    - double discountPercent
+    - double discountAmount
+    - boolean isPaid
+    - String remarks
 }
 
 class Carport {
-    - double width
-    - double length
-    - String roofMaterial
+    - int id
+    - int width
+    - int length
+    - int height
     - boolean hasShed
+    - int shedWidth
+    - int shedLength
+}
+
+class Shed {
+    - int id
+    - int width
+    - int length
+}
+
+class Roof {
+    - int id
+    - String roofStyle
+    - String roofCovering
+    - int pitch
+    - double price
+}
+
+class Material {
+    - int id
+    - String name
+    - String unit
+    - double price
 }
 
 class MaterialLine {
+    - String name
+    - String dimensions
     - int quantity
-    - double price
+    - String unit
     - String description
+    - double unitPrice
+    + double getTotalPrice()
 }
 
-class Role {
-    <<enumeration>>
-    CUSTOMER
+enum Role {
+    USER
     SALESPERSON
     ADMIN
 }
 
-User "1" -- "0..*" Order : places
-Order "1" -- "1" Carport : contains
-Carport "1" -- "0..*" MaterialLine : consists of
+enum OrderStatus {
+    pending
+    offer
+    approved
+    rejected
+    completed
+}
+
+enum RoofStyle {
+    flat
+    raised
+}
+
+enum RoofCovering {
+    none
+    plastic_trapez
+    eternit_b6_grey
+    eternit_b6_dark_blue
+    eternit_b7_dark_blue
+    concrete_coral_red
+    concrete_black
+}
+
+Zipcode "1" -- "0..*" User : has residents
+User "1" -- "0..*" Order : has orders
+Order "1" -- "1" Carport : has carport
+Carport "1" -- "1" Roof : has roof
+Carport "1" -- "0..1" Shed : has shed
+Carport "1" -- "0..*" MaterialLine : has material lines
+Material "1" -- "0..*" MaterialLine : used in
+
+User --> Role : has role
+Order --> OrderStatus : has status
+Roof --> RoofStyle : has style
+Roof --> RoofCovering : has covering
+
+note right of Shed
+  Shed exists only when
+  Carport.hasShed is true.
+end note
+
+note bottom of MaterialLine
+  MaterialLine represents a calculated line
+  in the bill of materials/stykliste.
+end note
 
 @enduml
