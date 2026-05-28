@@ -2,7 +2,6 @@ package app.persistence;
 
 import app.entities.Carport;
 import app.entities.MaterialLine;
-import app.entities.RoofType;
 import app.exceptions.DatabaseException;
 
 import java.sql.Connection;
@@ -75,11 +74,10 @@ public class OrderMapper {
 
     public static Carport getCarportByOrder(int orderId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = """
-        SELECT c.width, c.length, r.roof_style,
+        SELECT c.width, c.length,
                COALESCE(s.width, 0) AS shed_width,
                COALESCE(s.length, 0) AS shed_length
         FROM carport c
-        JOIN roof r ON r.roof_id = c.roof_id
         LEFT JOIN shed s ON s.carport_id = c.carport_id
         WHERE c.order_id = ?
         """;
@@ -94,13 +92,11 @@ public class OrderMapper {
                 int shedWidth = rs.getInt("shed_width");
                 int shedLength = rs.getInt("shed_length");
                 boolean hasShed = shedWidth > 0 && shedLength > 0;
-                RoofType roofType = "raised".equals(rs.getString("roof_style")) ? RoofType.RAISED : RoofType.FLAT;
 
                 return new Carport(
                         rs.getInt("width"),
                         rs.getInt("length"),
                         230,
-                        roofType,
                         hasShed,
                         shedWidth,
                         shedLength
@@ -145,7 +141,7 @@ public class OrderMapper {
             try {
                 conn.setAutoCommit(false);
 
-                int roofId = insertRoof(conn, roofSql, carport);
+                int roofId = insertRoof(conn, roofSql);
                 int carportId = insertCarport(conn, carportSql, orderId, roofId, carport);
 
                 if (carport.isHasShed()) {
@@ -218,17 +214,11 @@ public class OrderMapper {
         throw new DatabaseException("Ordre blev ikke oprettet");
     }
 
-    private static int insertRoof(Connection conn, String sql, Carport carport) throws SQLException {
+    private static int insertRoof(Connection conn, String sql) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            if (carport.getRoofType() == RoofType.RAISED) {
-                ps.setString(1, "raised");
-                ps.setString(2, "concrete_black");
-                ps.setInt(3, 25);
-            } else {
-                ps.setString(1, "flat");
-                ps.setString(2, "none");
-                ps.setNull(3, java.sql.Types.SMALLINT);
-            }
+            ps.setString(1, "flat");
+            ps.setString(2, "none");
+            ps.setNull(3, java.sql.Types.SMALLINT);
 
             ResultSet rs = ps.executeQuery();
             rs.next();
