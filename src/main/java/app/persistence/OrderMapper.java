@@ -74,10 +74,11 @@ public class OrderMapper {
 
     public static Carport getCarportByOrder(int orderId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = """
-        SELECT c.width, c.length,
+        SELECT c.width, c.length, r.roof_covering,
                COALESCE(s.width, 0) AS shed_width,
                COALESCE(s.length, 0) AS shed_length
         FROM carport c
+        JOIN roof r ON r.roof_id = c.roof_id
         LEFT JOIN shed s ON s.carport_id = c.carport_id
         WHERE c.order_id = ?
         """;
@@ -97,6 +98,7 @@ public class OrderMapper {
                         rs.getInt("width"),
                         rs.getInt("length"),
                         230,
+                        rs.getString("roof_covering"),
                         hasShed,
                         shedWidth,
                         shedLength
@@ -141,7 +143,7 @@ public class OrderMapper {
             try {
                 conn.setAutoCommit(false);
 
-                int roofId = insertRoof(conn, roofSql);
+                int roofId = insertRoof(conn, roofSql, carport);
                 int carportId = insertCarport(conn, carportSql, orderId, roofId, carport);
 
                 if (carport.isHasShed()) {
@@ -239,10 +241,10 @@ public class OrderMapper {
         throw new DatabaseException("Ordre blev ikke oprettet");
     }
 
-    private static int insertRoof(Connection conn, String sql) throws SQLException {
+    private static int insertRoof(Connection conn, String sql, Carport carport) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, "flat");
-            ps.setString(2, "none");
+            ps.setString(2, carport.getRoofMaterial());
             ps.setNull(3, java.sql.Types.SMALLINT);
 
             ResultSet rs = ps.executeQuery();

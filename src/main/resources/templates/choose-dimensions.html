@@ -74,6 +74,17 @@
                     </select>
                 </label>
 
+                <label>
+                    Tagtype
+                    <select id="roofMaterial" name="tagmateriale" required>
+                        <option th:each="roofMaterial : ${roofMaterialOptions}"
+                                th:value="${roofMaterial.key}"
+                                th:text="${roofMaterial.value}"
+                                th:selected="${roofMaterial.key == selectedRoofMaterial}"
+                                value="plastic_trapez">Plasttrapezplader</option>
+                    </select>
+                </label>
+
                 <h2>Redskabsrum</h2>
 
                 <label>

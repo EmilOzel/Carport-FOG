@@ -26,22 +26,15 @@ CREATE TABLE orders (
 
 CREATE TABLE roof (
     roof_id       SERIAL        PRIMARY KEY,
-    roof_style    VARCHAR(10)   NOT NULL CHECK (roof_style IN ('flat', 'raised')),
+    roof_style    VARCHAR(10)   NOT NULL CHECK (roof_style = 'flat'),
     roof_covering VARCHAR(30)   NOT NULL CHECK (roof_covering IN (
                                     'none',
-                                    'plastic_trapez',
-                                    'eternit_b6_grey',
-                                    'eternit_b6_dark_blue',
-                                    'eternit_b7_dark_blue',
-                                    'concrete_coral_red',
-                                    'concrete_black'
+                                    'plastic_trapez'
                                 )),
     pitch         SMALLINT      CHECK (pitch IN (15, 20, 25, 30, 35, 40, 45)),
     price         DECIMAL(10,2) NOT NULL DEFAULT 0.00,
 
-    CONSTRAINT chk_flat_no_pitch CHECK (NOT (roof_style = 'flat'   AND pitch IS NOT NULL)),
-    CONSTRAINT chk_raised_pitch  CHECK (NOT (roof_style = 'raised' AND pitch IS NULL)),
-    CONSTRAINT chk_raised_cover  CHECK (NOT (roof_style = 'raised' AND roof_covering = 'none'))
+    CONSTRAINT chk_flat_no_pitch CHECK (pitch IS NULL)
 );
 
 CREATE TABLE carport (

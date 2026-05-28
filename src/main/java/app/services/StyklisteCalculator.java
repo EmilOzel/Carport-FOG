@@ -94,10 +94,10 @@ public class StyklisteCalculator {
 
         materialLines.add(new MaterialLine(
                 "Tag",
-                "Betontagsten",
+                roofMaterialName(carport),
                 calculateRoofTiles(carport),
                 "stk.",
-                "Sort betontagsten",
+                "Tagmateriale til fladt tag",
                 ROOF_TILE_PRICE
         ));
 
@@ -135,6 +135,10 @@ public class StyklisteCalculator {
 
     private String rafterDescription(Carport carport) {
         return "Spær til fladt tag";
+    }
+
+    private String roofMaterialName(Carport carport) {
+        return CarportDimensions.ROOF_MATERIAL_OPTIONS.getOrDefault(carport.getRoofMaterial(), "Tagmateriale");
     }
 
     private int calculateBattens(Carport carport) {

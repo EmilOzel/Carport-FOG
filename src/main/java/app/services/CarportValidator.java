@@ -17,6 +17,10 @@ public class CarportValidator {
             throw new IllegalArgumentException("Vælg en gyldig carporthøjde");
         }
 
+        if (!CarportDimensions.isValidRoofMaterial(form.getRoofMaterial())) {
+            throw new IllegalArgumentException("Vælg et gyldigt tagmateriale");
+        }
+
         if (form.isHasShed()) {
             if (!CarportDimensions.isValidShedWidthForCarport(form.getShedWidth(), form.getWidth())) {
                 throw new IllegalArgumentException("Skurbredde skal være 60 cm mindre end carportbredden");

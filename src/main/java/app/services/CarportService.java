@@ -12,6 +12,7 @@ public class CarportService {
                 form.getWidth(),
                 form.getLength(),
                 form.getHeight(),
+                form.getRoofMaterial(),
                 form.isHasShed(),
                 form.getShedWidth(),
                 form.getShedLength()

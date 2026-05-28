@@ -5,14 +5,16 @@ public class Carport {
     private int width;
     private int length;
     private int height;
+    private String roofMaterial;
     private boolean hasShed;
     private int shedWidth;
     private int shedLength;
 
-    public Carport(int width, int length, int height, boolean hasShed, int shedWidth, int shedLength) {
+    public Carport(int width, int length, int height, String roofMaterial, boolean hasShed, int shedWidth, int shedLength) {
         this.width = width;
         this.length = length;
         this.height = height;
+        this.roofMaterial = roofMaterial;
         this.hasShed = hasShed;
         this.shedWidth = shedWidth;
         this.shedLength = shedLength;
@@ -44,6 +46,14 @@ public class Carport {
 
     public int getHeight() {
         return height;
+    }
+
+    public String getRoofMaterial() {
+        return roofMaterial;
+    }
+
+    public void setRoofMaterial(String roofMaterial) {
+        this.roofMaterial = roofMaterial;
     }
 
     public void setHeight(int height) {

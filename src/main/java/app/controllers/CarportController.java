@@ -80,23 +80,26 @@ public class CarportController {
         int width = parseRequiredInt(ctx, "bredde");
         int length = parseRequiredInt(ctx, "længde");
         int height = parseRequiredInt(ctx, "højde");
+        String roofMaterial = ctx.formParam("tagmateriale");
         boolean hasShed = "yes".equals(ctx.formParam("redskabsrum"));
         int shedWidth = parseOptionalInt(ctx.formParam("skurBredde"));
         int shedLength = parseOptionalInt(ctx.formParam("skurLængde"));
 
-        return new CarportForm(width, length, height, hasShed, shedWidth, shedLength);
+        return new CarportForm(width, length, height, roofMaterial, hasShed, shedWidth, shedLength);
     }
 
     private static void setDimensionAttributes(Context ctx, CarportForm form) {
         ctx.attribute("widthOptions", CarportDimensions.WIDTH_OPTIONS);
         ctx.attribute("lengthOptions", CarportDimensions.LENGTH_OPTIONS);
         ctx.attribute("heightOptions", CarportDimensions.HEIGHT_OPTIONS);
+        ctx.attribute("roofMaterialOptions", CarportDimensions.ROOF_MATERIAL_OPTIONS);
         ctx.attribute("shedWidthOptions", CarportDimensions.SHED_WIDTH_OPTIONS);
         ctx.attribute("shedLengthOptions", CarportDimensions.SHED_LENGTH_OPTIONS);
 
         ctx.attribute("selectedWidth", form == null ? CarportDimensions.DEFAULT_WIDTH : form.getWidth());
         ctx.attribute("selectedLength", form == null ? CarportDimensions.DEFAULT_LENGTH : form.getLength());
         ctx.attribute("selectedHeight", form == null ? CarportDimensions.DEFAULT_HEIGHT : form.getHeight());
+        ctx.attribute("selectedRoofMaterial", form == null ? CarportDimensions.DEFAULT_ROOF_MATERIAL : form.getRoofMaterial());
         ctx.attribute("selectedHasShed", form == null || form.isHasShed());
         ctx.attribute("selectedShedWidth", form == null ? CarportDimensions.DEFAULT_SHED_WIDTH : form.getShedWidth());
         ctx.attribute("selectedShedLength", form == null ? CarportDimensions.DEFAULT_SHED_LENGTH : form.getShedLength());

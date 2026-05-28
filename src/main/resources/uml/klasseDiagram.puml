@@ -47,7 +47,7 @@ package "entities" {
     class Carport {
         - double width
         - double length
-        - RoofType roofType
+        - String roofMaterial
         - boolean hasShed
     }
 
@@ -63,10 +63,6 @@ package "entities" {
         ADMIN
     }
 
-    enum RoofType {
-        FLAT
-        RAISED
-    }
 }
 
 package "exceptions" {
@@ -110,7 +106,6 @@ Order "1" --> "1" Carport : contains
 Carport "1" --> "0..*" MaterialLine : consists of
 
 User --> Role
-Carport --> RoofType
 
 ' =========================
 ' CONTROLLER DEPENDENCIES

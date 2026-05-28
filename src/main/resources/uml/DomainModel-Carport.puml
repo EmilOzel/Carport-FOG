@@ -22,7 +22,7 @@ class Order {
 class Carport {
     - double width
     - double length
-    - RoofType roofType
+    - String roofMaterial
     - boolean hasShed
 }
 
@@ -37,12 +37,6 @@ class Role {
     CUSTOMER
     SALESPERSON
     ADMIN
-}
-
-class RoofType {
-    <<enumeration>>
-    FLAT
-    RAISED
 }
 
 User "1" -- "0..*" Order : places

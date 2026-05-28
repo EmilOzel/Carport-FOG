@@ -2,7 +2,9 @@ package app.services;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class CarportDimensions {
     public static final int SHED_WIDTH_DIFFERENCE = 60;
@@ -12,10 +14,12 @@ public final class CarportDimensions {
     public static final List<Integer> HEIGHT_OPTIONS = List.of(210, 230, 250);
     public static final List<Integer> SHED_WIDTH_OPTIONS = range(180, 720, 60);
     public static final List<Integer> SHED_LENGTH_OPTIONS = range(180, 400, 60);
+    public static final Map<String, String> ROOF_MATERIAL_OPTIONS = roofMaterials();
 
     public static final int DEFAULT_WIDTH = 600;
     public static final int DEFAULT_LENGTH = 780;
     public static final int DEFAULT_HEIGHT = 230;
+    public static final String DEFAULT_ROOF_MATERIAL = "plastic_trapez";
     public static final int DEFAULT_SHED_WIDTH = DEFAULT_WIDTH - SHED_WIDTH_DIFFERENCE;
     public static final int DEFAULT_SHED_LENGTH = 240;
 
@@ -32,6 +36,10 @@ public final class CarportDimensions {
 
     public static boolean isValidHeight(int height) {
         return HEIGHT_OPTIONS.contains(height);
+    }
+
+    public static boolean isValidRoofMaterial(String roofMaterial) {
+        return ROOF_MATERIAL_OPTIONS.containsKey(roofMaterial);
     }
 
     public static boolean isValidShedWidth(int shedWidth) {
@@ -54,5 +62,12 @@ public final class CarportDimensions {
         }
 
         return Collections.unmodifiableList(values);
+    }
+
+    private static Map<String, String> roofMaterials() {
+        Map<String, String> materials = new LinkedHashMap<>();
+        materials.put("none", "Uden tagplader");
+        materials.put("plastic_trapez", "Plasttrapezplader");
+        return Collections.unmodifiableMap(materials);
     }
 }

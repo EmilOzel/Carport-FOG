@@ -2,7 +2,6 @@ package services;
 
 import app.entities.Carport;
 import app.entities.MaterialLine;
-import app.entities.RoofType;
 import app.services.StyklisteCalculator;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +13,7 @@ class StyklisteCalculatorTest {
 
     @Test
     void calculatePostsWithoutShed() {
-        Carport carport = new Carport(600, 780, 230, RoofType.FLAT, false, 0, 0);
+        Carport carport = new Carport(600, 780, 230, "plastic_trapez", false, 0, 0);
         StyklisteCalculator calculator = new StyklisteCalculator();
 
         int result = calculator.calculatePosts(carport);
@@ -24,7 +23,7 @@ class StyklisteCalculatorTest {
 
     @Test
     void calculatePostsWithShed() {
-        Carport carport = new Carport(600, 780, 230, RoofType.FLAT, true, 540, 210);
+        Carport carport = new Carport(600, 780, 230, "plastic_trapez", true, 540, 210);
         StyklisteCalculator calculator = new StyklisteCalculator();
 
         int result = calculator.calculatePosts(carport);
@@ -34,7 +33,7 @@ class StyklisteCalculatorTest {
 
     @Test
     void calculateRafters() {
-        Carport carport = new Carport(600, 780, 230, RoofType.FLAT, false, 0, 0);
+        Carport carport = new Carport(600, 780, 230, "plastic_trapez", false, 0, 0);
         StyklisteCalculator calculator = new StyklisteCalculator();
 
         int result = calculator.calculateRafters(carport);
@@ -44,7 +43,7 @@ class StyklisteCalculatorTest {
 
     @Test
     void calculateMaterialListWithShed() {
-        Carport carport = new Carport(600, 780, 380, RoofType.RAISED, true, 540, 210);
+        Carport carport = new Carport(600, 780, 380, "plastic_trapez", true, 540, 210);
         StyklisteCalculator calculator = new StyklisteCalculator();
 
         List<MaterialLine> result = calculator.calculateMaterialList(carport);
@@ -55,11 +54,12 @@ class StyklisteCalculatorTest {
         assertEquals("Rem", result.get(1).getName());
         assertEquals("Spær", result.get(2).getName());
         assertEquals("Beklædning", result.get(5).getName());
+        assertEquals("Plasttrapezplader", result.get(6).getDimensions());
     }
 
     @Test
     void calculateMaterialListWithoutShed() {
-        Carport carport = new Carport(390, 780, 310, RoofType.FLAT, false, 0, 0);
+        Carport carport = new Carport(390, 780, 310, "plastic_trapez", false, 0, 0);
         StyklisteCalculator calculator = new StyklisteCalculator();
 
         List<MaterialLine> result = calculator.calculateMaterialList(carport);
