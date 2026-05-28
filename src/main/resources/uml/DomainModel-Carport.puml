@@ -41,6 +41,7 @@ class Carport {
     - int width
     - int length
     - int height
+    - String roofMaterial
     - boolean hasShed
     - int shedWidth
     - int shedLength
@@ -54,9 +55,8 @@ class Shed {
 
 class Roof {
     - int id
-    - String roofStyle
+    - String roofStyle = "flat"
     - String roofCovering
-    - int pitch
     - double price
 }
 
@@ -78,9 +78,9 @@ class MaterialLine {
 }
 
 enum Role {
-    USER
-    SALESPERSON
-    ADMIN
+    customer
+    salesperson
+    admin
 }
 
 enum OrderStatus {
@@ -91,19 +91,9 @@ enum OrderStatus {
     completed
 }
 
-enum RoofStyle {
-    flat
-    raised
-}
-
 enum RoofCovering {
     none
     plastic_trapez
-    eternit_b6_grey
-    eternit_b6_dark_blue
-    eternit_b7_dark_blue
-    concrete_coral_red
-    concrete_black
 }
 
 Zipcode "1" -- "0..*" User : has residents
@@ -116,8 +106,12 @@ Material "1" -- "0..*" MaterialLine : used in
 
 User --> Role : has role
 Order --> OrderStatus : has status
-Roof --> RoofStyle : has style
 Roof --> RoofCovering : has covering
+
+note right of Roof
+  RoofStyle is always "flat".
+  The user only chooses roof covering/material.
+end note
 
 note right of Shed
   Shed exists only when
