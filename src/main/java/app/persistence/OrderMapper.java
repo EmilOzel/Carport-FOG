@@ -123,8 +123,8 @@ public class OrderMapper {
 
     public static void saveCarportForOrder(int orderId, Carport carport, List<MaterialLine> materials, ConnectionPool connectionPool) throws DatabaseException {
         String roofSql = """
-                INSERT INTO roof (roof_style, roof_covering, pitch, price)
-                VALUES (?, ?, ?, 0)
+                INSERT INTO roof (roof_style, roof_covering, pitch)
+                VALUES (?, ?, ?)
                 RETURNING roof_id
                 """;
         String carportSql = """
