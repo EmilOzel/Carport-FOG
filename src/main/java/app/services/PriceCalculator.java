@@ -16,16 +16,6 @@ public class PriceCalculator {
         return price;
     }
 
-    public double applyDiscount(double basePrice, double discountPercent) {
-        double safeDiscount = clampDiscount(discountPercent);
-        return basePrice - (basePrice * safeDiscount / 100);
-    }
-
-    public double calculateDiscountAmount(double basePrice, double discountPercent) {
-        double safeDiscount = clampDiscount(discountPercent);
-        return basePrice * safeDiscount / 100;
-    }
-
     private double clampDiscount(double discountPercent) {
         if (discountPercent < 0) {
             return 0;
