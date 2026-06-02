@@ -1,0 +1,41 @@
+@startuml
+title AS-IS Aktivitetsdiagram – Carport FOG
+
+|Kunde|
+start
+:Besøger forside;
+:Se carporte;
+
+if (Tagtype?) then (Fladt)
+else (Rejst)
+endif
+
+:Vælg dimensioner;
+
+if (Egne mål?) then (Ja)
+  :Indsend mål;
+else (Nej)
+  :Lav ordre;
+endif
+
+|System|
+:Send mail til sælger;
+
+|Sælger|
+:Modtag mail;
+:Indtast dimensioner;
+:Se stykliste & pris;
+:Send tilbud;
+
+|Kunde|
+if (Accepter tilbud?) then (Ja)
+  :Betal;
+  |System|
+  :Ordre afsluttet;
+  stop
+else (Nej)
+  :Afvis tilbud;
+  stop
+endif
+
+@enduml
