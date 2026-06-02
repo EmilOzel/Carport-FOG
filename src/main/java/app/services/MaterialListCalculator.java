@@ -6,7 +6,7 @@ import app.entities.MaterialLine;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StyklisteCalculator {
+public class MaterialListCalculator {
     // Enhedspriser brugt til at beregne materialelisten.
     private static final int RAFTER_SPACING_CM = 55; // afstand mellem spær i cm
 

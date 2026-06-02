@@ -2,19 +2,19 @@ package services;
 
 import app.entities.Carport;
 import app.entities.MaterialLine;
-import app.services.StyklisteCalculator;
+import app.services.MaterialListCalculator;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class StyklisteCalculatorTest {
+class MaterialListCalculatorTest {
 
     @Test
     void calculatePostsWithoutShed() {
         Carport carport = new Carport(600, 780, 230, "plastic_trapez", false, 0, 0);
-        StyklisteCalculator calculator = new StyklisteCalculator();
+        MaterialListCalculator calculator = new MaterialListCalculator();
 
         int result = calculator.calculatePosts(carport);
 
@@ -24,7 +24,7 @@ class StyklisteCalculatorTest {
     @Test
     void calculatePostsWithShed() {
         Carport carport = new Carport(600, 780, 230, "plastic_trapez", true, 540, 210);
-        StyklisteCalculator calculator = new StyklisteCalculator();
+        MaterialListCalculator calculator = new MaterialListCalculator();
 
         int result = calculator.calculatePosts(carport);
 
@@ -34,7 +34,7 @@ class StyklisteCalculatorTest {
     @Test
     void calculateRafters() {
         Carport carport = new Carport(600, 780, 230, "plastic_trapez", false, 0, 0);
-        StyklisteCalculator calculator = new StyklisteCalculator();
+        MaterialListCalculator calculator = new MaterialListCalculator();
 
         int result = calculator.calculateRafters(carport);
 
@@ -44,7 +44,7 @@ class StyklisteCalculatorTest {
     @Test
     void calculateMaterialListWithShed() {
         Carport carport = new Carport(600, 780, 380, "plastic_trapez", true, 540, 210);
-        StyklisteCalculator calculator = new StyklisteCalculator();
+        MaterialListCalculator calculator = new MaterialListCalculator();
 
         List<MaterialLine> result = calculator.calculateMaterialList(carport);
 
@@ -60,7 +60,7 @@ class StyklisteCalculatorTest {
     @Test
     void calculateMaterialListWithoutShed() {
         Carport carport = new Carport(390, 780, 310, "plastic_trapez", false, 0, 0);
-        StyklisteCalculator calculator = new StyklisteCalculator();
+        MaterialListCalculator calculator = new MaterialListCalculator();
 
         List<MaterialLine> result = calculator.calculateMaterialList(carport);
 

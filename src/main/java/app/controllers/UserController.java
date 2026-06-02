@@ -106,7 +106,7 @@ public class UserController {
 
         ctx.attribute("user", user);
 
-        ctx.render("userP-rediger.html");
+        ctx.render("edit-profile.html");
     }
 
 
@@ -147,10 +147,7 @@ public class UserController {
 
             ctx.sessionAttribute("currentUser", user);
 
-            ctx.attribute("success", "Profil opdateret");
-            ctx.attribute("user", user);
-
-            ctx.render("userP-rediger.html");
+            ctx.redirect("/bruger-side");
 
         } catch (DatabaseException e) {
 
@@ -163,12 +160,12 @@ public class UserController {
             } else {
 
                 ctx.attribute("error",
-                        "Postnummeret findes ikke");
+                        "Profilen kunne ikke opdateres. Prøv igen.");
             }
 
             ctx.attribute("user", user);
 
-            ctx.render("userP-rediger.html");
+            ctx.render("edit-profile.html");
         }
     }
 

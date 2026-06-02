@@ -52,6 +52,7 @@ public class AdminController {
             List<User> users = AdminMapper.getAllUsers(connectionPool);
             ctx.attribute("users", users);
             ctx.attribute("user", ctx.sessionAttribute("currentUser"));
+            ctx.attribute("currentUser", ctx.sessionAttribute("currentUser"));
             ctx.render("admin-users.html");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
@@ -119,6 +120,11 @@ public class AdminController {
         try {
             int userId = Integer.parseInt(ctx.pathParam("id"));
             String newRole = ctx.formParam("rolle");
+            User currentUser = ctx.sessionAttribute("currentUser");
+            if (currentUser != null && currentUser.getId() == userId) {
+                ctx.redirect("/admin/brugere");
+                return;
+            }
             User target = AdminMapper.getUserById(userId, connectionPool);
             if ("customer".equals(target.getRole())) {
                 ctx.redirect("/admin/brugere");

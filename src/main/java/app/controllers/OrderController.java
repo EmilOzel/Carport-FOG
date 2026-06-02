@@ -7,7 +7,7 @@ import app.persistence.AdminMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import app.services.CarportSvg;
-import app.services.StyklisteCalculator;
+import app.services.MaterialListCalculator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -77,6 +77,7 @@ public class OrderController {
                 return;
             }
             ctx.attribute("order", order);
+            ctx.attribute("user", ctx.sessionAttribute("currentUser"));
             ctx.render("payment.html");
         } catch (DatabaseException | NumberFormatException e) {
             ctx.redirect("/bruger-side");
@@ -92,7 +93,7 @@ public class OrderController {
         try {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
             OrderMapper.payOrder(orderId, userId, connectionPool);
-            ctx.redirect("/bruger-side");
+            ctx.redirect("/ordre/" + orderId);
         } catch (DatabaseException | NumberFormatException e) {
             ctx.attribute("error", e.getMessage());
             ctx.redirect("/bruger-side");
@@ -105,7 +106,7 @@ public class OrderController {
         try {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
             OrderMapper.acceptOffer(orderId, userId, connectionPool);
-            ctx.redirect("/bruger-side");
+            ctx.redirect("/ordre/" + orderId + "/betal");
         } catch (DatabaseException | NumberFormatException e) {
             ctx.redirect("/bruger-side");
         }
@@ -180,6 +181,7 @@ public class OrderController {
             ctx.attribute("svg", svg);
             ctx.attribute("ordreId", ordreId);
             ctx.attribute("order", order);
+            ctx.attribute("user", ctx.sessionAttribute("currentUser"));
             ctx.render("order-details.html");
         } catch (DatabaseException e) {
             ctx.attribute("lines", List.of());
@@ -200,7 +202,7 @@ public class OrderController {
             return;
         }
 
-        StyklisteCalculator calculator = new StyklisteCalculator();
+        MaterialListCalculator calculator = new MaterialListCalculator();
         List<MaterialLine> materials = calculator.calculateMaterialList(carport);
 
         OrderMapper.saveCarportForOrder(ordreId, carport, materials, connectionPool);
@@ -228,7 +230,7 @@ public class OrderController {
             return List.of();
         }
 
-        StyklisteCalculator calculator = new StyklisteCalculator();
+        MaterialListCalculator calculator = new MaterialListCalculator();
         return calculator.calculateMaterialList(carport);
     }
 

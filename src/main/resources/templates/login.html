@@ -22,9 +22,10 @@
                 <input type="password" name="password" placeholder="Adgangskode">
             </label>
             <p th:if="${error}" th:text="${error}" style="color:red;"></p>
-            <a class="auth-link" href="/opret-bruger">Har du glemt din adgangskode?</a>
-            <button class="btn" type="submit">Log på</button>
-            <a class="btn" href="/opret-bruger">Registrer</a>
+            <div class="form-actions">
+                <a class="btn form-actions__btn" href="/opret-bruger">Registrer</a>
+                <button class="btn form-actions__btn" type="submit">Log på</button>
+            </div>
         </form>
     </section>
 </main>

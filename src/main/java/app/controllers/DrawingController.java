@@ -7,7 +7,7 @@ import io.javalin.http.Context;
 public class DrawingController {
 
     public static void addRoutes(Javalin app) {
-        app.get("/tegning", DrawingController::showDrawing);
+        app.get("/bekraeftelse", DrawingController::showDrawing);
     }
 
     private static void showDrawing(Context ctx) {
@@ -19,6 +19,6 @@ public class DrawingController {
         }
 
         ctx.attribute("carport", carport);
-        ctx.render("drawing.html");
+        ctx.render("orderconfirmation.html");
     }
 }

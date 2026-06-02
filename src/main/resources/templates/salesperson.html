@@ -13,7 +13,7 @@
 <nav class="mob-nav" id="mobNav" aria-label="Sælger menu">
     <a href="/bruger-side">Profil</a>
     <a href="/mine-ordrer">Mine ordrer</a>
-    <a href="/byg-carport">Byg Carport</a>
+    <a href="/choose-dimensions">Byg Carport</a>
     <a href="/saelger">Sælger</a>
     <a th:if="${user != null and user.role == 'admin'}" href="/admin">Admin</a>
     <a href="/logout" class="mob-nav-logout">Log ud</a>
@@ -35,7 +35,7 @@
         <nav class="side-menu" aria-label="Sælger menu">
             <a href="/bruger-side">Profil</a>
             <a href="/mine-ordrer">Mine ordrer</a>
-            <a href="/byg-carport">Byg Carport</a>
+            <a href="/choose-dimensions">Byg Carport</a>
             <a href="/saelger">Sælger</a>
             <a th:if="${user != null and user.role == 'admin'}" href="/admin">Admin</a>
             <a href="/logout">Log ud</a>
@@ -70,24 +70,29 @@
                                     <span th:case="'pending'">Afventer</span>
                                     <span th:case="'offer'">Tilbud sendt</span>
                                     <span th:case="'approved'">Godkendt</span>
-                                    <span th:case="'rejected'">Afvist</span>
+                                    <span th:case="'rejected'"
+                                          style="background:#dc2626; color:#fff; font-size:11px; font-weight:700;
+                                                 padding:2px 10px; border-radius:12px; letter-spacing:0.5px;">
+                                        Afvist
+                                    </span>
                                     <span th:case="'completed'">Færdig</span>
                                     <span th:case="*" th:text="${order[4]}"></span>
                                 </span>
                             </td>
                             <td data-label="Kostpris"  th:text="${order[7]} + ' kr'"></td>
-                            <td data-label="Salgspris" th:text="${order[5]} + ' kr'"></td>
+                            <td data-label="Salgspris">
+                                <span th:if="${order[4] == 'pending'}"
+                                      style="background:#2563eb; color:#fff; font-size:11px; font-weight:700;
+                                             padding:2px 10px; border-radius:12px; letter-spacing:0.5px;">
+                                    Ledig
+                                </span>
+                                <span th:unless="${order[4] == 'pending'}" th:text="${order[5]} + ' kr'"></span>
+                            </td>
                             <td data-label="Betalt"    th:text="${order[6] ? 'Ja' : 'Nej'}"></td>
                             <td data-label="Handling">
                                 <div class="card-btns">
                                     <a th:href="@{/saelger/ordre/{id}(id=${order[0]})}"
                                        class="btn" style="font-size:11px; min-height:26px; padding:0 10px;">Se ordre</a>
-                                    <form th:if="${order[4] != 'rejected' and order[4] != 'completed'}"
-                                          th:action="@{/saelger/ordre/{id}/annuller(id=${order[0]})}" method="post" style="display:inline;"
-                                          onsubmit="return confirm('Er du sikker på du vil annullere ordre #' + [[${order[0]}]] + '?')">
-                                        <button type="submit" class="btn btn--reject"
-                                                style="font-size:11px; min-height:26px; padding:0 10px;">Annuller</button>
-                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -106,32 +111,6 @@
     </section>
 </main>
 
-<script>
-    const btn     = document.getElementById('hamburgerBtn');
-    const overlay = document.getElementById('mobOverlay');
-    const nav     = document.getElementById('mobNav');
-
-    function openMenu() {
-        btn.classList.add('open');
-        overlay.classList.add('open');
-        nav.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeMenu() {
-        btn.classList.remove('open');
-        overlay.classList.remove('open');
-        nav.classList.remove('open');
-        btn.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-    }
-
-    btn.addEventListener('click', () => {
-        btn.classList.contains('open') ? closeMenu() : openMenu();
-    });
-    overlay.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
-</script>
+<script src="/js/main.js"></script>
 </body>
 </html>

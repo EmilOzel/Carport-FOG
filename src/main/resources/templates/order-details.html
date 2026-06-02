@@ -2,13 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ordre detaljer | FOG</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+
+<div class="mob-overlay" id="mobOverlay"></div>
+<nav class="mob-nav" id="mobNav" aria-label="Navigation">
+    <a href="/bruger-side">Profil</a>
+    <a href="/mine-ordrer">Mine ordrer</a>
+    <a href="/choose-dimensions">Byg Carport</a>
+    <a th:if="${user != null and (user.role == 'salesperson' or user.role == 'admin')}" href="/saelger">Sælger</a>
+    <a th:if="${user != null and user.role == 'admin'}" href="/admin">Admin</a>
+    <a href="/logout" class="mob-nav-logout">Log ud</a>
+</nav>
+
 <main class="figma-page dashboard-page">
     <header class="topbar">
         <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Åbn menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
     <h1 class="dashboard-title">Ordre <span th:text="'#' + ${ordreId}"></span></h1>
@@ -100,7 +115,7 @@
                 <p th:switch="${order[5]}" style="margin:0 0 16px; font-size:14px;">
                     <span th:case="'pending'">Din ordre afventer behandling af en sælger. Du hører fra os snart.</span>
                     <span th:case="'offer'">Du har modtaget et tilbud på <strong th:text="${order[6]} + ' kr'"></strong>. Accepter eller afvis nedenfor.</span>
-                    <span th:case="'approved'">Dit tilbud er godkendt. Betal nedenfor for at færdiggøre din ordre.</span>
+                    <span th:case="'approved'">Din ordre er godkendt af en sælger. Betal nedenfor for at færdiggøre din ordre.</span>
                     <span th:case="'rejected'">Din ordre er afvist. Kontakt FOG for mere information.</span>
                     <span th:case="'completed'">Din ordre er betalt og under behandling. Vi kontakter dig vedr. levering.</span>
                 </p>
@@ -119,14 +134,16 @@
                     <a th:if="${order[5] == 'approved'}"
                        th:href="@{/ordre/{id}/betal(id=${ordreId})}"
                        class="btn btn--pay" style="min-height:36px; padding:0 20px;">
-                        Betal <span th:text="${order[6]} + ' kr'"></span>
+                        Betal &nbsp;<span th:text="${order[6]} + ' kr'"></span>
                     </a>
-                    <a class="btn back-btn" href="#" onclick="history.back(); return false;">Tilbage</a>
+                    <a class="btn" href="/bruger-side" style="min-height:36px; padding:0 20px;">Gå til profil</a>
                 </div>
             </div>
         </article>
         </th:block>
     </section>
 </main>
+
+<script src="/js/main.js"></script>
 </body>
 </html>

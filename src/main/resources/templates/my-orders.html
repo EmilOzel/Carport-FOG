@@ -13,7 +13,7 @@
 <nav class="mob-nav" id="mobNav" aria-label="Navigation">
     <a href="/bruger-side">Profil</a>
     <a href="/mine-ordrer">Mine ordrer</a>
-    <a href="/byg-carport">Byg Carport</a>
+    <a href="/choose-dimensions">Byg Carport</a>
     <a th:if="${user != null and (user.role == 'salesperson' or user.role == 'admin')}" href="/saelger">Sælger</a>
     <a th:if="${user != null and user.role == 'admin'}" href="/admin">Admin</a>
     <a href="/logout" class="mob-nav-logout">Log ud</a>
@@ -35,7 +35,7 @@
         <nav class="side-menu" aria-label="Bruger menu">
             <a href="/bruger-side">Profil</a>
             <a href="/mine-ordrer">Mine ordrer</a>
-            <a href="/byg-carport">Byg Carport</a>
+            <a href="/choose-dimensions">Byg Carport</a>
             <a th:if="${user != null and (user.role == 'salesperson' or user.role == 'admin')}" href="/saelger">Sælger</a>
             <a th:if="${user != null and user.role == 'admin'}" href="/admin">Admin</a>
             <a href="/logout">Log ud</a>
@@ -81,23 +81,16 @@
                                         Se detaljer
                                     </a>
                                     <span th:if="${order[1] == 'offer'}" style="display:contents;">
-                                        <form th:action="@{/ordre/{id}/accepter(id=${order[0]})}" method="post" style="display:inline;">
-                                            <button type="submit" class="btn btn--pay"
-                                                    style="font-size:11px; min-height:26px; padding:0 10px;">
-                                                Accepter [[${order[2]}]] kr
-                                            </button>
-                                        </form>
                                         <form th:action="@{/ordre/{id}/afvis(id=${order[0]})}" method="post" style="display:inline;"
                                               onsubmit="return confirm('Er du sikker på du vil afvise tilbuddet?')">
                                             <button type="submit" class="btn btn--reject"
                                                     style="font-size:11px; min-height:26px; padding:0 10px;">Afvis</button>
                                         </form>
                                     </span>
-                                    <a th:if="${order[1] == 'approved'}"
-                                       th:href="@{/ordre/{id}/betal(id=${order[0]})}"
-                                       class="btn btn--pay" style="font-size:11px; min-height:26px; padding:0 10px;">
-                                        Betal <span th:text="${order[2]} + ' kr'"></span>
-                                    </a>
+                                    <span th:if="${order[1] == 'approved'}"
+                                          style="font-size:11px; color: red; font-weight:600;">
+                                        Handling kræves
+                                    </span>
                                     <form th:if="${order[1] == 'pending'}"
                                           th:action="@{/ordre/{id}/annuller(id=${order[0]})}" method="post" style="display:inline;"
                                           onsubmit="return confirm('Er du sikker på du vil annullere ordre #' + [[${order[0]}]] + '?')">
@@ -128,32 +121,6 @@
     </section>
 </main>
 
-<script>
-    const btn     = document.getElementById('hamburgerBtn');
-    const overlay = document.getElementById('mobOverlay');
-    const nav     = document.getElementById('mobNav');
-
-    function openMenu() {
-        btn.classList.add('open');
-        overlay.classList.add('open');
-        nav.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeMenu() {
-        btn.classList.remove('open');
-        overlay.classList.remove('open');
-        nav.classList.remove('open');
-        btn.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-    }
-
-    btn.addEventListener('click', () => {
-        btn.classList.contains('open') ? closeMenu() : openMenu();
-    });
-    overlay.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
-</script>
+<script src="/js/main.js"></script>
 </body>
 </html>

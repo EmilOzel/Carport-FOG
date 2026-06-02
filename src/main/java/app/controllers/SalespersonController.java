@@ -67,7 +67,7 @@ public class SalespersonController {
         if (!isSalesperson(ctx)) { ctx.status(403); return; }
         try {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
-            AdminMapper.updateOrderStatus(orderId, "rejected", connectionPool);
+            AdminMapper.deleteOrder(orderId, connectionPool);
             ctx.redirect("/saelger");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());

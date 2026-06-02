@@ -11,7 +11,7 @@
 <!-- Mobile overlay + off-canvas drawer -->
 <div class="mob-overlay" id="mobOverlay"></div>
 <nav class="mob-nav" id="mobNav" aria-label="Bruger menu">
-    <a href="/bruger-side">Bruger <Profil></Profil></a>
+    <a href="/bruger-side">Profil</a>
     <a href="/mine-ordrer">Mine ordrer</a>
     <a href="/choose-dimensions">Byg Carport</a>
     <a th:if="${user.role == 'salesperson' or user.role == 'admin'}" href="/saelger">Sælger</a>
@@ -35,7 +35,7 @@
         <nav class="side-menu" aria-label="Bruger menu">
             <a href="/bruger-side">Profil</a>
             <a href="/mine-ordrer">Mine ordrer</a>
-            <a href="/byg-carport">Byg Carport</a>
+            <a href="/choose-dimensions">Byg Carport</a>
             <a th:if="${user.role == 'salesperson' or user.role == 'admin'}" href="/saelger">Sælger</a>
             <a th:if="${user.role == 'admin'}" href="/admin">Admin</a>
             <a href="/logout">Log ud</a>
@@ -70,32 +70,6 @@
     </section>
 </main>
 
-<script>
-    const btn     = document.getElementById('hamburgerBtn');
-    const overlay = document.getElementById('mobOverlay');
-    const nav     = document.getElementById('mobNav');
-
-    function openMenu() {
-        btn.classList.add('open');
-        overlay.classList.add('open');
-        nav.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeMenu() {
-        btn.classList.remove('open');
-        overlay.classList.remove('open');
-        nav.classList.remove('open');
-        btn.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-    }
-
-    btn.addEventListener('click', () => {
-        btn.classList.contains('open') ? closeMenu() : openMenu();
-    });
-    overlay.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
-</script>
+<script src="/js/main.js"></script>
 </body>
 </html>

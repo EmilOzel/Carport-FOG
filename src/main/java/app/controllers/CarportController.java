@@ -17,31 +17,17 @@ public class CarportController {
     public static void addRoutes(Javalin app) {
         app.get("/", ctx -> ctx.render("index.html"));
 
-        app.get("/byg-carport", ctx -> {
-
+        app.get("/færdige-modeller", ctx -> ctx.render("ready-models.html"));
+        app.get("/choose-dimensions", ctx -> {
             User user = ctx.sessionAttribute("currentUser");
-
             if (user == null) {
-
-                // gem hvor brugeren ville hen
-                ctx.sessionAttribute("redirectAfterLogin", "/byg-carport");
-
-                // send til login
+                ctx.sessionAttribute("redirectAfterLogin", "/choose-dimensions");
                 ctx.redirect("/login");
                 return;
             }
-
-            CarportController.showBuildPage(ctx);
+            CarportController.showMeasurementPage(ctx);
         });
-
-
-        app.get("/færdige-modeller", ctx -> ctx.render("ready-models.html"));
-        app.get("/choose-dimensions", CarportController::showMeasurementPage);
         app.post("/carport/order", CarportController::createOrder);
-    }
-
-    private static void showBuildPage(Context ctx) {
-        ctx.render("build-carport.html");
     }
 
     private static void showMeasurementPage(Context ctx) {
@@ -68,7 +54,7 @@ public class CarportController {
 
             ctx.sessionAttribute("currentCarport", carport);
             ctx.sessionAttribute("currentOrder", order);
-            ctx.redirect("/tegning");
+            ctx.redirect("/bekraeftelse");
         } catch (IllegalArgumentException e) {
             ctx.attribute("error", e.getMessage());
             setDimensionAttributes(ctx, form);

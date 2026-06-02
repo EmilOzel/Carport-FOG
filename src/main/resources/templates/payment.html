@@ -7,9 +7,23 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+
+<div class="mob-overlay" id="mobOverlay"></div>
+<nav class="mob-nav" id="mobNav" aria-label="Navigation">
+    <a href="/bruger-side">Profil</a>
+    <a href="/mine-ordrer">Mine ordrer</a>
+    <a href="/choose-dimensions">Byg Carport</a>
+    <a th:if="${user != null and (user.role == 'salesperson' or user.role == 'admin')}" href="/saelger">Sælger</a>
+    <a th:if="${user != null and user.role == 'admin'}" href="/admin">Admin</a>
+    <a href="/logout" class="mob-nav-logout">Log ud</a>
+</nav>
+
 <main class="figma-page dashboard-page">
     <header class="topbar">
         <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Åbn menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
     <h1 class="dashboard-title">Betal ordre <span th:text="'#' + ${order[0]}"></span></h1>
@@ -40,7 +54,7 @@
                             Bekræft betaling
                         </button>
                     </form>
-                    <a class="btn" href="/bruger-side" style="background:#888; min-height:40px; padding:0 28px; font-size:15px;">
+                    <a class="btn" href="#" onclick="history.back(); return false;" style="background:#888; min-height:40px; padding:0 28px; font-size:15px;">
                         Fortryd
                     </a>
                 </div>
@@ -48,5 +62,7 @@
         </article>
     </section>
 </main>
+
+<script src="/js/main.js"></script>
 </body>
 </html>

@@ -100,7 +100,6 @@ public class AdminMapper {
         try (Connection conn = connectionPool.getConnection()) {
             conn.setAutoCommit(false);
             try {
-                // Find carport + roof tilknyttet ordren (hvis de findes)
                 Integer carportId = null;
                 Integer roofId    = null;
                 try (PreparedStatement ps = conn.prepareStatement(

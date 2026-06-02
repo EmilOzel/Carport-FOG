@@ -3,30 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plantegning | FOG</title>
+    <title>Bekræftelse | FOG</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 <main class="figma-page">
     <header class="topbar">
         <a href="/"><img class="logo" src="/images/fog.png" alt="Fog"></a>
+        <a href="/bruger-side" style="display:flex; align-items:center;">
+            <img src="/images/person.png" alt="Profil" style="height:28px; width:28px;">
+        </a>
     </header>
 
     <section class="drawing-panel">
-        <h1>Bestil tilbud</h1>
+        <h1>Bekræft din ordre</h1>
         <div class="dash-card" style="margin-bottom:16px;">
-            <header>Plantegning</header>
+            <header>Ordrebekræftelse</header>
             <div class="dash-body" style="padding:20px;">
                 <p style="margin:0;">
-                    Plantegningen kan først ses, når ordren er færdig.
+                    Gennemgå dine valg og bekræft din bestilling nedenfor. En sælger vil herefter kontakte dig med et tilbud.
                 </p>
             </div>
         </div>
 
-        <div class="drawing-actions">
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
             <a class="btn" href="/choose-dimensions">Ret mål</a>
             <form action="/bestil-tilbud" method="post">
-                <button class="btn" type="submit">Fortsæt</button>
+                <button class="btn" type="submit">Bekræft og bestil</button>
             </form>
         </div>
     </section>

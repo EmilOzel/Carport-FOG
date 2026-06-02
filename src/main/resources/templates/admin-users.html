@@ -12,7 +12,7 @@
 <nav class="mob-nav" id="mobNav" aria-label="Admin menu">
     <a href="/bruger-side">Profil</a>
     <a href="/mine-ordrer">Mine ordrer</a>
-    <a href="/byg-carport">Byg Carport</a>
+    <a href="/choose-dimensions">Byg Carport</a>
     <a href="/saelger">Sælger</a>
     <a href="/admin">Admin</a>
     <a href="/logout" class="mob-nav-logout">Log ud</a>
@@ -32,7 +32,7 @@
         <nav class="side-menu" aria-label="Navigation">
             <a href="/bruger-side">Profil</a>
             <a href="/mine-ordrer">Mine ordrer</a>
-            <a href="/byg-carport">Byg Carport</a>
+            <a href="/choose-dimensions">Byg Carport</a>
             <a href="/saelger">Sælger</a>
             <a href="/admin">Admin</a>
             <a href="/logout">Log ud</a>
@@ -66,9 +66,16 @@
                                 <td data-label="Adresse" th:text="${user.address}"></td>
                                 <td data-label="Postnr." th:text="${user.zipcode}"></td>
                                 <td data-label="By"      th:text="${user.city}"></td>
-                                <td data-label="Rolle"   th:text="${user.role}"></td>
+                                <td data-label="Rolle">
+                                    <span th:switch="${user.role}">
+                                        <span th:case="'customer'">Kunde</span>
+                                        <span th:case="'salesperson'">Sælger</span>
+                                        <span th:case="'admin'">Admin</span>
+                                        <span th:case="*" th:text="${user.role}"></span>
+                                    </span>
+                                </td>
                                 <td data-label="Skift rolle">
-                                    <form th:if="${user.role != 'customer'}"
+                                    <form th:if="${user.role != 'customer' and user.id != currentUser.id}"
                                           th:action="@{/admin/bruger/{id}/rolle(id=${user.id})}" method="post" class="table-form">
                                         <select name="rolle">
                                             <option value="salesperson" th:selected="${user.role == 'salesperson'}">Sælger</option>
@@ -76,7 +83,7 @@
                                         </select>
                                         <button type="submit" class="btn">Gem</button>
                                     </form>
-                                    <span th:if="${user.role == 'customer'}" style="color:#888; font-size:12px;">—</span>
+                                    <span th:if="${user.role == 'customer' or user.id == currentUser.id}" style="color:#888; font-size:12px;">—</span>
                                 </td>
                                 <td data-label="Slet">
                                     <div class="card-btns">
@@ -101,15 +108,6 @@
     </section>
 </main>
 
-<script>
-    const btn = document.getElementById('hamburgerBtn');
-    const overlay = document.getElementById('mobOverlay');
-    const nav = document.getElementById('mobNav');
-    function openMenu() { btn.classList.add('open'); overlay.classList.add('open'); nav.classList.add('open'); btn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
-    function closeMenu() { btn.classList.remove('open'); overlay.classList.remove('open'); nav.classList.remove('open'); btn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
-    btn.addEventListener('click', () => btn.classList.contains('open') ? closeMenu() : openMenu());
-    overlay.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
-</script>
+<script src="/js/main.js"></script>
 </body>
 </html>

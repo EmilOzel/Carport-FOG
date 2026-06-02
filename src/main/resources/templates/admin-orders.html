@@ -12,7 +12,7 @@
 <nav class="mob-nav" id="mobNav" aria-label="Admin menu">
     <a href="/bruger-side">Profil</a>
     <a href="/mine-ordrer">Mine ordrer</a>
-    <a href="/byg-carport">Byg Carport</a>
+    <a href="/choose-dimensions">Byg Carport</a>
     <a href="/saelger">Sælger</a>
     <a href="/admin">Admin</a>
     <a href="/logout" class="mob-nav-logout">Log ud</a>
@@ -32,7 +32,7 @@
         <nav class="side-menu" aria-label="Navigation">
             <a href="/bruger-side">Profil</a>
             <a href="/mine-ordrer">Mine ordrer</a>
-            <a href="/byg-carport">Byg Carport</a>
+            <a href="/choose-dimensions">Byg Carport</a>
             <a href="/saelger">Sælger</a>
             <a href="/admin">Admin</a>
             <a href="/logout">Log ud</a>
@@ -66,7 +66,16 @@
                                 <td data-label="Kunde"     th:text="${order[1]}"></td>
                                 <td data-label="Email"     th:text="${order[2]}"></td>
                                 <td data-label="Dato"      th:text="${order[3]}"></td>
-                                <td data-label="Status"    th:text="${order[4]}"></td>
+                                <td data-label="Status">
+                                    <span th:switch="${order[4]}">
+                                        <span th:case="'pending'">Afventer</span>
+                                        <span th:case="'offer'">Tilbud sendt</span>
+                                        <span th:case="'approved'">Godkendt</span>
+                                        <span th:case="'rejected'">Afvist</span>
+                                        <span th:case="'completed'">Færdig</span>
+                                        <span th:case="*" th:text="${order[4]}"></span>
+                                    </span>
+                                </td>
                                 <td data-label="Salgspris" th:text="${order[5]} + ' kr'"></td>
                                 <td data-label="Kostpris"  th:text="${order[7]} + ' kr'"></td>
                                 <td data-label="Betalt"    th:text="${order[6] ? 'Ja' : 'Nej'}"></td>
@@ -93,15 +102,6 @@
     </section>
 </main>
 
-<script>
-    const btn = document.getElementById('hamburgerBtn');
-    const overlay = document.getElementById('mobOverlay');
-    const nav = document.getElementById('mobNav');
-    function openMenu() { btn.classList.add('open'); overlay.classList.add('open'); nav.classList.add('open'); btn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
-    function closeMenu() { btn.classList.remove('open'); overlay.classList.remove('open'); nav.classList.remove('open'); btn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
-    btn.addEventListener('click', () => btn.classList.contains('open') ? closeMenu() : openMenu());
-    overlay.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
-</script>
+<script src="/js/main.js"></script>
 </body>
 </html>
