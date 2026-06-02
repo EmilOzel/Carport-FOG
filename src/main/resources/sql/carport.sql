@@ -10,7 +10,9 @@ CREATE TABLE users (
     email         VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     role          VARCHAR(20)  NOT NULL CHECK (role IN ('customer', 'salesperson', 'admin')),
-    zip           CHAR(4)      NOT NULL REFERENCES zipcode(zip)
+    zip           CHAR(4)      NOT NULL REFERENCES zipcode(zip),
+    address       VARCHAR(255),
+    phone         VARCHAR(20)
 );
 
 CREATE TABLE orders (
@@ -25,14 +27,13 @@ CREATE TABLE orders (
 );
 
 CREATE TABLE roof (
-    roof_id       SERIAL        PRIMARY KEY,
-    roof_style    VARCHAR(10)   NOT NULL CHECK (roof_style = 'flat'),
-    roof_covering VARCHAR(30)   NOT NULL CHECK (roof_covering IN (
-                                    'none',
-                                    'plastic_trapez'
-                                )),
-    pitch         SMALLINT      CHECK (pitch IN (15, 20, 25, 30, 35, 40, 45)),
-    price         DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    roof_id       SERIAL      PRIMARY KEY,
+    roof_style    VARCHAR(10) NOT NULL CHECK (roof_style = 'flat'),
+    roof_covering VARCHAR(30) NOT NULL CHECK (roof_covering IN (
+                                  'none',
+                                  'plastic_trapez'
+                              )),
+    pitch         SMALLINT    CHECK (pitch IN (15, 20, 25, 30, 35, 40, 45)),
 
     CONSTRAINT chk_flat_no_pitch CHECK (pitch IS NULL)
 );
