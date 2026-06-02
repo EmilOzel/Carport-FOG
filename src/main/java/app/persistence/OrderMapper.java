@@ -168,34 +168,50 @@ public class OrderMapper {
         }
     }
 
-    public static void acceptOffer(int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "UPDATE orders SET status = 'approved' WHERE order_id = ?";
+    public static void acceptOffer(int orderId, int userId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET status = 'approved' WHERE order_id = ? AND user_id = ? AND status = 'offer'";
         try (Connection conn = connectionPool.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderId);
-            ps.executeUpdate();
+            ps.setInt(2, userId);
+            if (ps.executeUpdate() == 0) {
+                throw new DatabaseException("Tilbuddet kunne ikke accepteres");
+            }
         } catch (SQLException e) {
             throw new DatabaseException("Kunne ikke acceptere tilbud", e);
         }
     }
 
-    public static void rejectOffer(int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "UPDATE orders SET status = 'rejected' WHERE order_id = ?";
+    public static void rejectOffer(int orderId, int userId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET status = 'rejected' WHERE order_id = ? AND user_id = ? AND status = 'offer'";
         try (Connection conn = connectionPool.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderId);
-            ps.executeUpdate();
+            ps.setInt(2, userId);
+            if (ps.executeUpdate() == 0) {
+                throw new DatabaseException("Tilbuddet kunne ikke afvises");
+            }
         } catch (SQLException e) {
             throw new DatabaseException("Kunne ikke afvise tilbud", e);
         }
     }
 
-    public static void payOrder(int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "UPDATE orders SET is_paid = true, status = 'completed' WHERE order_id = ?";
+    public static void payOrder(int orderId, int userId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = """
+                UPDATE orders
+                SET is_paid = true, status = 'completed'
+                WHERE order_id = ?
+                  AND user_id = ?
+                  AND status = 'approved'
+                  AND is_paid = false
+                """;
         try (Connection conn = connectionPool.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderId);
-            ps.executeUpdate();
+            ps.setInt(2, userId);
+            if (ps.executeUpdate() == 0) {
+                throw new DatabaseException("Ordren kunne ikke betales");
+            }
         } catch (SQLException e) {
             throw new DatabaseException("Kunne ikke gennemføre betaling", e);
         }

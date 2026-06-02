@@ -66,6 +66,11 @@ public class OrderController {
         if (userId == null) { ctx.redirect("/login"); return; }
         try {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
+            if (!OrderMapper.isOrderOwner(orderId, userId, connectionPool)) {
+                ctx.redirect("/bruger-side");
+                return;
+            }
+
             Object[] order = AdminMapper.getOrderDetail(orderId, connectionPool);
             if (!"approved".equals(order[5])) {
                 ctx.redirect("/bruger-side");
@@ -73,7 +78,7 @@ public class OrderController {
             }
             ctx.attribute("order", order);
             ctx.render("payment.html");
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | NumberFormatException e) {
             ctx.redirect("/bruger-side");
         }
     }
@@ -86,9 +91,9 @@ public class OrderController {
         }
         try {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
-            OrderMapper.payOrder(orderId, connectionPool);
+            OrderMapper.payOrder(orderId, userId, connectionPool);
             ctx.redirect("/bruger-side");
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | NumberFormatException e) {
             ctx.attribute("error", e.getMessage());
             ctx.redirect("/bruger-side");
         }
@@ -99,9 +104,9 @@ public class OrderController {
         if (userId == null) { ctx.redirect("/login"); return; }
         try {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
-            OrderMapper.acceptOffer(orderId, connectionPool);
+            OrderMapper.acceptOffer(orderId, userId, connectionPool);
             ctx.redirect("/bruger-side");
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | NumberFormatException e) {
             ctx.redirect("/bruger-side");
         }
     }
@@ -111,9 +116,9 @@ public class OrderController {
         if (userId == null) { ctx.redirect("/login"); return; }
         try {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
-            OrderMapper.rejectOffer(orderId, connectionPool);
+            OrderMapper.rejectOffer(orderId, userId, connectionPool);
             ctx.redirect("/bruger-side");
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | NumberFormatException e) {
             ctx.redirect("/bruger-side");
         }
     }
