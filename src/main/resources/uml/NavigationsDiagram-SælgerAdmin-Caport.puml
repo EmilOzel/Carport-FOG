@@ -17,77 +17,42 @@ skinparam state {
 
 [*] --> Login
 
-state "Login" as Login
-Login : /login
-
-state "Brugerside" as Brugerside
-Brugerside : /bruger-side
-
-state "Sælger" as Saelger
-Saelger : /saelger
-
-state "Sælger ordre" as SaelgerOrdre
-SaelgerOrdre : /saelger/ordre/{id}
-
-state "Send tilbud" as SendTilbud
-SendTilbud : POST /saelger/ordre/{id}/send-tilbud
-
-state "Admin ordrer" as AdminOrdrer
-AdminOrdrer : /admin
-
-state "Admin brugere" as AdminBrugere
-AdminBrugere : /admin/brugere
-
-state "Admin statistik" as AdminStatistik
-AdminStatistik : /admin/statistik
-
-state "Opret sælger" as OpretSaelger
-OpretSaelger : /admin/opret-saelger
-
-state "Opdater ordrestatus" as OpdaterStatus
-OpdaterStatus : POST /admin/ordre/{id}/status
-
-state "Opdater brugerrolle" as OpdaterRolle
-OpdaterRolle : POST /admin/bruger/{id}/rolle
-
-state "Slet bruger" as SletBruger
-SletBruger : POST /admin/bruger/{id}/slet
-
-state "Log ud" as LogUd
-LogUd : /logout
+state "Login\n--\n/login" as Login
+state "Brugerside\n--\n/bruger-side" as Brugerside
+state "Sælgeroversigt\n--\n/saelger" as Saelger
+state "Sælger ordre\n--\n/saelger/ordre/{id}" as SaelgerOrdre
+state "Admin ordrer\n--\n/admin" as AdminOrdrer
+state "Admin brugere\n--\n/admin/brugere" as AdminBrugere
+state "Admin statistik\n--\n/admin/statistik" as AdminStatistik
+state "Opret sælger\n--\n/admin/opret-saelger" as OpretSaelger
+state "Log ud\n--\n/logout" as LogUd
 
 Login --> Brugerside : POST /login korrekt
 Login --> Login : POST /login forkert
 
-Brugerside --> Saelger : sælger
-Brugerside --> AdminOrdrer : admin
+Brugerside --> Saelger : rolle = sælger
+Brugerside --> AdminOrdrer : rolle = admin
 Brugerside --> LogUd : log ud
 LogUd --> Login
 
 Saelger --> SaelgerOrdre : vælg ordre
-SaelgerOrdre --> SendTilbud : send tilbud
-SendTilbud --> Saelger : tilbud sendt
 SaelgerOrdre --> Saelger : tilbage
+SaelgerOrdre --> Saelger : POST /saelger/ordre/{id}/send-tilbud
 
 AdminOrdrer --> AdminBrugere : administrer brugere
 AdminOrdrer --> AdminStatistik : se statistik
 AdminOrdrer --> OpretSaelger : opret sælger
-AdminOrdrer --> OpdaterStatus : ændr ordrestatus
-OpdaterStatus --> AdminOrdrer : status opdateret
-
+AdminOrdrer --> AdminOrdrer : POST /admin/ordre/{id}/status
 AdminOrdrer --> SaelgerOrdre : se ordre
+AdminOrdrer --> LogUd : log ud
 
-AdminBrugere --> OpdaterRolle : ændr rolle
-OpdaterRolle --> AdminBrugere : rolle opdateret
-AdminBrugere --> SletBruger : slet bruger
-SletBruger --> AdminBrugere : bruger slettet
+AdminBrugere --> AdminBrugere : POST /admin/bruger/{id}/rolle
+AdminBrugere --> AdminBrugere : POST /admin/bruger/{id}/slet
 AdminBrugere --> AdminOrdrer : tilbage
 
 AdminStatistik --> AdminOrdrer : tilbage
 
 OpretSaelger --> AdminBrugere : POST /admin/opret-saelger oprettet
 OpretSaelger --> OpretSaelger : POST /admin/opret-saelger fejl
-
-AdminOrdrer --> LogUd : log ud
 
 @enduml

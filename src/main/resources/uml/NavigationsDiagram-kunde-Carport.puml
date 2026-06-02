@@ -17,38 +17,17 @@ skinparam state {
 
 [*] --> Forside
 
-state "Forside" as Forside
-Forside : /
-
-state "Login" as Login
-Login : /login
-
-state "Opret konto" as OpretKonto
-OpretKonto : /opret-bruger
-
-state "Brugerside" as Brugerside
-Brugerside : /bruger-side
-
-state "Log ud" as LogUd
-LogUd : /logout
-
-state "Byg carport" as BygCarport
-BygCarport : /byg-carport
-
-state "Vælg mål" as VaelgMaal
-VaelgMaal : /choose-dimensions
-
-state "Bestil tilbud" as BestilTilbud
-BestilTilbud : /tegning
-
-state "Mine ordrer" as MineOrdrer
-MineOrdrer : /mine-ordrer
-
-state "Ordredetaljer" as OrdreDetaljer
-OrdreDetaljer : /ordre/{ordreId}
-
-state "Betaling" as Betaling
-Betaling : /ordre/{id}/betal
+state "Forside\n--\n/" as Forside
+state "Login\n--\n/login" as Login
+state "Opret konto\n--\n/opret-bruger" as OpretKonto
+state "Brugerside\n--\n/bruger-side" as Brugerside
+state "Log ud\n--\n/logout" as LogUd
+state "Byg carport\n--\n/byg-carport" as BygCarport
+state "Vælg mål og tagmateriale\n--\n/choose-dimensions" as VaelgMaal
+state "Bestil tilbud\n--\n/tegning" as BestilTilbud
+state "Mine ordrer\n--\n/mine-ordrer" as MineOrdrer
+state "Ordredetaljer\n--\n/ordre/{ordreId}" as OrdreDetaljer
+state "Betaling\n--\n/ordre/{id}/betal" as Betaling
 
 Forside --> Login : vælg login
 Forside --> OpretKonto : opret konto
@@ -66,12 +45,13 @@ Brugerside --> LogUd : log ud
 LogUd --> Forside
 
 Brugerside --> BygCarport : byg carport
-BygCarport --> VaelgMaal : vælg carporttype
-VaelgMaal --> BygCarport : tilbage
+BygCarport --> VaelgMaal : vælg carport
 
+VaelgMaal --> BygCarport : tilbage
 VaelgMaal --> BestilTilbud : POST /carport/order
+
 BestilTilbud --> VaelgMaal : ret mål
-BestilTilbud --> OrdreDetaljer : POST /bestil-tilbud
+BestilTilbud --> MineOrdrer : POST /bestil-tilbud
 
 Brugerside --> MineOrdrer : se mine ordrer
 MineOrdrer --> OrdreDetaljer : se detaljer
