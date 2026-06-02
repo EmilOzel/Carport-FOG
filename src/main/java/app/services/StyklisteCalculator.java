@@ -7,15 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StyklisteCalculator {
-    private static final int RAFTER_SPACING_CM = 55;
-    private static final double POST_PRICE = 400;
-    private static final double BEAM_PRICE = 950;
-    private static final double RAFTER_PRICE = 325;
-    private static final double BATTEN_PRICE = 55;
-    private static final double FASCIA_PRICE = 150;
-    private static final double CLADDING_PRICE = 35;
-    private static final double ROOF_TILE_PRICE = 16;
-    private static final double MOUNTING_PACKAGE_PRICE = 1200;
+    // Enhedspriser brugt til at beregne materialelisten.
+    private static final int RAFTER_SPACING_CM = 55; // afstand mellem spær i cm
+
+    private static final double POST_PRICE = 400; // pris pr. stolpe
+    private static final double BEAM_PRICE = 950; // pris pr. rem/bærende bjælke
+    private static final double RAFTER_PRICE = 325; // pris pr. spær
+    private static final double BATTEN_PRICE = 55; // pris pr. lægte
+    private static final double FASCIA_PRICE = 150; // pris pr. sternbræt
+    private static final double CLADDING_PRICE = 35; // pris pr. beklædningsbræt til redskabsrum
+    private static final double ROOF_TILE_PRICE = 16; // pris pr. tagplade/tagsten
+    private static final double MOUNTING_PACKAGE_PRICE = 1200; // pakke med skruer og beslag
 
     public int calculatePosts(Carport carport) {
         if (carport.isHasShed()) {

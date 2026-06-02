@@ -34,7 +34,7 @@ CREATE TABLE roof (
                                     'plastic_trapez'
                                 )),
     pitch         SMALLINT      CHECK (pitch IN (15, 20, 25, 30, 35, 40, 45)),
-    price         DECIMAL(10,2) NOTA NULL DEFAULT 0.00,
+    price         DECIMAL(10,2) NOT NULL DEFAULT 0.00,
 
     CONSTRAINT chk_flat_no_pitch CHECK (pitch IS NULL)
 );

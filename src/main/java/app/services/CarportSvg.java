@@ -15,7 +15,7 @@ public class CarportSvg {
     private static final int MAX_LENGTH = 880;
     private static final int MAX_WIDTH = 420;
     private static final int BEAM_OFFSET_CM = 30;
-    private static final int RAFTER_SPACING_CM = 55;
+    private static final int RAFTER_SPACING_CM = 55; // afstand mellem hvert spær i centimeter
 
     private static final String LINE = "stroke:black;stroke-width:2;fill:none";
     private static final String ROOF_LINE = "stroke:black;stroke-width:4;fill:none";
