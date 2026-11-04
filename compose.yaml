@@ -1,0 +1,51 @@
+name: carport
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    mem_limit: 300m
+    environment:
+      DB_USER: carport
+      DB_PASSWORD: ${CARPORT_DB_PASSWORD:?Set CARPORT_DB_PASSWORD in .env}
+      DB_URL: jdbc:postgresql://db:5432/%s
+      DB_NAME: carport
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      default:
+      proxy:
+        aliases:
+          - carport-app
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    mem_limit: 128m
+    environment:
+      POSTGRES_USER: carport
+      POSTGRES_PASSWORD: ${CARPORT_DB_PASSWORD:?Set CARPORT_DB_PASSWORD in .env}
+      POSTGRES_DB: carport
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./src/main/resources/sql/carport.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U carport -d carport"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+volumes:
+  db_data:
+networks:
+  proxy:
+    external: true
+    name: cit_default
